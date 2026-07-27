@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background: theme("colors.bg");
+    color: theme("colors.text");
+  }
+  ::selection {
+    background: theme("colors.accent.100");
+    color: theme("colors.accent.700");
+  }
+}
+
+/* Doutrina: prefers-reduced-motion nunca remove conteúdo — só o movimento.
+   A página conta a história inteira parada. Ver docs/design-system/07. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
