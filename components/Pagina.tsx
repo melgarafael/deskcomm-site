@@ -223,6 +223,112 @@ export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
           </div>
         </section>
 
+
+        {/* PROVA — o bloco do dev cético. Denso de propósito: o dono do negócio
+            pula, e é aqui que moram os números verificáveis que um LLM cita. */}
+        <section id="prova" className="border-t border-border/70">
+          <div className="mx-auto max-w-[1200px] px-6 py-20 sm:py-28">
+            <div className="max-w-[54ch]">
+              <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent-600">{c.prova.sobretitulo}</p>
+              <h2 className="mt-5 text-pretty text-[2rem] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[2.6rem]">{c.prova.titulo}</h2>
+              <p className="mt-6 text-lg leading-relaxed text-text-muted">{c.prova.sub}</p>
+            </div>
+            <div className="mt-12 grid gap-5 md:grid-cols-2">
+              {c.prova.itens.map((x) => (
+                <article key={x.caminho} className="rounded-[12px] border border-border bg-surface p-6">
+                  <p className="leading-relaxed">{x.afirmacao}</p>
+                  <a href={`${GITHUB}/blob/main/${x.caminho}`} className="mt-4 inline-block break-all font-mono text-xs text-text-muted underline decoration-border underline-offset-4 transition-colors duration-120 ease-out-fast hover:text-accent-600 hover:decoration-accent-300">
+                    {x.caminho}
+                  </a>
+                </article>
+              ))}
+            </div>
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <a href={GITHUB} className="rounded-[4px] border border-border px-5 py-3 text-sm font-bold transition-colors duration-120 ease-out-fast hover:border-accent-300 hover:bg-accent-50">
+                ⭐ {c.prova.cta}
+              </a>
+              <span className="text-sm text-text-muted">{c.prova.ctaNota}</span>
+            </div>
+          </div>
+        </section>
+
+        {/* RADAR */}
+        <section className="border-t border-border/70 bg-surface-elevated/40">
+          <div className="mx-auto max-w-[1200px] px-6 py-20 sm:py-28">
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,54%)_minmax(0,46%)] lg:items-center lg:gap-16">
+              <div className="min-w-0">
+                <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent-600">{c.radar.sobretitulo}</p>
+                <h2 className="mt-5 text-pretty text-[2rem] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[2.6rem]">{c.radar.titulo}</h2>
+                <p className="mt-6 max-w-[46ch] text-lg leading-relaxed text-text-muted">{c.radar.texto}</p>
+                <p className="mt-6 max-w-[46ch] border-l-2 border-accent-500 pl-5 leading-relaxed">{c.radar.fecho}</p>
+              </div>
+              <ul className="min-w-0 space-y-3">
+                {c.radar.faixas.map((f, i) => (
+                  <li key={f} className="flex items-center gap-4 rounded-[12px] border border-border bg-bg px-5 py-4">
+                    <span aria-hidden className={["h-2.5 w-2.5 rounded-full", i === 0 ? "bg-warn" : i === 1 ? "bg-accent-300" : "bg-accent-600"].join(" ")} />
+                    <span className="font-mono text-sm uppercase tracking-[0.1em]">{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* MULTI-NICHO */}
+        <section className="border-t border-border/70">
+          <div className="mx-auto max-w-[1200px] px-6 py-20 sm:py-28">
+            <div className="max-w-[52ch]">
+              <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent-600">{c.nichos.sobretitulo}</p>
+              <h2 className="mt-5 text-pretty text-[2rem] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[2.6rem]">{c.nichos.titulo}</h2>
+              <p className="mt-6 text-lg leading-relaxed text-text-muted">{c.nichos.texto}</p>
+            </div>
+            <div className="mt-12 grid gap-px overflow-hidden rounded-[12px] border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+              {c.nichos.abas.map((a) => (
+                <div key={a.nicho} className="bg-bg p-6">
+                  <p className="font-mono text-xs uppercase tracking-[0.12em] text-text-muted">{a.nicho}</p>
+                  <p className="mt-4 text-lg font-bold tracking-tight">{a.lead}</p>
+                  <p className="mt-1 font-mono text-xs text-text-muted">lead →</p>
+                  <p className="mt-4 text-lg font-bold tracking-tight text-accent-600">{a.ganho}</p>
+                  <p className="mt-1 font-mono text-xs text-text-muted">won →</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* REVENDEDOR */}
+        <section className="border-t border-border/70 bg-surface-elevated/40">
+          <div className="mx-auto max-w-[1200px] px-6 py-20 sm:py-28">
+            <div className="max-w-[58ch]">
+              <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent-600">{c.revendedor.sobretitulo}</p>
+              <h2 className="mt-5 text-pretty text-[2rem] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[2.6rem]">{c.revendedor.titulo}</h2>
+              <p className="mt-6 text-lg leading-relaxed text-text-muted">{c.revendedor.texto}</p>
+              <p className="mt-6 rounded-[12px] border border-border bg-bg p-5 leading-relaxed text-text-muted">{c.revendedor.honestidade}</p>
+              <a href={`${GITHUB}/blob/main/docs/white-label.md`} className="mt-8 inline-block rounded-[4px] border border-border bg-bg px-5 py-3 text-sm font-bold transition-colors duration-120 ease-out-fast hover:border-accent-300 hover:bg-accent-50">
+                {c.revendedor.cta} →
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ — pergunta literal como H3 VISÍVEL e resposta direta nas primeiras
+            frases. É o formato que a pesquisa mediu como extraível por motor
+            generativo; JSON-LD escondido não substitui, e o Google descontinuou
+            os rich results de FAQ. */}
+        <section className="border-t border-border/70">
+          <div className="mx-auto max-w-[1200px] px-6 py-20 sm:py-28">
+            <h2 className="max-w-[20ch] text-pretty text-[2rem] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[2.6rem]">{c.faq.titulo}</h2>
+            <div className="mt-12 grid gap-x-14 gap-y-9 md:grid-cols-2">
+              {c.faq.perguntas.map((q) => (
+                <div key={q.p} className="min-w-0">
+                  <h3 className="text-lg font-bold tracking-tight">{q.p}</h3>
+                  <p className="mt-2.5 leading-relaxed text-text-muted">{q.r}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* BANNER DA PARCERIA */}
         <section className="px-6 py-16 sm:py-24">
           <div className="mx-auto max-w-[1200px] overflow-hidden rounded-[20px] bg-[#03263c] text-white">
@@ -244,6 +350,36 @@ export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
           </div>
         </section>
       </main>
+
+      <footer className="border-t border-border">
+        <div className="mx-auto max-w-[1200px] px-6 py-14">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+            {c.rodape.colunas.map((col) => (
+              <div key={col.titulo} className="min-w-0">
+                <p className="font-mono text-xs uppercase tracking-[0.14em] text-text-muted">{col.titulo}</p>
+                <ul className="mt-4 space-y-2.5">
+                  {col.itens.map((i) => (
+                    <li key={i.rotulo}>
+                      <a href={i.href.startsWith("#") ? href(i.href) : `${GITHUB}${i.href}`} className="text-sm transition-colors duration-120 ease-out-fast hover:text-accent-600">
+                        {i.rotulo}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
+            <p className="font-mono text-xs text-text-muted">{c.rodape.nota}</p>
+            {/* Data VISÍVEL na página, não só no schema: a pesquisa mediu que 75%
+                das páginas citadas por IA foram atualizadas nos últimos 12 meses,
+                e a data de atualização discrimina melhor que a de publicação. */}
+            <p className="font-mono text-xs text-text-muted">
+              {c.rodape.atualizado} <time dateTime="2026-07-28">28/07/2026</time>
+            </p>
+          </div>
+        </div>
+      </footer>
     </>
   );
 }

@@ -62,4 +62,17 @@ export type Conteudo = {
     fecho: string;
   };
   banner: { sobretitulo: string; titulo: string; texto: string; cta: string; microcopy: string };
+  prova: {
+    sobretitulo: string;
+    titulo: string;
+    sub: string;
+    itens: { afirmacao: string; caminho: string }[];
+    cta: string;
+    ctaNota: string;
+  };
+  radar: { sobretitulo: string; titulo: string; texto: string; fecho: string; faixas: string[] };
+  nichos: { sobretitulo: string; titulo: string; texto: string; abas: { nicho: string; lead: string; ganho: string }[] };
+  revendedor: { sobretitulo: string; titulo: string; texto: string; honestidade: string; cta: string };
+  faq: { titulo: string; perguntas: { p: string; r: string }[] };
+  rodape: { colunas: { titulo: string; itens: { rotulo: string; href: string }[] }[]; nota: string; atualizado: string };
 };

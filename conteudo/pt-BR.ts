@@ -98,4 +98,66 @@ export const ptBR: Conteudo = {
     cta: "Assinar a VPS com desconto",
     microcopy: "link de parceria — assinar por ele apoia o projeto",
   },
+  prova: {
+    sobretitulo: "Prova",
+    titulo: "Não acredite. Confira.",
+    sub: "Cada afirmação desta página aponta para um arquivo do repositório público. Se alguma não se sustentar, é bug — e vale uma issue.",
+    itens: [
+      { afirmacao: "O isolamento entre clientes é testado a cada alteração. O CI sobe um Postgres limpo e roda 364 testes de invariante. Um deles cria duas organizações e prova que uma não vê nenhuma linha da outra — e um caso de controle prova antes que as linhas existem, senão o teste passaria com a tabela vazia.", caminho: "tests/invariants/rls-isolation.test.ts" },
+      { afirmacao: "Sete verificações antes de cada envio, em ordem fixa e versionada. Cada avaliação vira registro durável e exportável — inclusive as que barraram uma mensagem.", caminho: "lib/agent-engine/guardrails/before-send.ts" },
+      { afirmacao: "Atualizar não quebra: o schema é aplicado em banco novo e reaplicado em banco existente, provando idempotência. O caminho de atualização é testado, não só documentado.", caminho: "scripts/test-db.sh" },
+      { afirmacao: "Licença MIT, sem versão paga, sem funcionalidade travada. O que você instala é o produto completo.", caminho: "LICENSE" },
+    ],
+    cta: "Dar uma estrela no GitHub",
+    ctaNota: "é o que ajuda outras pessoas a encontrarem o projeto",
+  },
+  radar: {
+    sobretitulo: "Anti-morte",
+    titulo: "Quantos leads estão morrendo agora?",
+    texto: "O Radar responde. Toda demanda aberta é classificada pelo tempo sem interação e pelo que ficou pendente. Não é relatório do mês passado — é o estado agora.",
+    fecho: "Um número na tela que não muda uma decisão é ruído. Esse muda.",
+    faixas: ["crítico", "em risco", "em voo"],
+  },
+  nichos: {
+    sobretitulo: "Multi-nicho",
+    titulo: "O mesmo sistema atende quem vende consulta e quem vende tênis.",
+    texto: "O vocabulário do funil é configurável. Não é tema, não é fork, não é “versão para clínicas” — é o mesmo núcleo, configurado.",
+    abas: [
+      { nicho: "E-commerce", lead: "Cliente", ganho: "Pago" },
+      { nicho: "Clínica", lead: "Paciente", ganho: "Agendado" },
+      { nicho: "Imobiliária", lead: "Interessado", ganho: "Fechado" },
+      { nicho: "Serviços", lead: "Prospecto", ganho: "Contratado" },
+    ],
+  },
+  revendedor: {
+    sobretitulo: "Para agências",
+    titulo: "Instale para os seus clientes.",
+    texto: "Duas variáveis no .env trocam nome e logo em toda a interface — sem tocar em código, porque código editado se perde na próxima atualização. Licença MIT: pode modificar, hospedar para terceiros e cobrar.",
+    honestidade: "O que ainda NÃO dá: cores e fontes exigem alterar o design system, e a marca é por instalação, não por organização. Está escrito no guia — melhor você saber agora do que descobrir na frente do seu cliente.",
+    cta: "Ler o guia para agências",
+  },
+  faq: {
+    titulo: "Perguntas que você vai fazer",
+    perguntas: [
+      { p: "Quanto custa o DeskcommCRM?", r: "O software é gratuito e de código aberto, sob licença MIT. Não existe versão paga nem funcionalidade travada. Você paga apenas a infraestrutura: a VPS e as chaves de IA que consumir." },
+      { p: "Preciso saber programar para instalar?", r: "Não, mas precisa seguir um passo a passo e ter os acessos em mãos. A instalação é um comando, e o kit inclui um assistente em IA que conduz o processo por conversa." },
+      { p: "Qual VPS eu preciso?", r: "4 GB de RAM são o recomendado — o plano VPS NVMe 4 da HostGator atende. A stack sobe com 2 GB, mas opera no limite: são 7 contêineres, e cada sessão de WhatsApp custa cerca de 150 MB." },
+      { p: "Serve para qual tipo de negócio?", r: "Qualquer negócio que venda por conversa. O vocabulário do funil é configurável, então o mesmo sistema atende e-commerce, clínica, imobiliária, infoproduto e prestador de serviço." },
+      { p: "Posso instalar para meus clientes e cobrar?", r: "Pode. A licença MIT permite uso comercial, modificação e redistribuição, e não há cláusula proibindo hospedar para terceiros." },
+      { p: "O que acontece se a IA errar?", r: "Cada mensagem passa por sete verificações antes de sair, e todas ficam registradas — inclusive as que barraram um envio. Quando o agente não deve seguir sozinho, ele passa para um humano com um resumo do que aconteceu." },
+      { p: "Meus dados ficam no Brasil?", r: "Ficam onde estiver a sua VPS. Contratando uma VPS com datacenter no Brasil, a operação não realiza transferência internacional de dados pessoais — e portanto não fica sujeita às cláusulas-padrão da Resolução ANPD nº 19/2024." },
+      { p: "Como atualizo depois?", r: "Rodando bash update.sh. Ele faz backup do banco antes, reaplica o schema de forma idempotente e confere a saúde no final." },
+    ],
+  },
+  rodape: {
+    colunas: [
+      { titulo: "Produto", itens: [{ rotulo: "Como funciona", href: "#como-funciona" }, { rotulo: "Preço", href: "#preco" }, { rotulo: "Instalar", href: "#instalar" }] },
+      { titulo: "Documentação", itens: [{ rotulo: "Guia de instalação", href: "/blob/main/docs/SETUP.md" }, { rotulo: "Para agências", href: "/blob/main/docs/white-label.md" }, { rotulo: "Arquitetura", href: "/blob/main/ARCHITECTURE.md" }, { rotulo: "Doutrina do sistema vivo", href: "/blob/main/docs/doctrine/sistema-vivo.md" }] },
+      { titulo: "Comunidade", itens: [{ rotulo: "Discussions", href: "/discussions" }, { rotulo: "Issues", href: "/issues" }, { rotulo: "Contribuir", href: "/blob/main/CONTRIBUTING.md" }] },
+      { titulo: "Projeto", itens: [{ rotulo: "Licença MIT", href: "/blob/main/LICENSE" }, { rotulo: "Changelog", href: "/blob/main/CHANGELOG.md" }, { rotulo: "Segurança", href: "/blob/main/SECURITY.md" }] },
+    ],
+    nota: "DeskcommCRM · MIT · Feito no Brasil",
+    atualizado: "Página atualizada em",
+  },
+
 };
