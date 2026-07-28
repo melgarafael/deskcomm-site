@@ -118,3 +118,27 @@ if __name__ == "__main__":
     if len(args) < 2:
         sys.exit("uso: keyout.py entrada.png saida.png [--tol N]")
     recortar(args[0], args[1], tolerancia)
+
+
+def aparar(caminho: str, margem: float = 0.06) -> None:
+    """
+    Apara a imagem até o conteúdo, com margem proporcional igual em volta.
+
+    Necessário porque o gerador compõe cada cena onde quer: entre duas imagens
+    da mesma sessão o conteúdo apareceu começando em 33% e em 7% da largura.
+    Lado a lado num grid, isso lê como desalinhamento — e não é culpa do layout.
+    Aparar pelo bbox real iguala a moldura sem tocar no render.
+    """
+    im = Image.open(caminho)
+    caixa = im.getbbox()
+    if not caixa:
+        return
+    m = int(max(caixa[2] - caixa[0], caixa[3] - caixa[1]) * margem)
+    novo = (
+        max(0, caixa[0] - m),
+        max(0, caixa[1] - m),
+        min(im.width, caixa[2] + m),
+        min(im.height, caixa[3] + m),
+    )
+    im.crop(novo).save(caminho)
+    print(f"  aparado: {im.width}x{im.height} → {novo[2]-novo[0]}x{novo[3]-novo[1]}")
