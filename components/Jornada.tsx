@@ -3,6 +3,8 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 
+import type { Conteudo } from "@/conteudo";
+
 import { usarProgresso } from "./mesa/usarProgresso";
 
 const Mesa3D = dynamic(() => import("./mesa/Mesa3D").then((m) => m.Mesa3D), { ssr: false });
@@ -19,59 +21,23 @@ const Mesa3D = dynamic(() => import("./mesa/Mesa3D").then((m) => m.Mesa3D), { ss
  * demais para o aparelho e para a bateria. Lá cada passo carrega a imagem
  * estática do próprio estado — os renders que serviram de direção de arte.
  */
-const PASSOS = [
-  {
-    n: "01",
-    titulo: "09:41 — chega uma mensagem",
-    texto:
-      "“Vocês entregam em Salvador?” Antes de qualquer resposta, o sistema já sabe quem é: histórico, pedidos, o que ficou combinado da última vez.",
-    img: "/img/cena-00-base.png",
-  },
-  {
-    n: "02",
-    titulo: "O agente lê antes de falar",
-    texto:
-      "Ele busca na base de conhecimento da sua empresa — seu prazo, sua política, seu catálogo. Não inventa.",
-    img: "/img/cena-02.png",
-  },
-  {
-    n: "03",
-    titulo: "Sete verificações antes de enviar",
-    texto:
-      "Descadastro, LGPD, anti-banimento, variação de texto, promessa determinística, promessa semântica e aviso de automação. Nessa ordem, sempre.",
-    img: "/img/cena-03.png",
-  },
-  {
-    n: "04",
-    titulo: "Inclusive o que ele decidiu não enviar",
-    texto:
-      "O agente ia prometer entrega em 24h. A verificação barrou: esse prazo não existe no seu catálogo. Fica registrado o que ele ia dizer — e por que não disse.",
-    img: "/img/cena-04.png",
-  },
-  {
-    n: "05",
-    titulo: "O lead se move sozinho",
-    texto:
-      "Qualificado, ele muda de etapa no funil. A etiqueta entra, o responsável é definido — e cada movimento tem motivo registrado.",
-    img: "/img/cena-05.png",
-  },
-  {
-    n: "06",
-    titulo: "Quando é a vez do humano, ele recebe contexto",
-    texto:
-      "Não a conversa crua: resumo do que aconteceu, o que foi combinado, quais objeções apareceram e qual é o próximo passo.",
-    img: "/img/cena-05.png",
-  },
-  {
-    n: "07",
-    titulo: "E se ninguém responder, não morre",
-    texto:
-      "Follow-up agendado. Se esfriar, o lead aparece no Radar classificado por risco — antes de virar prejuízo.",
-    img: "/img/cena-07.png",
-  },
+const IMAGENS = [
+  "/img/cena-00-base.png",
+  "/img/cena-02.png",
+  "/img/cena-03.png",
+  "/img/cena-04.png",
+  "/img/cena-05.png",
+  "/img/cena-05.png",
+  "/img/cena-07.png",
 ];
 
-export function Jornada() {
+export function Jornada({ c }: { c: Conteudo }) {
+  const PASSOS = c.jornada.passos.map((p, i) => ({
+    n: String(i + 1).padStart(2, "0"),
+    titulo: p.titulo,
+    texto: p.texto,
+    img: IMAGENS[i]!,
+  }));
   // Uma medição, dois usos: o ref contínuo alimenta a geometria, o passo
   // discreto alimenta o texto. Mesma fonte de verdade, sem render por quadro.
   const { alvo, progresso, passo: ativo } = usarProgresso(PASSOS.length);
@@ -81,10 +47,10 @@ export function Jornada() {
       <div className="mx-auto max-w-[1200px] px-6 pt-20 sm:pt-28">
         <div className="max-w-[46ch]">
           <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent-600">
-            A vida de um lead
+            {c.jornada.sobretitulo}
           </p>
           <h2 className="mt-5 text-pretty text-[2rem] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[2.6rem]">
-            O que acontece entre a mensagem e a venda.
+            {c.jornada.titulo}
           </h2>
         </div>
       </div>
@@ -140,7 +106,7 @@ export function Jornada() {
               <div className="mt-5 overflow-hidden rounded-[12px] border border-border bg-bg">
                 <Image
                   src={p.img}
-                  alt={`Estado ${p.n} da mesa: ${p.titulo.toLowerCase()}.`}
+                  alt={`${p.n} — ${p.titulo}`}
                   width={1594}
                   height={941}
                   className="h-auto w-full"
