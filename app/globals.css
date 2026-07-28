@@ -67,20 +67,13 @@
   .regra-num { animation: none; }
 }
 
-/* Trilho numerado da jornada: mesma lógica do trilho das regras — o número do
-   passo em vista ganha destaque, informando onde você está numa sequência longa.
-   Sem isso, sticky de sete passos vira desorientação. */
-@supports (animation-timeline: view()) {
-  .passo-num {
-    animation: ds-passo-ativo linear both;
-    animation-timeline: view();
-    animation-range: cover 30% cover 70%;
-  }
-  @keyframes ds-passo-ativo {
-    0%, 100% { color: theme("colors.text-muted"); }
-    45%, 55% { color: theme("colors.accent.600"); }
-  }
+/* Trilho numerado da jornada: marcado pelo mesmo observador que troca a cena.
+   Uma fonte de verdade para "qual passo está em vista" — com dois mecanismos,
+   um deles falha calado e o trilho desencontra da imagem. */
+[data-ativo] .passo-num {
+  color: theme("colors.accent.600");
 }
-@media (prefers-reduced-motion: reduce) {
-  .passo-num { animation: none; }
+.passo-num {
+  transition: color 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
+
