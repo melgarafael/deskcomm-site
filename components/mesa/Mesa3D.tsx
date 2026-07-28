@@ -2,9 +2,10 @@
 
 import { ContactShadows } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import type { Group } from "three";
 
+import { CartaoContexto, Conhecimento, Gates, Humano, RegistroVeto, Resumo } from "./estados";
 import { Agente, CORES, Clay, Conversa, Funil, Lead, Placa, Registro, Temporizador } from "./pecas";
 
 /**
@@ -54,10 +55,23 @@ const entre = (a: number, b: number, k: number) => a + (b - a) * Math.min(1, Mat
 const faixa = (p: number, ini: number, fim: number) =>
   Math.min(1, Math.max(0, (p - ini) / (fim - ini)));
 
+/**
+ * O progresso vira sete tempos. Cada elemento lê quanto o SEU tempo está ativo,
+ * e a mesa nunca troca de imagem: ela muda de estado.
+ */
+function tempo(p: number, i: number, total = 7) {
+  const largura = 1 / total;
+  const ini = i * largura;
+  // Entra na primeira metade da faixa e permanece até o fim dela.
+  return Math.min(1, Math.max(0, (p - ini) / (largura * 0.55)));
+}
+
 function Cena({ progresso }: { progresso: number }) {
   const grupo = useRef<Group>(null);
   const pecas = useRef<Group>(null);
+  const leadRef = useRef<Group>(null);
   const suave = useRef(0);
+  const [p, setP] = useState(0);
 
   useFrame((_, dt) => {
     // Amortecimento: a mesa PERSEGUE o progresso em vez de saltar com ele.
@@ -69,24 +83,20 @@ function Cena({ progresso }: { progresso: number }) {
 
     if (grupo.current) {
       // Gira e inclina: você contorna a mesa enquanto desce a página.
-      grupo.current.rotation.y = entre(-0.42, 0.5, faixa(p, 0, 1));
-      grupo.current.rotation.x = entre(0, -0.18, faixa(p, 0.3, 1));
-      grupo.current.position.y = entre(0, 0.6, faixa(p, 0.35, 1));
+      grupo.current.rotation.y = entre(-0.30, 0.26, faixa(p, 0, 1));
+      grupo.current.rotation.x = entre(0, -0.09, faixa(p, 0.3, 1));
+      
     }
-    if (pecas.current) {
-      // As peças SOBEM e se afastam do tampo — a mesa se abre nas próprias
-      // camadas, que é a leitura do cubo do CodeWiki aplicada aqui.
-      const abrir = faixa(p, 0.22, 0.8);
-      pecas.current.children.forEach((filho, i) => {
-        const base = filho.userData.base as [number, number, number];
-        const dir = filho.userData.dir as [number, number];
-        filho.position.set(
-          base[0] + dir[0] * abrir * 1.5,
-          base[1] + abrir * (0.5 + i * 0.34),
-          base[2] + dir[1] * abrir * 1.5,
-        );
-      });
+    // O lead percorre o sulco da conversa até o funil no tempo 5.
+    if (leadRef.current) {
+      const andar = faixa(p, 4 / 7, 4 / 7 + 0.09);
+      leadRef.current.position.set(
+        entre(-4.75, -0.9, andar),
+        entre(0.28, 0.62, andar),
+        entre(1.25, -2.05, andar),
+      );
     }
+    setP(p);
   });
 
   return (
@@ -97,35 +107,29 @@ function Cena({ progresso }: { progresso: number }) {
       <Placa largura={10.1} profundidade={6.75} espessura={0.14} raio={0.7} cor={CORES.peca} position={[0, -0.46, 0]} />
 
       {/* Sulcos: o caminho que liga as peças */}
-      <Sulco de={[-3.5, 0.9]} para={[-0.2, 0.9]} />
-      <Sulco de={[-0.2, 0.9]} para={[-0.2, -1.1]} />
+      <Sulco de={[-3.5, 0.9]} para={[-0.2, 0.9]} aceso={p > 4 / 7} />
+      <Sulco de={[-0.2, 0.9]} para={[-0.2, -1.1]} aceso={p > 4.6 / 7} />
       <Sulco de={[-3.3, -1.4]} para={[-1.2, -1.4]} />
       <Sulco de={[1.2, 0]} para={[3.4, 0]} />
       <Sulco de={[-0.2, -1.9]} para={[1.5, -1.9]} />
 
-      {/* Cada peça guarda sua posição de repouso e a direção para onde se
-          afasta quando a mesa abre. userData em vez de estado do React: isto
-          muda a cada quadro e não pode passar pelo ciclo de render. */}
-      <group ref={pecas}>
-        {(
-          [
-            [Conversa, [-3.9, 0.2, 0.9], [-1, 0.2]],
-            [Funil, [-0.9, 0.05, -2.3], [-0.2, -1]],
-            [Agente, [0.4, 0.02, 0], [0.1, 0]],
-            [Temporizador, [3.9, 0.02, 0.3], [1, 0.15]],
-            [Registro, [-0.4, 0.1, 2.1], [-0.15, 1]],
-          ] as const
-        ).map(([Peca, base, dir], i) => (
-          <group
-            key={i}
-            position={base as [number, number, number]}
-            userData={{ base, dir }}
-          >
-            <Peca position={[0, 0, 0]} />
-          </group>
-        ))}
+      <Conversa position={[-3.9, 0.2, 0.9]} />
+      <Funil position={[-0.9, 0.05, -2.3]} />
+      <Agente position={[0.4, 0.02, 0]} />
+      <Temporizador position={[3.9, 0.02, 0.3]} />
+      <Registro position={[-0.4, 0.1, 2.1]} />
+
+      {/* Os sete tempos da narrativa, na mesma mesa. */}
+      <CartaoContexto f={tempo(p, 0)} />
+      <Conhecimento f={tempo(p, 1)} />
+      <Gates f={tempo(p, 2)} destacarVeto={tempo(p, 3)} />
+      <RegistroVeto f={tempo(p, 3)} />
+      <Humano f={tempo(p, 5)} />
+      <Resumo f={tempo(p, 5)} />
+
+      <group ref={leadRef} position={[-4.75, 0.28, 1.25]}>
+        <Lead position={[0, 0, 0]} cor={tempo(p, 6) > 0.4 ? CORES.ambar : CORES.sage} />
       </group>
-      <Lead position={[-4.75, 0.28, 1.25]} />
     </group>
   );
 }
