@@ -66,3 +66,21 @@
   .mesa-revela { animation: none; clip-path: none; }
   .regra-num { animation: none; }
 }
+
+/* Trilho numerado da jornada: mesma lógica do trilho das regras — o número do
+   passo em vista ganha destaque, informando onde você está numa sequência longa.
+   Sem isso, sticky de sete passos vira desorientação. */
+@supports (animation-timeline: view()) {
+  .passo-num {
+    animation: ds-passo-ativo linear both;
+    animation-timeline: view();
+    animation-range: cover 30% cover 70%;
+  }
+  @keyframes ds-passo-ativo {
+    0%, 100% { color: theme("colors.text-muted"); }
+    45%, 55% { color: theme("colors.accent.600"); }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .passo-num { animation: none; }
+}
