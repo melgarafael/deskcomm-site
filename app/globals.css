@@ -29,3 +29,40 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ── Movimento ──────────────────────────────────────────────────────────────
+   Regra desta página (docs/design-system/10-landing-motion.md): o que se move
+   precisa estar explicando o produto. Nada entra com fade só por ter entrado no
+   viewport — isso é o parallax decorativo que o 07-motion-language.md bane. */
+
+/* A mesa ganha as conexões. Uma passada, da esquerda para a direita, no
+   carregamento. Não repete. */
+.mesa-revela {
+  animation: ds-conectar 1400ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both;
+}
+@keyframes ds-conectar {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+
+/* O trilho numerado das regras: o número do item em vista fica em destaque.
+   Isso INFORMA — diz em que ponto da lista você está —, não decora.
+   Só existe onde o navegador tem timeline de scroll; sem suporte, a lista fica
+   legível do mesmo jeito. */
+@supports (animation-timeline: view()) {
+  .regra-num {
+    animation: ds-regra-ativa linear both;
+    animation-timeline: view();
+    animation-range: cover 35% cover 65%;
+  }
+  @keyframes ds-regra-ativa {
+    0%, 100% { color: theme("colors.text-muted"); }
+    50%      { color: theme("colors.accent.600"); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Sem movimento, a mesa já nasce conectada: a história continua inteira. */
+  .mesa-revela { animation: none; clip-path: none; }
+  .regra-num { animation: none; }
+}

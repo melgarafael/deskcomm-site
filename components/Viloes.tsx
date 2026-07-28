@@ -34,12 +34,12 @@ export function Viloes() {
 
         <div className="mt-14 grid gap-x-12 gap-y-14 md:grid-cols-2">
           {VILOES.map((v) => (
-            <article key={v.titulo} className="min-w-0">
+            <article key={v.titulo} className="group min-w-0">
               {/* Proporção fixa + contain: as imagens saem do gerador com
                   proporções diferentes (1,64 e 1,58 aqui), e sem isso os
                   cartões ficam com alturas distintas e os títulos deixam de
                   alinhar na mesma linha de base. */}
-              <div className="flex aspect-[8/5] items-center justify-center overflow-hidden rounded-[12px] border border-border bg-bg p-3">
+              <div className="flex aspect-[8/5] items-center justify-center overflow-hidden rounded-[12px] border border-border bg-bg p-3 transition-[border-color,transform] duration-200 ease-out-slow group-hover:-translate-y-px group-hover:border-accent-300">
                 <Image
                   src={v.img}
                   alt={v.alt}

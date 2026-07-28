@@ -58,7 +58,7 @@ export function Virada() {
               key={r.n}
               className="grid gap-x-8 gap-y-2 border-b border-border py-7 md:grid-cols-[auto_minmax(0,20rem)_minmax(0,1fr)] md:items-baseline"
             >
-              <span className="font-mono text-sm text-accent-600">{r.n}</span>
+              <span className="regra-num font-mono text-sm text-text-muted">{r.n}</span>
               <h3 className="text-lg font-bold tracking-tight">{r.regra}</h3>
               <p className="leading-relaxed text-text-muted">{r.prova}</p>
             </li>
