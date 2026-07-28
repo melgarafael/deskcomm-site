@@ -10,6 +10,8 @@
   body {
     background: theme("colors.bg");
     color: theme("colors.text");
+    /* Sangramento de imagem recorta; nunca empurra a página. */
+    overflow-x: clip;
   }
   ::selection {
     background: theme("colors.accent.100");
