@@ -66,7 +66,7 @@ function tempo(p: number, i: number, total = 7) {
   return Math.min(1, Math.max(0, (p - ini) / (largura * 0.55)));
 }
 
-function Cena({ progresso }: { progresso: number }) {
+function Cena({ progresso }: { progresso: { current: number } }) {
   const grupo = useRef<Group>(null);
   const pecas = useRef<Group>(null);
   const leadRef = useRef<Group>(null);
@@ -78,7 +78,7 @@ function Cena({ progresso }: { progresso: number }) {
     // Sem isso, scroll em trackpad vira tremor.
     // dt*11: a mesa cola no scroll. Abaixo disso ela arrasta e parece
     // pesada; muito acima, trackpad vira tremor.
-    suave.current += (progresso - suave.current) * Math.min(1, dt * 11);
+    suave.current += (progresso.current - suave.current) * Math.min(1, dt * 11);
     const p = suave.current;
 
     if (grupo.current) {
@@ -134,7 +134,7 @@ function Cena({ progresso }: { progresso: number }) {
   );
 }
 
-export function Mesa3D({ progresso = 0 }: { progresso?: number }) {
+export function Mesa3D({ progresso }: { progresso: { current: number } }) {
   return (
     <div className="relative aspect-[16/9] w-full">
       <Canvas

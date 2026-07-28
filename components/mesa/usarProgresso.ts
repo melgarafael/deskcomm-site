@@ -3,42 +3,60 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Progresso do scroll DENTRO de um elemento: 0 quando o topo dele encosta no topo
- * da tela, 1 quando o fim dele sai por cima.
+ * Progresso do scroll dentro de um elemento.
  *
- * Lê no rAF em vez de no evento de scroll: o evento dispara mais que a taxa de
- * quadros e o cálculo repetido não vira quadro nenhum. Assim o valor é lido uma
- * vez por quadro, que é exatamente quando ele é usado.
+ * Devolve duas coisas, com propósitos diferentes:
+ * - `progresso`: ref com o valor contínuo, para a animação ler no quadro. NÃO
+ *   passa por estado — animar via setState dispara um render por quadro.
+ * - `passo`: estado, atualizado só quando o índice do passo MUDA. Informação
+ *   discreta, algumas vezes por rolagem inteira.
+ *
+ * POR QUE OUVIR O SCROLL EM VEZ DE MANTER UM LAÇO DE rAF VIVO: a primeira versão
+ * era um laço auto-perpetuado, e ele MORRIA no primeiro setState — medido: 21
+ * quadros e congelava, com o alvo ainda anexado. Um laço que depende de
+ * sobreviver a todo ciclo de render é frágil por construção. Ouvinte de evento
+ * é reanexado se o efeito rodar de novo, e o rAF aqui só estrangula a frequência
+ * — não é o motor.
  */
-export function usarProgresso() {
+export function usarProgresso(passos = 1) {
   const alvo = useRef<HTMLDivElement>(null);
-  const [progresso, setProgresso] = useState(0);
+  const progresso = useRef(0);
+  const [passo, setPasso] = useState(0);
 
   useEffect(() => {
-    let vivo = true;
-    let ultimo = -1;
+    let agendado = false;
+    let ultimoPasso = -1;
 
-    const passo = () => {
-      if (!vivo) return;
+    const medir = () => {
+      agendado = false;
       const el = alvo.current;
-      if (el) {
-        const r = el.getBoundingClientRect();
-        const total = r.height - window.innerHeight;
-        const p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
-        // Só re-renderiza quando o valor muda de forma perceptível.
-        if (Math.abs(p - ultimo) > 0.001) {
-          ultimo = p;
-          setProgresso(p);
-        }
-      }
-      requestAnimationFrame(passo);
-    };
-    const id = requestAnimationFrame(passo);
-    return () => {
-      vivo = false;
-      cancelAnimationFrame(id);
-    };
-  }, []);
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const total = r.height - window.innerHeight;
+      const p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
+      progresso.current = p;
 
-  return { alvo, progresso };
+      const i = Math.min(passos - 1, Math.floor(p * passos));
+      if (i !== ultimoPasso) {
+        ultimoPasso = i;
+        setPasso(i);
+      }
+    };
+
+    const aoRolar = () => {
+      if (agendado) return;
+      agendado = true;
+      requestAnimationFrame(medir);
+    };
+
+    window.addEventListener("scroll", aoRolar, { passive: true });
+    window.addEventListener("resize", aoRolar);
+    medir();
+    return () => {
+      window.removeEventListener("scroll", aoRolar);
+      window.removeEventListener("resize", aoRolar);
+    };
+  }, [passos]);
+
+  return { alvo, progresso, passo };
 }
