@@ -62,19 +62,21 @@ function Cena({ progresso }: { progresso: number }) {
   useFrame((_, dt) => {
     // Amortecimento: a mesa PERSEGUE o progresso em vez de saltar com ele.
     // Sem isso, scroll em trackpad vira tremor.
-    suave.current += (progresso - suave.current) * Math.min(1, dt * 6);
+    // dt*11: a mesa cola no scroll. Abaixo disso ela arrasta e parece
+    // pesada; muito acima, trackpad vira tremor.
+    suave.current += (progresso - suave.current) * Math.min(1, dt * 11);
     const p = suave.current;
 
     if (grupo.current) {
       // Gira e inclina: você contorna a mesa enquanto desce a página.
       grupo.current.rotation.y = entre(-0.42, 0.5, faixa(p, 0, 1));
-      grupo.current.rotation.x = entre(0, -0.16, faixa(p, 0.45, 1));
-      grupo.current.position.y = entre(0, 0.6, faixa(p, 0.5, 1));
+      grupo.current.rotation.x = entre(0, -0.18, faixa(p, 0.3, 1));
+      grupo.current.position.y = entre(0, 0.6, faixa(p, 0.35, 1));
     }
     if (pecas.current) {
       // As peças SOBEM e se afastam do tampo — a mesa se abre nas próprias
       // camadas, que é a leitura do cubo do CodeWiki aplicada aqui.
-      const abrir = faixa(p, 0.35, 0.9);
+      const abrir = faixa(p, 0.22, 0.8);
       pecas.current.children.forEach((filho, i) => {
         const base = filho.userData.base as [number, number, number];
         const dir = filho.userData.dir as [number, number];
