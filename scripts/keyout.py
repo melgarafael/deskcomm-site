@@ -20,20 +20,55 @@ from collections import deque
 
 from PIL import Image
 
-CREME = (250, 249, 246)  # #faf9f6 — fundo da página
+def _medir_fundo(px, largura: int, altura: int) -> tuple[tuple[int, int, int], int]:
+    """
+    Mede a cor de fundo NA PRÓPRIA IMAGEM, amostrando a faixa das bordas.
+
+    Fixar #faf9f6 no código era premissa, não fato: cada render sai com um creme
+    levemente diferente (medidos 249,248,244 e 248,245,242 em duas imagens da
+    mesma sessão). Com alvo fixo, a segunda deixava pixels dispersos e o recorte
+    parava de fechar. A tolerância também sai da medição — amplitude observada
+    mais folga —, em vez de ser um número escolhido no chute.
+    """
+    amostra = []
+    for x in range(0, largura, 4):
+        for y in list(range(0, 24, 4)) + list(range(altura - 24, altura, 4)):
+            amostra.append(px[x, y][:3])
+    for y in range(0, altura, 4):
+        for x in list(range(0, 24, 4)) + list(range(largura - 24, largura, 4)):
+            amostra.append(px[x, y][:3])
+
+    # MEDIANA e percentis, não média e amplitude. A faixa das bordas NÃO é toda
+    # fundo: a composição do hero tem a mesa sangrando pela direita de propósito,
+    # então a amostra vem contaminada com pixels do objeto. Com média+amplitude a
+    # tolerância foi para ±49 e o recorte comeu a borda da mesa. Mediana ignora o
+    # contaminante, e o teto impede que uma amostra pior ainda estoure de novo.
+    canais = list(zip(*amostra))
+    medianas = tuple(sorted(c)[len(c) // 2] for c in canais)
+
+    def percentil(valores: tuple[int, ...], p: float) -> int:
+        ordenado = sorted(valores)
+        return ordenado[min(len(ordenado) - 1, int(len(ordenado) * p))]
+
+    espalhamento = max(percentil(c, 0.97) - percentil(c, 0.03) for c in canais)
+    return medianas, max(6, min(14, espalhamento + 3))
 
 
-def recortar(origem: str, destino: str, tol: int = 6) -> None:
+def recortar(origem: str, destino: str, tol: int | None = None) -> None:
     im = Image.open(origem).convert("RGBA")
     largura, altura = im.size
     px = im.load()
 
+    fundo, tol_medida = _medir_fundo(px, largura, altura)
+    tol = tol if tol is not None else tol_medida
+    print(f"  fundo medido: rgb{fundo} · tolerância: ±{tol}")
+
     def e_fundo(x: int, y: int) -> bool:
         r, g, b, _ = px[x, y]
         return (
-            abs(r - CREME[0]) <= tol
-            and abs(g - CREME[1]) <= tol
-            and abs(b - CREME[2]) <= tol
+            abs(r - fundo[0]) <= tol
+            and abs(g - fundo[1]) <= tol
+            and abs(b - fundo[2]) <= tol
         )
 
     visitado = bytearray(largura * altura)
@@ -77,7 +112,7 @@ def recortar(origem: str, destino: str, tol: int = 6) -> None:
 
 if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
-    tolerancia = 6
+    tolerancia = None
     if "--tol" in sys.argv:
         tolerancia = int(sys.argv[sys.argv.index("--tol") + 1])
     if len(args) < 2:
