@@ -5,6 +5,7 @@ import type { Conteudo, Idioma } from "@/conteudo";
 import { IDIOMAS } from "@/conteudo";
 
 import { Jornada } from "./Jornada";
+import { Logotipo, Simbolo } from "./Marca";
 import { Mesa } from "./mesa/MesaEstatica";
 import { StarCount } from "./StarCount";
 
@@ -19,9 +20,8 @@ export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
     <>
       <header className="sticky top-0 z-50 border-b border-transparent bg-bg/90 backdrop-blur-[2px]">
         <div className="mx-auto flex h-14 max-w-[1200px] items-center gap-8 px-6">
-          <a href={base} className="flex items-center gap-2.5 font-bold tracking-tight">
-            <span aria-hidden className="h-3.5 w-3.5 rounded-[4px] bg-accent-600" />
-            DeskcommCRM
+          <a href={base} className="flex items-center" aria-label="DeskcommCRM">
+            <Logotipo className="h-7 w-auto" />
           </a>
           <nav className="hidden flex-1 items-center gap-6 md:flex">
             {[
@@ -370,7 +370,10 @@ export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
             ))}
           </div>
           <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
-            <p className="font-mono text-xs text-text-muted">{c.rodape.nota}</p>
+            <div className="flex items-center gap-3">
+              <Simbolo className="h-6 w-6" />
+              <p className="font-mono text-xs text-text-muted">{c.rodape.nota}</p>
+            </div>
             {/* Data VISÍVEL na página, não só no schema: a pesquisa mediu que 75%
                 das páginas citadas por IA foram atualizadas nos últimos 12 meses,
                 e a data de atualização discrimina melhor que a de publicação. */}
