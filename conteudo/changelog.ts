@@ -170,9 +170,11 @@ const es: TextosChangelog = {
 
 export const TEXTOS_CHANGELOG: Record<Idioma, TextosChangelog> = { "pt-BR": pt, en, es };
 
-export function formatarData(data: string, locale: string, formato: "longo" | "curto" | "mes" = "longo"): string {
+export function formatarData(data: string, locale: string, formato: "longo" | "curto" | "mes" | "numerico" = "longo"): string {
   const opcoes: Intl.DateTimeFormatOptions =
-    formato === "mes"
+    formato === "numerico"
+      ? { day: "2-digit", month: "2-digit", year: "numeric", timeZone: "UTC" }
+      : formato === "mes"
       ? { month: "long", year: "numeric", timeZone: "UTC" }
       : formato === "curto"
         ? { day: "2-digit", month: "short", timeZone: "UTC" }

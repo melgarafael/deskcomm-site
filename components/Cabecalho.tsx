@@ -19,9 +19,10 @@ export const GITHUB = "https://github.com/melgarafael/DeskcommCRM";
  *     instalar ficava mais alto que o próprio cabeçalho;
  *   - âncoras e seletor de idioma funcionam fora da home (`/#instalar`; a mesma
  *     página no outro idioma);
- *   - o botão dos guias para devs: texto inteiro a partir de 1024 px, rótulo
- *     curto entre 640 e 1024, e só o ícone abaixo disso — é o único jeito de caber
- *     ao lado do botão de instalar num celular de 360 px.
+ *   - o botão dos guias para devs: texto inteiro a partir de 1280 px, rótulo
+ *     curto entre 640 e 1280, e só o ícone abaixo disso. Com o texto inteiro já em
+ *     1024 px, o cabeçalho em espanhol passava 29 px da tela; e abaixo de 640 só o
+ *     ícone cabe ao lado do botão de instalar num celular de 360 px.
  *
  * Não importa `Jornada` nem nada de `mesa/`: páginas que usam o cabeçalho não
  * carregam o Three.js da home.
@@ -81,8 +82,8 @@ export function Cabecalho({ c, idioma, pagina }: { c: Conteudo; idioma: Idioma; 
               <path d="M2.5 4.5 5.5 8l-3 3.5" />
               <path d="M7.5 11.5h6" />
             </svg>
-            <span className="hidden whitespace-nowrap sm:inline lg:hidden">{c.nav.guiasCurto}</span>
-            <span className="hidden whitespace-nowrap lg:inline">{c.nav.guias}</span>
+            <span className="hidden whitespace-nowrap sm:inline xl:hidden">{c.nav.guiasCurto}</span>
+            <span className="hidden whitespace-nowrap xl:inline">{c.nav.guias}</span>
           </a>
           <a href={GITHUB} className="hidden h-9 items-center gap-2 rounded-[4px] border border-border px-3 text-sm transition-colors duration-150 ease-out-fast hover:border-accent-300 hover:bg-accent-50 md:flex">
             <svg viewBox="0 0 16 16" aria-hidden className="h-4 w-4 fill-current">

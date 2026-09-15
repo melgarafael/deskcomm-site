@@ -70,13 +70,15 @@ export async function PaginaChangelog({ idioma }: { idioma: Idioma }) {
             <p className="font-mono text-xs uppercase tracking-[0.16em] text-text-muted">{t.sobretitulo}</p>
             <h1 className="mt-5 max-w-[18ch] text-balance text-[2.3rem] font-bold leading-[1.08] tracking-[-0.02em] sm:text-[3.1rem]">{t.titulo}</h1>
             <p className="mt-5 max-w-[56ch] text-pretty text-lg leading-relaxed text-text-muted">{t.subtitulo}</p>
-            <dl className="mt-8 grid max-w-[520px] grid-cols-3 gap-4 border-t border-border pt-6">
+            {/* No celular a data ocupa a segunda linha inteira: numa coluna de ~96px, "27/07/2026" em
+                mono transbordava 4px da tela — sem alargar a própria caixa, invisível a quem só mede caixas. */}
+            <dl className="mt-8 grid max-w-[520px] grid-cols-2 gap-4 border-t border-border pt-6 sm:grid-cols-3">
               {[
                 [String(versoes.length), t.estatisticas.versoes],
                 [String(totalMudancas), t.estatisticas.mudancas],
-                [formatarData(primeira.data, t.locale, "mes"), t.estatisticas.desde],
-              ].map(([valor, rotulo]) => (
-                <div key={rotulo} className="min-w-0">
+                [formatarData(primeira.data, t.locale, "numerico"), t.estatisticas.desde],
+              ].map(([valor, rotulo], i) => (
+                <div key={rotulo} className={i === 2 ? "col-span-2 min-w-0 sm:col-span-1" : "min-w-0"}>
                   <dt className="sr-only">{rotulo}</dt>
                   <dd className="font-mono text-xl tabular-nums text-text sm:text-2xl">{valor}</dd>
                   <dd className="mt-1 text-xs leading-snug text-text-muted">{rotulo}</dd>
@@ -89,7 +91,7 @@ export async function PaginaChangelog({ idioma }: { idioma: Idioma }) {
             href={rotaDaVersao(idioma, ultima.versao)}
             className="group relative block overflow-hidden rounded-[20px] border border-accent-200 bg-surface p-6 transition-colors duration-150 ease-out-fast hover:border-accent-300 sm:p-7"
           >
-            <span aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-accent-50" />
+            <span aria-hidden className="pointer-events-none absolute -right-16 -top-16 hidden h-48 w-48 rounded-full bg-accent-50 sm:block" />
             <div className="relative">
               <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-accent-700">
                 <span className="relative flex h-2 w-2">
