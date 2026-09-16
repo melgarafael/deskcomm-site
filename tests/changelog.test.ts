@@ -37,20 +37,25 @@ const FIXTURE = `# Changelog
 
 **Se o seu servidor foi instalado antes desta versão, rode o \`update.sh\` DUAS vezes.**
 
+Não é engano: a primeira execução ainda é a do programa antigo. Esta prosa apoia o aviso acima,
+e não é um aviso a mais.
+
 **Antes de ligar a parada automática, confira o número do seu limite.**
 
 ## [1.0.0] — 2026-01-01
 
 ### Segurança
 
-**⚠️ Requer atenção**
-
-Prosa que não é entrada de nada.
-
 **Estes são os grupos desta versão:**
 
 - **Uma correção.** O corpo dela.
 - **Outra correção** — o corpo da outra.
+
+**⚠️ Requer atenção**
+
+Prosa que é o aviso inteiro, e não abre em negrito.
+
+Um segundo parágrafo, um segundo aviso.
 
 ### Corrigido
 
@@ -95,10 +100,27 @@ test("c1: `Requer atenção` vem primeiro, mesmo escrita depois no arquivo", () 
   assert.equal(porNumero("2.0.0").secoes[0].tipo, "atencao");
 });
 
-test("c1: `**⚠️ Requer atenção**` é cabeçalho de seção, não entrada dela", () => {
+test("c1 (v5): `**⚠️ Requer atenção**` ABRE uma seção, e não fica de entrada da anterior", () => {
+  const v = porNumero("1.0.0");
+  assert.equal(v.secoes[0].tipo, "atencao", "a 1.1.0 e a 1.2.0 escrevem o aviso assim, dentro de outra seção");
   const seguranca = secao("1.0.0", "Segurança");
-  assert.equal(contarItens(seguranca), 2, "os 2 itens da lista, sem o cabeçalho em negrito e sem a prosa");
+  assert.equal(contarItens(seguranca), 2, "os 2 itens da lista, sem o cabeçalho em negrito e sem a prosa dele");
   assert.deepEqual(titulosDaSecao(seguranca), ["Uma correção", "Outra correção"]);
+});
+
+test("c1 (v5): seção que não nomeia nada conta os parágrafos — o chip não pode dizer 0", () => {
+  const atencao = secao("1.0.0", "Requer atenção");
+  assert.equal(contarItens(atencao), 2, "prosa pura: cada parágrafo de topo é um aviso");
+  assert.deepEqual(titulosDaSecao(atencao), [
+    "Prosa que é o aviso inteiro, e não abre em negrito.",
+    "Um segundo parágrafo, um segundo aviso.",
+  ]);
+});
+
+test("c1 (v5): o recuo para a prosa é só de quem não nomeia nada", () => {
+  const atencao = secao("2.0.0", "Requer atenção");
+  assert.equal(contarItens(atencao), 2, "a seção tem 2 avisos em negrito; a prosa entre eles é apoio");
+  assert.ok(!titulosDaSecao(atencao).some((t) => t.startsWith("Não é engano")), "prosa de apoio virou aviso");
 });
 
 test("c1: parágrafo em negrito que ABRE uma lista não conta — quem conta são os itens", () => {

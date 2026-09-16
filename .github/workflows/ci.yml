@@ -1,0 +1,34 @@
+# O ponto de invocação da suíte.
+#
+# Ela existia e nada a rodava: o repositório não tinha `.github/`, e os únicos checks do PR #1
+# eram o deploy da Vercel e o comentário de preview — nenhum dos dois roda `pnpm test`. Uma
+# suíte que só protege quem lembrar de digitá-la não protege ninguém num PR de terceiro.
+#
+# `pnpm test` também virou `prebuild` no `package.json`, então quem roda `pnpm build` (aqui e na
+# Vercel, que executa o script `build` do `package.json`) leva a suíte junto. Este workflow é o
+# que NÃO depende disso: roda a suíte sozinha, e reprova com ela.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      # `--test` do Node não tem watch aqui: sai 1 no primeiro caso vermelho.
+      - run: pnpm test
+      # O build baixa o CHANGELOG da `main` do produto e gera as 42 versões × 3 idiomas.
+      - run: pnpm build

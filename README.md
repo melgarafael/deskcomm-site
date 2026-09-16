@@ -17,6 +17,16 @@ pnpm install
 pnpm dev
 ```
 
+## Conferir
+
+```bash
+pnpm typecheck
+pnpm test     # node:test; também roda sozinho antes do `pnpm build`
+pnpm build    # baixa o CHANGELOG da main do produto e gera as 42 versões × 3 idiomas
+```
+
+Os três rodam no CI (`.github/workflows/ci.yml`) a cada push e a cada PR.
+
 ## Estado
 
 Esqueleto com `noindex`. Sai quando a LP estiver pronta.

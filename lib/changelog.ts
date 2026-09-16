@@ -122,12 +122,41 @@ export function interpretarChangelog(md: string): Versao[] {
   return versoes;
 }
 
+const CABECALHO_DE_SECAO = /^###\s+(.+?)\s*$/;
+/** Uma linha que é só um negrito: `**⚠️ Requer atenção**`. */
+const SO_NEGRITO = /^\*\*(.+?)\*\*\s*$/;
+
+/** O título de uma seção sem o `⚠️` do formato do robô — é por ele que `### Corrigido` repetido funde. */
+function normalizarTituloDeSecao(titulo: string): string {
+  return titulo.replace(/^⚠️?\s*/u, "").trim();
+}
+
+/**
+ * A linha abre uma seção? `###` sempre; um negrito sozinho, quando ele nomeia uma seção conhecida.
+ *
+ * A 1.1.0 e a 1.2.0 escrevem `**⚠️ Requer atenção**` DENTRO de `### Alterado` e de `### Segurança`,
+ * e lido como corpo o aviso não ganhava seção, nem h2, nem chip: a 1.2.0 mostrava só "Adicionado 26
+ * · Corrigido 19 · Segurança 5", e o aviso escondido ali é o das 51 migrations de banco. Pior que o
+ * silêncio seria o carimbo errado: qualquer parágrafo em negrito depois dele viraria uma entrada de
+ * "Segurança". Medido no CHANGELOG da `main`: das 12 linhas que são só negrito, estas 2 são as
+ * únicas que nomeiam uma seção — `**Atendimento**` e `**Escolher a sua IA**` (1.2.0) continuam
+ * abrindo lista, e o `**Versão de segurança. Se você roda…**` da 1.2.1 continua parágrafo.
+ */
+function tituloDaSecao(linha: string): string | null {
+  const cabecalho = CABECALHO_DE_SECAO.exec(linha);
+  if (cabecalho) return normalizarTituloDeSecao(cabecalho[1]);
+  const negrito = SO_NEGRITO.exec(linha);
+  if (!negrito) return null;
+  const titulo = normalizarTituloDeSecao(negrito[1].trim().replace(/[.:]$/, ""));
+  return tipoDaSecao(titulo) === "outro" ? null : titulo;
+}
+
 function separarSecoes(linhas: string[]): { introducao: Bloco[]; secoes: Secao[] } {
   const intro: string[] = [];
   const secoes: { titulo: string; linhas: string[] }[] = [];
   for (const linha of linhas) {
-    const m = /^###\s+(.+?)\s*$/.exec(linha);
-    if (m) secoes.push({ titulo: m[1], linhas: [] });
+    const titulo = tituloDaSecao(linha);
+    if (titulo) secoes.push({ titulo, linhas: [] });
     else if (secoes.length) secoes[secoes.length - 1].linhas.push(linha);
     else intro.push(linha);
   }
@@ -135,11 +164,10 @@ function separarSecoes(linhas: string[]): { introducao: Bloco[]; secoes: Secao[]
   // `### Corrigido` duas vezes na mesma versão (1.6.0) vira uma seção só.
   const fundidas: Secao[] = [];
   for (const s of secoes) {
-    const titulo = s.titulo.replace(/^⚠️?\s*/u, "").trim();
     const blocos = interpretarBlocos(s.linhas);
-    const existente = fundidas.find((f) => f.titulo === titulo);
+    const existente = fundidas.find((f) => f.titulo === s.titulo);
     if (existente) existente.blocos.push(...blocos);
-    else fundidas.push({ titulo, tipo: tipoDaSecao(titulo), blocos });
+    else fundidas.push({ titulo: s.titulo, tipo: tipoDaSecao(s.titulo), blocos });
   }
 
   // "Requer atenção" vem sempre primeiro — nas versões manuais ela aparecia em qualquer posição.
@@ -315,30 +343,30 @@ export function ancoraDoGithub(titulo: string): string {
  * "Se você está vindo da 1.4.0" da 1.5.0 — e quem conta são os itens. Parágrafo sem negrito,
  * citação, código e separador são corpo, não entrada.
  *
+ * Corpo, mas de quê? Numa seção que não nomeia NADA, não há entrada para esses parágrafos
+ * sustentarem — e o chip voltaria a dizer 0 sobre uma seção que diz alguma coisa. É o caso dos
+ * avisos da 1.1.0 e da 1.2.0, prosa pura debaixo de um cabeçalho em negrito. Então: sem nenhuma
+ * entrada nomeada, cada parágrafo de topo é uma entrada. O recuo é DESSA seção e só dela — a
+ * 1.3.0 tem um aviso em negrito seguido de citação, código e quatro parágrafos de apoio, e
+ * continua contando 1, porque ali a prosa tem a quem servir. Medido no CHANGELOG da `main`: das
+ * 95 seções das 42 versões, o ramo dispara em 2 — as duas que o cabeçalho em negrito cria (1.1.0
+ * e 1.2.0); nas outras 93 nenhuma entrada muda.
+ *
  * Entrada que não nomeia nada depois de tirada a marcação sai daqui, e não do consumidor: o chip
  * conta `length` e a listagem imprime os títulos, e filtrar só na listagem faria o chip contar um
- * marcador que a lista não mostra. Hoje não há nenhuma (461 entradas, 0 vazias) — o filtro existe
+ * marcador que a lista não mostra. Hoje não há nenhuma (464 entradas, 0 vazias) — o filtro existe
  * para que o número e a lista continuem sendo o MESMO array quando houver.
  */
 export function entradasDaSecao(s: Secao): string[] {
-  const entradas: string[] = [];
+  const nomeadas: string[] = [];
   s.blocos.forEach((b, i) => {
-    if (b.t === "lista") for (const it of b.itens) entradas.push(it.titulo ?? primeiroParagrafo(it));
-    else if (b.t === "p" && b.texto.startsWith("**") && s.blocos[i + 1]?.t !== "lista" && !ehCabecalhoDeSecao(b.texto))
-      entradas.push(separarTitulo(b.texto)?.titulo ?? b.texto);
+    if (b.t === "lista") for (const it of b.itens) nomeadas.push(it.titulo ?? primeiroParagrafo(it));
+    else if (b.t === "p" && b.texto.startsWith("**") && s.blocos[i + 1]?.t !== "lista")
+      nomeadas.push(separarTitulo(b.texto)?.titulo ?? b.texto);
   });
-  return entradas.filter((e) => textoSimples(e) !== "");
-}
-
-/**
- * `**⚠️ Requer atenção**` sozinho num parágrafo é uma SEÇÃO escrita em negrito, não uma entrada
- * dela: a 1.1.0 e a 1.2.0 abrem o aviso assim, dentro de `### Alterado` e `### Segurança`.
- * Sem esta guarda o chip dizia "Segurança 6" e a listagem nomeava "⚠️ Requer atenção" como se
- * fosse uma das correções de segurança.
- */
-function ehCabecalhoDeSecao(texto: string): boolean {
-  const separado = separarTitulo(texto);
-  return separado !== null && separado.resto === "" && tipoDaSecao(separado.titulo) !== "outro";
+  const comNome = nomeadas.filter((e) => textoSimples(e) !== "");
+  if (comNome.length > 0) return comNome;
+  return s.blocos.flatMap((b) => (b.t === "p" ? [b.texto] : [])).filter((e) => textoSimples(e) !== "");
 }
 
 /** O título de cada entrada, sem marcação — o que a listagem mostra e busca. */
