@@ -246,21 +246,41 @@ function interpretarItem(corpo: string[]): Item {
 }
 
 /**
+ * O que fecha o título quando a pontuação não está dentro do negrito: travessão, en-dash ou
+ * dois-pontos abrindo o corpo — `**Tempo adaptativo** — a IA escolhe o intervalo` —, com um
+ * localizador entre parênteses opcional antes dele — `**Tela de Execuções** (Agente de IA →
+ * Execuções): o que a IA fez`, `**Índice de Atrito** (Desempenho) — o sistema passa a medir`.
+ *
+ * O parêntese sozinho NÃO fecha, e é por isso que ele não está na classe de caracteres: em
+ * `**O instalador pergunta qual IA vai atender** (OpenRouter, Anthropic ou OpenAI) e valida a
+ * chave na hora` a frase continua DEPOIS do parêntese. Medido no CHANGELOG da `main`: dos 5
+ * corpos que começam por `(`, 3 seguem com `:`/travessão (título) e 2 seguem com `,`/`e`
+ * (frase que continua).
+ */
+const SEPARA_TITULO_DO_CORPO = /^(?:\([^)]*\)\s*)?[—–:]/u;
+
+/**
  * `**Título** Corpo` (robô) e `**Título.** corpo` (manual) → título e corpo. O título pode ter
  * atravessado linhas: o parágrafo já chega com as linhas unidas.
  *
- * O negrito só é título quando fecha a frase: corpo vazio, negrito terminado em pontuação, ou
- * corpo que abre frase nova (maiúscula, número, aspas, código). Fora disso o negrito é o começo
- * de uma frase que continua — `**Excluir um canal** apagava o roteador`, `**Chamada perdida vira
- * aviso na Central**, com o número` — e parti-lo deixava um título solto e um parágrafo que
- * começa por minúscula ou vírgula. Aí devolve `null` e o parágrafo fica inteiro.
+ * O negrito só é título quando fecha a frase: corpo vazio, negrito terminado em pontuação, corpo
+ * que abre frase nova (maiúscula, número, aspas, código) ou corpo que abre com separador
+ * (`SEPARA_TITULO_DO_CORPO`). Fora disso o negrito é o começo de uma frase que continua —
+ * `**Excluir um canal** apagava o roteador`, `**Chamada perdida vira aviso na Central**, com o
+ * número` — e parti-lo deixava um título solto e um parágrafo que começa por minúscula ou
+ * vírgula. Aí devolve `null` e o parágrafo fica inteiro.
+ *
+ * Exigir só a pontuação dentro do negrito custou caro na primeira versão desta regra: as versões
+ * escritas à mão dão o título no estilo `**Título** — corpo`, e 42 cartões de topo perderam o
+ * `titulo` de uma vez (36 deles na 1.2.0, que caiu de 49 para 13 títulos de item).
  */
 function separarTitulo(texto: string): { titulo: string; resto: string } | null {
   const m = /^\*\*(.+?)\*\*\s*(.*)$/.exec(texto);
   if (!m) return null;
   const negrito = m[1].trim();
   const resto = m[2].trim();
-  const fechaFrase = resto === "" || /[.:!?]$/.test(negrito) || /^[\p{Lu}\p{N}"“'`]/u.test(resto);
+  const fechaFrase =
+    resto === "" || /[.:!?]$/.test(negrito) || /^[\p{Lu}\p{N}"“'`]/u.test(resto) || SEPARA_TITULO_DO_CORPO.test(resto);
   return fechaFrase ? { titulo: negrito.replace(/[.:]$/, ""), resto } : null;
 }
 
@@ -294,6 +314,11 @@ export function ancoraDoGithub(titulo: string): string {
  * primeiro". Parágrafo em negrito seguido de lista é a abertura dela — os grupos da 1.2.0, o
  * "Se você está vindo da 1.4.0" da 1.5.0 — e quem conta são os itens. Parágrafo sem negrito,
  * citação, código e separador são corpo, não entrada.
+ *
+ * Entrada que não nomeia nada depois de tirada a marcação sai daqui, e não do consumidor: o chip
+ * conta `length` e a listagem imprime os títulos, e filtrar só na listagem faria o chip contar um
+ * marcador que a lista não mostra. Hoje não há nenhuma (461 entradas, 0 vazias) — o filtro existe
+ * para que o número e a lista continuem sendo o MESMO array quando houver.
  */
 export function entradasDaSecao(s: Secao): string[] {
   const entradas: string[] = [];
@@ -302,7 +327,7 @@ export function entradasDaSecao(s: Secao): string[] {
     else if (b.t === "p" && b.texto.startsWith("**") && s.blocos[i + 1]?.t !== "lista" && !ehCabecalhoDeSecao(b.texto))
       entradas.push(separarTitulo(b.texto)?.titulo ?? b.texto);
   });
-  return entradas;
+  return entradas.filter((e) => textoSimples(e) !== "");
 }
 
 /**

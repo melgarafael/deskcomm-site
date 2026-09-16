@@ -3,11 +3,18 @@ import type { Idioma } from "./tipos";
 /**
  * A página "Guias do assistente" — para devs e para quem instala.
  *
- * Tudo aqui descreve o que existe na `main` do DeskcommCRM, conferido em
- * 2026-09-15: os seis guias `deskcomm-*` em `.agents/skills/` (espelho em
- * `.claude/skills/`), o `scripts/instalar-guias.sh` e o comportamento de cada
- * assistente — medido nesta máquina onde deu (Claude Code, OpenCode, Antigravity
- * CLI) e pela documentação oficial onde não deu (Codex, Cursor).
+ * Tudo aqui descreve o que existe na `main` do DeskcommCRM, conferido na data de
+ * `GUIAS_ATUALIZADO_EM` (abaixo, e é ela que o rodapé mostra — uma data só):
+ * os seis guias `deskcomm-*` em `.agents/skills/` (espelho em `.claude/skills/`),
+ * o `scripts/instalar-guias.sh` e o comportamento de cada assistente — medido
+ * nesta máquina onde deu (Claude Code, Codex, OpenCode, Antigravity CLI) e pela
+ * documentação oficial onde não deu (Cursor).
+ *
+ * O Codex entrou nos medidos em 2026-09-16, e foi essa medição que tirou daqui a
+ * afirmação de que ele só carrega os guias do projeto em pasta confiável: com
+ * codex-cli 0.154.0 e a sonda calibrada (o marcador do `.codex/config.toml`
+ * aparece em "trusted" e some em "untrusted"), a skill do projeto carregou nos
+ * dois casos. Quem for repor a afirmação, meça antes.
  *
  * Mudou um guia, o nome de um comando ou a pasta que um assistente lê? Esta
  * página mente até alguém mudar este arquivo. O guia `deskcomm-contribuir` do

@@ -130,20 +130,20 @@ export async function PaginaVersao({ idioma, versao }: { idioma: Idioma; versao:
                               id={ancora}
                               className={`group scroll-mt-24 rounded-[12px] border bg-surface p-5 sm:p-6 ${s.tipo === "atencao" ? "border-warn/40" : "border-border"}`}
                             >
+                              {/* Flutua fora do `h3`: o cartão tem âncora com ou sem título, e este link é a única
+                                  forma de obtê-la pela tela. Dentro do `h3`, o cartão sem título não oferecia link. */}
+                              <a
+                                href={`#${ancora}`}
+                                aria-label={t.linkDoItem}
+                                className="float-right ml-3 mt-0.5 rounded-[4px] p-1 text-text-muted opacity-0 transition-opacity duration-150 ease-out-fast hover:text-accent-700 focus:opacity-100 group-hover:opacity-100"
+                              >
+                                <svg viewBox="0 0 16 16" aria-hidden className="h-3.5 w-3.5 fill-none stroke-current" strokeWidth="1.6" strokeLinecap="round">
+                                  <path d="M6.5 9.5 9.5 6.5M7 4.5l1-1a2.8 2.8 0 0 1 4 4l-1 1M9 11.5l-1 1a2.8 2.8 0 0 1-4-4l1-1" />
+                                </svg>
+                              </a>
                               {it.titulo ? (
-                                <h3 className="flex items-start justify-between gap-3 text-[1.05rem] font-bold leading-snug text-text">
-                                  <span>
-                                    <Inline texto={it.titulo} />
-                                  </span>
-                                  <a
-                                    href={`#${ancora}`}
-                                    aria-label={t.linkDoItem}
-                                    className="mt-0.5 shrink-0 rounded-[4px] p-1 text-text-muted opacity-0 transition-opacity duration-150 ease-out-fast hover:text-accent-700 focus:opacity-100 group-hover:opacity-100"
-                                  >
-                                    <svg viewBox="0 0 16 16" aria-hidden className="h-3.5 w-3.5 fill-none stroke-current" strokeWidth="1.6" strokeLinecap="round">
-                                      <path d="M6.5 9.5 9.5 6.5M7 4.5l1-1a2.8 2.8 0 0 1 4 4l-1 1M9 11.5l-1 1a2.8 2.8 0 0 1-4-4l1-1" />
-                                    </svg>
-                                  </a>
+                                <h3 className="text-[1.05rem] font-bold leading-snug text-text">
+                                  <Inline texto={it.titulo} />
                                 </h3>
                               ) : null}
                               {it.blocos.length ? (
