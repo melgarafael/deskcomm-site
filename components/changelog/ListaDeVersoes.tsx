@@ -67,7 +67,7 @@ export function ListaDeVersoes({ idioma, versoes }: { idioma: Idioma; versoes: R
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
               placeholder={t.filtros.busca}
-              className="h-10 w-full rounded-[6px] border border-border bg-surface pl-9 pr-3 text-sm text-text placeholder:text-text-muted/80 focus:border-accent-300 focus:outline-none focus:ring-2 focus:ring-accent-100"
+              className="h-10 w-full rounded-[6px] border border-border bg-surface pl-9 pr-3 text-sm text-text placeholder:text-text-muted focus:border-accent-300 focus:outline-none focus:ring-2 focus:ring-accent-100"
             />
           </label>
           <div role="group" aria-label={t.filtros.rotulo} className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-0.5">
@@ -128,7 +128,7 @@ export function ListaDeVersoes({ idioma, versoes }: { idioma: Idioma; versoes: R
               <ol className="relative border-l border-border">
                 {g.versoes.map((v) => {
                   const destaque = v.secoes.find((s) => s.tipo === "atencao");
-                  const titulos = v.secoes.flatMap((s) => s.titulos.map((titulo) => ({ tipo: s.tipo, titulo })));
+                  const titulos = v.secoes.flatMap((s) => s.titulos.filter(Boolean).map((titulo) => ({ tipo: s.tipo, titulo })));
                   return (
                     <li key={v.versao} className="relative pb-3 pl-6 sm:pl-8">
                       <span aria-hidden className={`absolute -left-[5px] top-[26px] h-[9px] w-[9px] rounded-full ring-4 ring-bg ${v.salto === "patch" ? "bg-accent-300" : "bg-accent-600"}`} />

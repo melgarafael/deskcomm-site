@@ -27,7 +27,9 @@ export const GITHUB = "https://github.com/melgarafael/DeskcommCRM";
  * Não importa `Jornada` nem nada de `mesa/`: páginas que usam o cabeçalho não
  * carregam o Three.js da home.
  */
-export function Cabecalho({ c, idioma, pagina }: { c: Conteudo; idioma: Idioma; pagina: PaginaId }) {
+/** `sufixo`: o resto do caminho depois da página (`/1.27.2` numa versão), para o seletor de idioma
+ *  levar à mesma versão, e não à lista — o mesmo sufixo que `alternatesDe` põe no hreflang. */
+export function Cabecalho({ c, idioma, pagina, sufixo = "" }: { c: Conteudo; idioma: Idioma; pagina: PaginaId; sufixo?: string }) {
   const naHome = pagina === "home";
   const ancora = (frag: string) => ancoraDaHome(idioma, frag, naHome);
   const guiasAtiva = pagina === "guias";
@@ -53,11 +55,11 @@ export function Cabecalho({ c, idioma, pagina }: { c: Conteudo; idioma: Idioma; 
         <div className="ml-auto flex items-center gap-2 sm:gap-2.5">
           {/* Troca de idioma: links de verdade, não estado. Cada idioma tem URL
               própria — e aponta para a MESMA página no outro idioma. */}
-          <nav aria-label="Idioma" className="hidden items-center gap-1 md:flex">
+          <nav aria-label={c.nav.idioma} className="hidden items-center gap-1 md:flex">
             {IDIOMAS.map((i) => (
               <a
                 key={i.codigo}
-                href={ROTAS[pagina][i.codigo]}
+                href={`${ROTAS[pagina][i.codigo]}${sufixo}`}
                 hrefLang={i.codigo}
                 aria-current={i.codigo === idioma ? "true" : undefined}
                 className={[

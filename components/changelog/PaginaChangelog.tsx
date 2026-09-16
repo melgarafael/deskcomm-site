@@ -5,7 +5,7 @@ import { Rodape } from "@/components/Rodape";
 import { CONTEUDO, type Idioma } from "@/conteudo";
 import { TEXTOS_CHANGELOG, formatarData } from "@/conteudo/changelog";
 import { ROTAS, alternatesDe, rotaDaVersao } from "@/conteudo/rotas";
-import { contarItens, lerChangelog, textoSimples, titulosDaSecao, type Versao } from "@/lib/changelog";
+import { contarItens, entradasDaSecao, lerChangelog, textoSimples, titulosDaSecao, type Versao } from "@/lib/changelog";
 
 import { ChipSalto, ChipSecao } from "./Marcadores";
 import { ListaDeVersoes, type ResumoVersao } from "./ListaDeVersoes";
@@ -59,7 +59,7 @@ export async function PaginaChangelog({ idioma }: { idioma: Idioma }) {
   const ultima = versoes[0];
   const totalMudancas = versoes.reduce((n, v) => n + v.secoes.reduce((m, s) => m + contarItens(s), 0), 0);
   const primeira = versoes[versoes.length - 1];
-  const destaques = ultima.secoes.flatMap((s) => s.blocos.flatMap((b) => (b.t === "lista" ? b.itens.filter((it) => it.titulo).map((it) => ({ s, it })) : []))).slice(0, 3);
+  const destaques = ultima.secoes.flatMap((s) => entradasDaSecao(s)).slice(0, 3);
 
   return (
     <>
@@ -114,9 +114,9 @@ export async function PaginaChangelog({ idioma }: { idioma: Idioma }) {
               </div>
               {destaques.length ? (
                 <ul lang="pt-BR" className="mt-5 space-y-2 border-t border-border pt-5">
-                  {destaques.map(({ it }, i) => (
+                  {destaques.map((titulo, i) => (
                     <li key={i} className="line-clamp-2 text-sm font-bold leading-snug text-text">
-                      {textoSimples(it.titulo ?? "", 200)}
+                      {textoSimples(titulo, 200)}
                     </li>
                   ))}
                 </ul>
@@ -139,7 +139,7 @@ export async function PaginaChangelog({ idioma }: { idioma: Idioma }) {
 
         <ListaDeVersoes idioma={idioma} versoes={versoes.map(resumir)} />
       </main>
-      <Rodape c={c} idioma={idioma} pagina="changelog" />
+      <Rodape c={c} idioma={idioma} pagina="changelog" atualizadoEm={ultima.data} />
     </>
   );
 }

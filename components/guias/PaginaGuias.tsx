@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Cabecalho, GITHUB } from "@/components/Cabecalho";
 import { Rodape } from "@/components/Rodape";
 import { CONTEUDO, type Idioma } from "@/conteudo";
-import { COMANDOS, TEXTOS_GUIAS, type Assistente, type Guia, type TextosGuias } from "@/conteudo/guias";
+import { COMANDOS, GUIAS_ATUALIZADO_EM, TEXTOS_GUIAS, type Assistente, type Guia, type TextosGuias } from "@/conteudo/guias";
 import { alternatesDe } from "@/conteudo/rotas";
 
 import { AbasDosAssistentes, Comando, FiltroDePublico } from "./Interativos";
@@ -27,7 +27,7 @@ function Terminal({ t }: { t: TextosGuias }) {
           <span className="h-2.5 w-2.5 rounded-full bg-[#4a463d]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#4a463d]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#4a463d]" />
-          <span className="ml-3 font-mono text-[11px] text-[#8f8a7e]">~/meu-negocio</span>
+          <span className="ml-3 font-mono text-[11px] text-[#8f8a7e]">{t.terminal.pasta}</span>
         </div>
         <div className="space-y-4 px-5 py-5 font-mono text-[13px] leading-relaxed sm:px-6 sm:py-6">
           <p>
@@ -139,7 +139,7 @@ function PainelDoAssistente({ a, t }: { a: Assistente; t: TextosGuias }) {
           <dd className="min-w-0">
             <p className="leading-relaxed">{a.peloNome.texto}</p>
             <div className="mt-3">
-              <Comando comando={a.peloNome.exemplo} copiar={t.copiar} copiado={t.copiado} prefixo="›" />
+              <Comando comando={a.peloNome.exemplo} copiar={t.copiar} copiado={t.copiado} selecionado={t.selecionado} prefixo="›" />
             </div>
           </dd>
         </div>
@@ -149,7 +149,7 @@ function PainelDoAssistente({ a, t }: { a: Assistente; t: TextosGuias }) {
             <p className="leading-relaxed">{a.lista.texto}</p>
             {a.lista.exemplo ? (
               <div className="mt-3">
-                <Comando comando={a.lista.exemplo} copiar={t.copiar} copiado={t.copiado} prefixo={NO_TERMINAL.test(a.lista.exemplo) ? "$" : "›"} />
+                <Comando comando={a.lista.exemplo} copiar={t.copiar} copiado={t.copiado} selecionado={t.selecionado} prefixo={NO_TERMINAL.test(a.lista.exemplo) ? "$" : "›"} />
               </div>
             ) : null}
           </dd>
@@ -195,7 +195,7 @@ export function PaginaGuias({ idioma }: { idioma: Idioma }) {
               <h1 className="mt-5 max-w-[20ch] text-balance text-[2.3rem] font-bold leading-[1.08] tracking-[-0.02em] sm:text-[3.1rem]">{t.titulo}</h1>
               <p className="mt-5 max-w-[60ch] text-pretty text-lg leading-relaxed text-text-muted">{t.subtitulo}</p>
               <div className="mt-8 max-w-[640px]">
-                <Comando comando={COMANDOS.instalar} copiar={t.copiar} copiado={t.copiado} />
+                <Comando comando={COMANDOS.instalar} copiar={t.copiar} copiado={t.copiado} selecionado={t.selecionado} />
               </div>
               <div className="mt-5 flex flex-wrap gap-3">
                 <a href="#instalar" className="rounded-[4px] bg-accent-600 px-5 py-3 text-sm font-bold text-white transition-colors duration-150 ease-out-fast hover:bg-accent-700">
@@ -276,7 +276,7 @@ export function PaginaGuias({ idioma }: { idioma: Idioma }) {
                 </div>
                 <p className="mt-2 text-pretty leading-relaxed text-text-muted">{t.instalar.opcaoA.texto}</p>
                 <div className="mt-5">
-                  <Comando comando={COMANDOS.instalar} copiar={t.copiar} copiado={t.copiado} escuro />
+                  <Comando comando={COMANDOS.instalar} copiar={t.copiar} copiado={t.copiado} selecionado={t.selecionado} escuro />
                 </div>
                 <ul className="mt-5 space-y-2">
                   {t.instalar.opcaoA.detalhes.map((d) => (
@@ -289,7 +289,7 @@ export function PaginaGuias({ idioma }: { idioma: Idioma }) {
                 <p className="mt-5 text-sm font-bold">{t.instalar.opcaoA.atualizar}</p>
                 <p className="mt-3 text-sm text-text-muted">{t.instalar.opcaoA.remover}</p>
                 <div className="mt-2">
-                  <Comando comando={COMANDOS.remover} copiar={t.copiar} copiado={t.copiado} />
+                  <Comando comando={COMANDOS.remover} copiar={t.copiar} copiado={t.copiado} selecionado={t.selecionado} />
                 </div>
               </div>
 
@@ -297,7 +297,7 @@ export function PaginaGuias({ idioma }: { idioma: Idioma }) {
                 <h3 className="text-xl font-bold">{t.instalar.opcaoB.titulo}</h3>
                 <p className="mt-2 text-pretty leading-relaxed text-text-muted">{t.instalar.opcaoB.texto}</p>
                 <div className="mt-5">
-                  <Comando comando={COMANDOS.clonar} copiar={t.copiar} copiado={t.copiado} />
+                  <Comando comando={COMANDOS.clonar} copiar={t.copiar} copiado={t.copiado} selecionado={t.selecionado} />
                 </div>
                 <ul className="mt-5 space-y-2">
                   {t.instalar.opcaoB.detalhes.map((d) => (
@@ -331,7 +331,7 @@ export function PaginaGuias({ idioma }: { idioma: Idioma }) {
                       <p className="mt-1 text-pretty text-sm leading-relaxed text-text-muted">{p.texto}</p>
                       {p.comando ? (
                         <div className="mt-3">
-                          <Comando comando={p.comando} copiar={t.copiar} copiado={t.copiado} />
+                          <Comando comando={p.comando} copiar={t.copiar} copiado={t.copiado} selecionado={t.selecionado} />
                         </div>
                       ) : null}
                     </div>
@@ -362,7 +362,7 @@ export function PaginaGuias({ idioma }: { idioma: Idioma }) {
           </div>
         </section>
       </main>
-      <Rodape c={c} idioma={idioma} pagina="guias" />
+      <Rodape c={c} idioma={idioma} pagina="guias" atualizadoEm={GUIAS_ATUALIZADO_EM} />
     </>
   );
 }

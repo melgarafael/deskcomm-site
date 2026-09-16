@@ -49,7 +49,9 @@ export type TextosGuias = {
   ctaCatalogo: string;
   copiar: string;
   copiado: string;
-  terminal: { voce: string; pedido: string; usando: string; passos: string[] };
+  /** Anunciado ao leitor de tela quando a área de transferência recusa e o comando fica só selecionado. */
+  selecionado: string;
+  terminal: { pasta: string; voce: string; pedido: string; usando: string; passos: string[] };
   passos: { titulo: string; itens: { titulo: string; texto: string }[] };
   catalogo: {
     sobretitulo: string;
@@ -87,6 +89,9 @@ export type TextosGuias = {
   lista: Assistente[];
 };
 
+/** A data que o rodapé da página de guias mostra. Mudou o texto desta página? Mude esta data. */
+export const GUIAS_ATUALIZADO_EM = "2026-09-16";
+
 const COMANDO = "curl -fsSL https://raw.githubusercontent.com/melgarafael/DeskcommCRM/main/scripts/instalar-guias.sh | bash";
 export const COMANDOS = {
   instalar: COMANDO,
@@ -115,7 +120,9 @@ const pt: TextosGuias = {
   ctaCatalogo: "Ver os seis guias",
   copiar: "Copiar",
   copiado: "Copiado",
+  selecionado: "Comando selecionado. Copie com Ctrl+C.",
   terminal: {
+    pasta: "~/meu-negocio",
     voce: "você",
     pedido: "quero instalar o CRM na minha VPS da HostGator",
     usando: "usando o guia deskcomm-instalar",
@@ -175,7 +182,7 @@ const pt: TextosGuias = {
         "Mantenha a sua branch atualizada com a main: numa branch antiga, os guias também são os antigos.",
       ],
     },
-    windows: "No Windows, rode pelo Git Bash ou pelo WSL. Onde o sistema não cria atalhos de pasta, o instalador copia os guias — aí rode o comando de novo sempre que quiser atualizar.",
+    windows: "No Windows, rode pelo Git Bash quando o assistente está instalado no próprio Windows. Pelo WSL, só se o assistente também roda dentro do WSL: lá a pasta pessoal é a do Linux, que os programas do Windows não leem. Onde o sistema não cria atalhos de pasta, o instalador copia os guias — aí rode o comando de novo sempre que quiser atualizar.",
   },
   contribuir: {
     sobretitulo: "Para quem contribui",
@@ -193,10 +200,10 @@ const pt: TextosGuias = {
     itens: [
       { p: "Preciso saber o nome do guia?", r: "Não. O assistente escolhe o guia pelo assunto do que você pede. O nome serve para quando você quer ter certeza de qual guia vai entrar." },
       { p: "O assistente vai mexer no meu servidor sozinho?", r: "Ele segue as permissões do seu assistente: comandos pedem a sua confirmação, a menos que você tenha liberado. No guia de prompt, publicar a versão nova do agente é sempre com você." },
-      { p: "Os guias leem as conversas dos meus clientes?", r: "O guia de métricas lê o banco só com consultas que somam e contam, sem abrir o texto das mensagens nem dado pessoal." },
+      { p: "Os guias leem as conversas dos meus clientes?", r: "O de métricas, não: lê o banco só com consultas que somam e contam, sem abrir o texto das mensagens nem dado pessoal. O de prompt pode ler um trecho quando é indispensável para ver como o agente fala, e só com você sabendo: as mensagens que o próprio agente enviou em poucas conversas recentes — não as do cliente —, sem copiar nada para fora da sessão." },
       { p: "Funciona se eu escrever em inglês ou espanhol?", r: "Sim. Os guias são escritos em português, e o assistente segue o guia respondendo no idioma em que você escreve." },
       { p: "Já tenho uma skill com o mesmo nome. E agora?", r: "O instalador não toca nela: avisa que pulou e segue com os outros guias." },
-      { p: "Instalei e o guia não aparece.", r: "Abra uma sessão nova do assistente. No Codex e no Antigravity, confirme também que você confia na pasta do projeto: pasta não confiável não carrega os guias dela." },
+      { p: "Instalei e o guia não aparece.", r: "Abra uma sessão nova do assistente. No Antigravity, confirme também que você confia na pasta do projeto: ali, pasta não confiável não carrega os guias dela." },
     ],
   },
   guias: [
@@ -284,10 +291,7 @@ const pt: TextosGuias = {
       sozinho: "Aciona o guia quando o pedido combina com a descrição dele.",
       peloNome: { texto: "Digite o cifrão e o nome, ou escolha no menu.", exemplo: "$deskcomm-prompt o agente está inventando preço" },
       lista: { texto: "Abre o menu de guias.", exemplo: "/skills" },
-      bomSaber: [
-        "Os guias do projeto só carregam numa pasta que você marcou como confiável.",
-        "Se uma mudança não aparecer, reinicie o Codex.",
-      ],
+      bomSaber: ["Se uma mudança não aparecer, reinicie o Codex."],
       doc: "https://learn.chatgpt.com/docs/build-skills",
     },
     {
@@ -356,7 +360,9 @@ const en: TextosGuias = {
   ctaCatalogo: "See the six guides",
   copiar: "Copy",
   copiado: "Copied",
+  selecionado: "Command selected. Copy it with Ctrl+C.",
   terminal: {
+    pasta: "~/my-business",
     voce: "you",
     pedido: "I want to install the CRM on my VPS",
     usando: "using the deskcomm-instalar guide",
@@ -416,7 +422,7 @@ const en: TextosGuias = {
         "Keep your branch up to date with main: on an old branch, the guides are old too.",
       ],
     },
-    windows: "On Windows, run it from Git Bash or WSL. Where the system can't create folder links, the installer copies the guides instead — then run the command again whenever you want to update.",
+    windows: "On Windows, run it from Git Bash when the assistant is installed on Windows itself. Use WSL only if the assistant also runs inside WSL: there your home folder is the Linux one, which Windows apps don't read. Where the system can't create folder links, the installer copies the guides instead — then run the command again whenever you want to update.",
   },
   contribuir: {
     sobretitulo: "For contributors",
@@ -434,10 +440,10 @@ const en: TextosGuias = {
     itens: [
       { p: "Do I need to know the guide's name?", r: "No. The assistant picks the guide from what you ask. The name is for when you want to be sure which guide runs." },
       { p: "Will the assistant change my server on its own?", r: "It follows your assistant's permissions: commands ask for your confirmation unless you've allowed them. In the prompt guide, publishing the agent's new version is always up to you." },
-      { p: "Do the guides read my customers' conversations?", r: "The metrics guide reads the database only with queries that sum and count, without opening message text or personal data." },
+      { p: "Do the guides read my customers' conversations?", r: "The metrics guide doesn't: it reads the database only with queries that sum and count, without opening message text or personal data. The prompt guide may read an excerpt when it's essential to see how the agent talks, and only with your knowledge: the messages the agent itself sent in a few recent conversations — not the customer's — without copying anything out of the session." },
       { p: "Does it work if I write in English or Spanish?", r: "Yes. The guides are written in Portuguese, and the assistant follows them while answering in the language you write in." },
       { p: "I already have a skill with the same name. Now what?", r: "The installer leaves it alone: it says it skipped it and carries on with the other guides." },
-      { p: "I installed them and the guide doesn't show up.", r: "Start a new assistant session. In Codex and Antigravity, also confirm that you trust the project folder: an untrusted folder doesn't load its guides." },
+      { p: "I installed them and the guide doesn't show up.", r: "Start a new assistant session. In Antigravity, also confirm that you trust the project folder: there, an untrusted folder doesn't load its guides." },
     ],
   },
   guias: [
@@ -457,7 +463,7 @@ const en: TextosGuias = {
       resumo: "Builds a client's customer service by niche — clinic, real estate, services, courses, store — in the right order, through the screens.",
       paraQuem: "Business owners, agencies and people implementing it for others.",
       faz: ["Creates AI agents, routers and follow-ups.", "Uploads the knowledge base and builds the pipeline.", "Hands you ready-to-paste text and guides you to the test."],
-      frases: ["set up the CRM for a clinic", "what prompt should the real estate agent use?", "I finished onboarding, now what?"],
+      frases: ["set up the CRM for a clinic", "what prompt should I use for the real estate agency's AI agent?", "I finished onboarding, now what?"],
     },
     {
       id: "deskcomm-metricas",
@@ -522,7 +528,7 @@ const en: TextosGuias = {
       sozinho: "Triggers the guide when your request matches its description.",
       peloNome: { texto: "Type a dollar sign and the name, or pick it from the menu.", exemplo: "$deskcomm-prompt the agent keeps making up prices" },
       lista: { texto: "Opens the guides menu.", exemplo: "/skills" },
-      bomSaber: ["Project guides only load in a folder you've marked as trusted.", "If a change doesn't show up, restart Codex."],
+      bomSaber: ["If a change doesn't show up, restart Codex."],
       doc: "https://learn.chatgpt.com/docs/build-skills",
     },
     {
@@ -591,7 +597,9 @@ const es: TextosGuias = {
   ctaCatalogo: "Ver las seis guías",
   copiar: "Copiar",
   copiado: "Copiado",
+  selecionado: "Comando seleccionado. Cópialo con Ctrl+C.",
   terminal: {
+    pasta: "~/mi-negocio",
     voce: "tú",
     pedido: "quiero instalar el CRM en mi VPS",
     usando: "usando la guía deskcomm-instalar",
@@ -620,10 +628,10 @@ const es: TextosGuias = {
     titulo: "Cómo usarlas en cada uno.",
     texto: "Todos siguen el mismo estándar abierto de guías (Agent Skills) y activan la guía solos según el tema. Cambia dónde buscan y cómo llamar una guía por su nombre.",
     onde: "Dónde busca",
-    sozinho: "Sola",
+    sozinho: "Por su cuenta",
     peloNome: "Por nombre",
     lista: "Ver la lista",
-    bomSaber: "Bueno saber",
+    bomSaber: "Conviene saber",
     doc: "Documentación oficial",
     outros: "¿Otro asistente? Los que siguen el estándar Agent Skills — como GitHub Copilot y Gemini CLI — suelen leer la carpeta .agents/skills, y el instalador también enlaza las guías en ~/.agents/skills.",
   },
@@ -634,7 +642,7 @@ const es: TextosGuias = {
     opcaoA: {
       titulo: "En cualquier carpeta",
       selo: "Recomendado",
-      texto: "Pégalo en la terminal de tu computadora — no en la VPS. Funciona antes de clonar el proyecto.",
+      texto: "Pégalo en la terminal de tu computadora — no en el VPS. Funciona antes de clonar el proyecto.",
       atualizar: "Para actualizar, ejecuta el mismo comando otra vez.",
       remover: "Para deshacer:",
       detalhes: [
@@ -651,7 +659,7 @@ const es: TextosGuias = {
         "Mantén tu rama actualizada con main: en una rama vieja, las guías también son viejas.",
       ],
     },
-    windows: "En Windows, ejecútalo desde Git Bash o WSL. Donde el sistema no crea enlaces de carpeta, el instalador copia las guías — entonces vuelve a ejecutar el comando cada vez que quieras actualizar.",
+    windows: "En Windows, ejecútalo desde Git Bash si el asistente está instalado en el propio Windows. Desde WSL, solo si el asistente también corre dentro de WSL: ahí tu carpeta personal es la de Linux, que los programas de Windows no leen. Donde el sistema no crea enlaces de carpeta, el instalador copia las guías — entonces vuelve a ejecutar el comando cada vez que quieras actualizar.",
   },
   contribuir: {
     sobretitulo: "Para quien contribuye",
@@ -669,10 +677,10 @@ const es: TextosGuias = {
     itens: [
       { p: "¿Necesito saber el nombre de la guía?", r: "No. El asistente elige la guía según lo que pides. El nombre sirve cuando quieres estar seguro de qué guía va a entrar." },
       { p: "¿El asistente va a cambiar mi servidor solo?", r: "Sigue los permisos de tu asistente: los comandos piden tu confirmación, salvo que los hayas liberado. En la guía de prompt, publicar la nueva versión del agente siempre queda en tus manos." },
-      { p: "¿Las guías leen las conversaciones de mis clientes?", r: "La guía de métricas lee la base solo con consultas que suman y cuentan, sin abrir el texto de los mensajes ni datos personales." },
-      { p: "¿Funciona si escribo en español o en inglés?", r: "Sí. Las guías están escritas en portugués, y el asistente las sigue respondiendo en el idioma en que escribes." },
+      { p: "¿Las guías leen las conversaciones de mis clientes?", r: "La de métricas, no: lee la base solo con consultas que suman y cuentan, sin abrir el texto de los mensajes ni datos personales. La de prompt puede leer un fragmento cuando es indispensable para ver cómo habla el agente, y solo con tu conocimiento: los mensajes que el propio agente envió en pocas conversaciones recientes — no los del cliente —, sin copiar nada fuera de la sesión." },
+      { p: "¿Funciona si escribo en español o en inglés?", r: "Sí. Las guías están escritas en portugués, y el asistente las sigue y te responde en el idioma en que escribes." },
       { p: "Ya tengo una skill con el mismo nombre. ¿Y ahora?", r: "El instalador no la toca: avisa que la saltó y sigue con las otras guías." },
-      { p: "Instalé y la guía no aparece.", r: "Abre una sesión nueva del asistente. En Codex y Antigravity, confirma también que confías en la carpeta del proyecto: una carpeta no confiable no carga sus guías." },
+      { p: "Instalé y la guía no aparece.", r: "Abre una sesión nueva del asistente. En Antigravity, confirma también que confías en la carpeta del proyecto: ahí, una carpeta no confiable no carga sus guías." },
     ],
   },
   guias: [
@@ -680,8 +688,8 @@ const es: TextosGuias = {
       id: "deskcomm-instalar",
       publico: "opera",
       titulo: "Instalar y operar",
-      resumo: "Pone el CRM en línea en una VPS y lo cuida después: actualizaciones, respaldos, dominio, WhatsApp y los errores de instalación.",
-      paraQuem: "Quien instala, aunque no sea técnico, agencias y quien opera una VPS.",
+      resumo: "Pone el CRM en línea en un VPS y lo cuida después: actualizaciones, respaldos, dominio, WhatsApp y los errores de instalación.",
+      paraQuem: "Quien instala, aunque no sea técnico, agencias y quien opera un VPS.",
       faz: ["Guía la instalación paso a paso y ejecuta los scripts del kit.", "Resuelve SSL, DNS, Supabase, proxy y clave de IA.", "Actualiza, respalda y restaura."],
       frases: ["quiero instalar el CRM en mi VPS", "mi sitio no tiene el candado", "¿cómo hago un respaldo?"],
     },
@@ -727,7 +735,7 @@ const es: TextosGuias = {
       titulo: "Seguir las reglas del código",
       resumo: "Señala las reglas no negociables de este repositorio cada vez que alguien escribe o revisa código.",
       paraQuem: "Cualquier persona o IA que escriba código en el proyecto.",
-      faz: ["Aislamiento entre empresas con RLS.", "Migración, baseline y manifiesto andando juntos.", "Qué cambia para quien ya instaló en una VPS."],
+      faz: ["Aislamiento entre empresas con RLS.", "Migración, baseline y manifiesto andando juntos.", "Qué cambia para quien ya instaló en un VPS."],
       frases: ["revisa este código", "¿cómo creo una migración aquí?", "¿puedo agregar esta columna?"],
     },
   ],
@@ -741,7 +749,7 @@ const es: TextosGuias = {
         { rotulo: "Global", caminho: "~/.claude/skills/" },
       ],
       sozinho: "Lee la descripción de cada guía y activa la que coincide con tu pedido.",
-      peloNome: { texto: "Escribe la barra y el nombre. Lo que venga después va junto a la guía.", exemplo: "/deskcomm-instalar mi dominio es crm.miempresa.com" },
+      peloNome: { texto: "Escribe la barra y el nombre. Lo que escribas después se le pasa a la guía.", exemplo: "/deskcomm-instalar mi dominio es crm.miempresa.com" },
       lista: { texto: "Muestra todas las guías cargadas.", exemplo: "/skills" },
       bomSaber: ["Una guía global con el mismo nombre le gana a la del proyecto.", "¿Cambiaste el texto de una guía? Se recarga sola. ¿Acabas de crear la carpeta de guías? Reinicia la sesión."],
       doc: "https://code.claude.com/docs/en/skills",
@@ -757,7 +765,7 @@ const es: TextosGuias = {
       sozinho: "Activa la guía cuando tu pedido coincide con su descripción.",
       peloNome: { texto: "Escribe el signo de dólar y el nombre, o elígela en el menú.", exemplo: "$deskcomm-prompt el agente está inventando precios" },
       lista: { texto: "Abre el menú de guías.", exemplo: "/skills" },
-      bomSaber: ["Las guías del proyecto solo cargan en una carpeta que marcaste como confiable.", "Si un cambio no aparece, reinicia Codex."],
+      bomSaber: ["Si un cambio no aparece, reinicia Codex."],
       doc: "https://learn.chatgpt.com/docs/build-skills",
     },
     {

@@ -79,6 +79,8 @@ export function Blocos({ blocos, denso = false }: { blocos: Bloco[]; denso?: boo
                 <code>{b.texto}</code>
               </pre>
             );
+          case "separador":
+            return <hr key={i} className="border-border" />;
           case "citacao":
             return (
               <blockquote key={i} className="border-l-2 border-warn/60 bg-[#fbf6ec] py-3 pl-4 pr-3">

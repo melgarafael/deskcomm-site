@@ -1,4 +1,5 @@
 import type { Conteudo, Idioma } from "@/conteudo";
+import { TEXTOS_CHANGELOG, formatarData } from "@/conteudo/changelog";
 import { ROTAS, ancoraDaHome, type PaginaId } from "@/conteudo/rotas";
 
 import { GITHUB } from "./Cabecalho";
@@ -19,7 +20,9 @@ function resolver(href: string, idioma: Idioma, naHome: boolean): string {
   return `${GITHUB}${href}`;
 }
 
-export function Rodape({ c, idioma, pagina }: { c: Conteudo; idioma: Idioma; pagina: PaginaId }) {
+/** `atualizadoEm` (AAAA-MM-DD) é de cada página: uma data só para o site inteiro fazia /guias e
+ *  /changelog, criadas em setembro, dizerem que foram atualizadas em julho. */
+export function Rodape({ c, idioma, pagina, atualizadoEm }: { c: Conteudo; idioma: Idioma; pagina: PaginaId; atualizadoEm: string }) {
   const naHome = pagina === "home";
   return (
     <footer className="border-t border-border">
@@ -49,7 +52,7 @@ export function Rodape({ c, idioma, pagina }: { c: Conteudo; idioma: Idioma; pag
               das páginas citadas por IA foram atualizadas nos últimos 12 meses,
               e a data de atualização discrimina melhor que a de publicação. */}
           <p className="font-mono text-xs text-text-muted">
-            {c.rodape.atualizado} <time dateTime="2026-07-28">28/07/2026</time>
+            {c.rodape.atualizado} <time dateTime={atualizadoEm}>{formatarData(atualizadoEm, TEXTOS_CHANGELOG[idioma].locale, "numerico")}</time>
           </p>
         </div>
       </div>

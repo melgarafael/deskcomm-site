@@ -59,7 +59,7 @@ export function ChipSecao({ tipo, rotulo, contagem }: { tipo: TipoSecao; rotulo:
     <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-0.5 text-xs font-bold ${ESTILO_SECAO[tipo].chip}`}>
       <IconeSecao tipo={tipo} />
       {rotulo}
-      {contagem !== undefined ? <span className="font-mono font-normal tabular-nums opacity-80">{contagem}</span> : null}
+      {contagem !== undefined ? <span className="font-mono font-normal tabular-nums">{contagem}</span> : null}
     </span>
   );
 }

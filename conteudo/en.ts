@@ -11,7 +11,7 @@ export const en: Conteudo = {
     descricao:
       "AI agents that answer, qualify and move deals over WhatsApp, inside a CRM you host yourself. Every agent action is auditable. MIT-licensed, no paid tier, no per-seat pricing.",
   },
-  nav: { comoFunciona: "How it works", prova: "Proof", instalar: "Install", preco: "Pricing", ctaInstalar: "Install on a VPS", guias: "Dev guides", guiasCurto: "Guides", changelog: "Changelog" },
+  nav: { comoFunciona: "How it works", prova: "Proof", instalar: "Install", preco: "Pricing", ctaInstalar: "Install on a VPS", guias: "Dev guides", guiasCurto: "Guides", changelog: "Changelog", idioma: "Language" },
   hero: {
     sobretitulo: "Desk + comm — the sales desk",
     h1a: "Your whole sales operation on one desk.",

@@ -17,7 +17,7 @@ export const es: Conteudo = {
     descricao:
       "Agentes de IA atienden por WhatsApp, califican al lead y mueven el embudo — con todo registrado y auditable. En tu propio servidor, sin mensualidad por usuario. Open source, licencia MIT.",
   },
-  nav: { comoFunciona: "Cómo funciona", prova: "Prueba", instalar: "Instalar", preco: "Precio", ctaInstalar: "Instalar en un VPS", guias: "Guías para devs", guiasCurto: "Guías", changelog: "Changelog" },
+  nav: { comoFunciona: "Cómo funciona", prova: "Prueba", instalar: "Instalar", preco: "Precio", ctaInstalar: "Instalar en un VPS", guias: "Guías para devs", guiasCurto: "Guías", changelog: "Changelog", idioma: "Idioma" },
   hero: {
     sobretitulo: "Desk + comm — el escritorio comercial",
     h1a: "Tu operación comercial en una sola mesa.",

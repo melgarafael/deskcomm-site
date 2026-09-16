@@ -4,15 +4,31 @@ import { useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 
 /** Comando com botão de copiar. Sem a API de área de transferência, seleciona o texto para o Ctrl+C. */
 /** `prefixo`: `$` para o terminal, `›` para o que se digita dentro do chat do assistente. */
-export function Comando({ comando, copiar, copiado, escuro = false, prefixo = "$" }: { comando: string; copiar: string; copiado: string; escuro?: boolean; prefixo?: "$" | "›" }) {
-  const [ok, setOk] = useState(false);
+export function Comando({
+  comando,
+  copiar,
+  copiado,
+  selecionado,
+  escuro = false,
+  prefixo = "$",
+}: {
+  comando: string;
+  copiar: string;
+  copiado: string;
+  /** O que o leitor de tela ouve quando a cópia falha e o texto fica só selecionado. */
+  selecionado: string;
+  escuro?: boolean;
+  prefixo?: "$" | "›";
+}) {
+  const [estado, setEstado] = useState<"parado" | "copiado" | "selecionado">("parado");
+  const ok = estado === "copiado";
   const pre = useRef<HTMLPreElement>(null);
 
   async function copiarComando() {
     try {
       await navigator.clipboard.writeText(comando);
-      setOk(true);
-      window.setTimeout(() => setOk(false), 1800);
+      setEstado("copiado");
+      window.setTimeout(() => setEstado("parado"), 1800);
     } catch {
       const sel = window.getSelection();
       if (pre.current && sel) {
@@ -20,6 +36,8 @@ export function Comando({ comando, copiar, copiado, escuro = false, prefixo = "$
         r.selectNodeContents(pre.current);
         sel.removeAllRanges();
         sel.addRange(r);
+        setEstado("selecionado");
+        window.setTimeout(() => setEstado("parado"), 1800);
       }
     }
   }
@@ -57,10 +75,13 @@ export function Comando({ comando, copiar, copiado, escuro = false, prefixo = "$
             <path d="M10.5 3.5V3a1.5 1.5 0 0 0-1.5-1.5H3.5A1.5 1.5 0 0 0 2 3v5.5A1.5 1.5 0 0 0 3.5 10H4" />
           </svg>
         )}
-        <span className="hidden sm:inline" aria-live="polite">
-          {ok ? copiado : copiar}
-        </span>
+        <span className="hidden sm:inline">{ok ? copiado : copiar}</span>
       </button>
+      {/* O aviso não pode morar no rótulo visível: abaixo de 640 px ele é display:none, e
+          região fora da árvore de acessibilidade não anuncia nada. */}
+      <span className="sr-only" aria-live="polite">
+        {estado === "copiado" ? copiado : estado === "selecionado" ? selecionado : ""}
+      </span>
     </div>
   );
 }

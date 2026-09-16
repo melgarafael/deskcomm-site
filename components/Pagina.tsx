@@ -299,7 +299,7 @@ export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
         </section>
       </main>
 
-      <Rodape c={c} idioma={idioma} pagina="home" />
+      <Rodape c={c} idioma={idioma} pagina="home" atualizadoEm="2026-07-28" />
     </>
   );
 }

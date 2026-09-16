@@ -44,7 +44,7 @@ export async function PaginaVersao({ idioma, versao }: { idioma: Idioma; versao:
 
   return (
     <>
-      <Cabecalho c={c} idioma={idioma} pagina="changelog" />
+      <Cabecalho c={c} idioma={idioma} pagina="changelog" sufixo={`/${v.versao}`} />
       <main className="mx-auto max-w-[1200px] px-5 pb-24 sm:px-6">
         <nav aria-label={t.migalha} className="pt-8 sm:pt-10">
           <ol className="flex flex-wrap items-center gap-2 font-mono text-xs text-text-muted">
@@ -81,7 +81,7 @@ export async function PaginaVersao({ idioma, versao }: { idioma: Idioma; versao:
               >
                 <IconeSecao tipo={s.tipo} />
                 {rotuloDaSecao(s, idioma)}
-                <span className="font-mono text-xs font-normal tabular-nums opacity-80">{contarItens(s)}</span>
+                <span className="font-mono text-xs font-normal tabular-nums">{contarItens(s)}</span>
               </a>
             ))}
           </div>
@@ -237,7 +237,7 @@ export async function PaginaVersao({ idioma, versao }: { idioma: Idioma; versao:
           </a>
         </div>
       </main>
-      <Rodape c={c} idioma={idioma} pagina="changelog" />
+      <Rodape c={c} idioma={idioma} pagina="changelog" atualizadoEm={todas[0].data} />
     </>
   );
 }

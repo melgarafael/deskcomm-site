@@ -42,7 +42,8 @@ export type Bloco =
   | { t: "p"; texto: string }
   | { t: "lista"; itens: Item[] }
   | { t: "codigo"; texto: string; linguagem: string }
-  | { t: "citacao"; blocos: Bloco[] };
+  | { t: "citacao"; blocos: Bloco[] }
+  | { t: "separador" };
 
 /** Um item de lista. `titulo` é o `**negrito**` que abre o item, quando há. */
 export type Item = { titulo: string | null; blocos: Bloco[] };
@@ -158,6 +159,8 @@ export function tipoDaSecao(titulo: string): TipoSecao {
 
 const INICIO_DE_ITEM = /^- /;
 const CERCA = /^```(.*)$/;
+/** `---`, `***`, `___` (com ou sem espaços entre os sinais). Sem este ramo, a linha virava um parágrafo "---" (1.10.0). */
+const SEPARADOR = /^ {0,3}([-*_])(?:[ \t]*\1){2,}[ \t]*$/;
 
 /** Blocos de um trecho já sem a indentação do contêiner. */
 export function interpretarBlocos(linhas: string[]): Bloco[] {
@@ -168,6 +171,12 @@ export function interpretarBlocos(linhas: string[]): Bloco[] {
     const linha = linhas[i];
 
     if (linha.trim() === "") {
+      i++;
+      continue;
+    }
+
+    if (SEPARADOR.test(linha)) {
+      blocos.push({ t: "separador" });
       i++;
       continue;
     }
@@ -230,13 +239,29 @@ function interpretarItem(corpo: string[]): Item {
   const primeiro = blocos[0];
   if (primeiro?.t !== "p") return { titulo: null, blocos };
 
-  // `**Título** corpo` (robô) e `**Título.** corpo` (manual). O título pode ter atravessado linhas:
-  // o parágrafo já chega com as linhas unidas.
-  const m = /^\*\*(.+?)\*\*\s*(.*)$/.exec(primeiro.texto);
-  if (!m) return { titulo: null, blocos };
-  const titulo = m[1].trim().replace(/[.:]$/, "");
-  const resto = m[2].trim();
+  const separado = separarTitulo(primeiro.texto);
+  if (!separado) return { titulo: null, blocos };
+  const { titulo, resto } = separado;
   return { titulo, blocos: resto ? [{ t: "p", texto: resto }, ...blocos.slice(1)] : blocos.slice(1) };
+}
+
+/**
+ * `**Título** Corpo` (robô) e `**Título.** corpo` (manual) → título e corpo. O título pode ter
+ * atravessado linhas: o parágrafo já chega com as linhas unidas.
+ *
+ * O negrito só é título quando fecha a frase: corpo vazio, negrito terminado em pontuação, ou
+ * corpo que abre frase nova (maiúscula, número, aspas, código). Fora disso o negrito é o começo
+ * de uma frase que continua — `**Excluir um canal** apagava o roteador`, `**Chamada perdida vira
+ * aviso na Central**, com o número` — e parti-lo deixava um título solto e um parágrafo que
+ * começa por minúscula ou vírgula. Aí devolve `null` e o parágrafo fica inteiro.
+ */
+function separarTitulo(texto: string): { titulo: string; resto: string } | null {
+  const m = /^\*\*(.+?)\*\*\s*(.*)$/.exec(texto);
+  if (!m) return null;
+  const negrito = m[1].trim();
+  const resto = m[2].trim();
+  const fechaFrase = resto === "" || /[.:!?]$/.test(negrito) || /^[\p{Lu}\p{N}"“'`]/u.test(resto);
+  return fechaFrase ? { titulo: negrito.replace(/[.:]$/, ""), resto } : null;
 }
 
 // ── Auxiliares ───────────────────────────────────────────────────────────────
@@ -259,15 +284,45 @@ export function ancoraDoGithub(titulo: string): string {
     .replace(/\s/g, "-");
 }
 
-/** Itens com título de uma seção — o que a listagem mostra. */
+/**
+ * As entradas de uma seção, uma por posição, cada uma pelo seu título em markdown. É o modelo
+ * único do que a página CONTA (chip, h2, "Nesta versão", totais) e do que a listagem NOMEIA.
+ *
+ * Entrada é um item de lista de topo, ou um parágrafo de topo que abre em negrito. As versões
+ * escritas à mão dão os avisos de "Requer atenção" em parágrafos assim (1.3.0, 1.4.0, 1.4.1,
+ * 1.5.0): contar só itens de lista punha "Requer atenção 0" logo acima de "Leia este bloco
+ * primeiro". Parágrafo em negrito seguido de lista é a abertura dela — os grupos da 1.2.0, o
+ * "Se você está vindo da 1.4.0" da 1.5.0 — e quem conta são os itens. Parágrafo sem negrito,
+ * citação, código e separador são corpo, não entrada.
+ */
+export function entradasDaSecao(s: Secao): string[] {
+  const entradas: string[] = [];
+  s.blocos.forEach((b, i) => {
+    if (b.t === "lista") for (const it of b.itens) entradas.push(it.titulo ?? primeiroParagrafo(it));
+    else if (b.t === "p" && b.texto.startsWith("**") && s.blocos[i + 1]?.t !== "lista" && !ehCabecalhoDeSecao(b.texto))
+      entradas.push(separarTitulo(b.texto)?.titulo ?? b.texto);
+  });
+  return entradas;
+}
+
+/**
+ * `**⚠️ Requer atenção**` sozinho num parágrafo é uma SEÇÃO escrita em negrito, não uma entrada
+ * dela: a 1.1.0 e a 1.2.0 abrem o aviso assim, dentro de `### Alterado` e `### Segurança`.
+ * Sem esta guarda o chip dizia "Segurança 6" e a listagem nomeava "⚠️ Requer atenção" como se
+ * fosse uma das correções de segurança.
+ */
+function ehCabecalhoDeSecao(texto: string): boolean {
+  const separado = separarTitulo(texto);
+  return separado !== null && separado.resto === "" && tipoDaSecao(separado.titulo) !== "outro";
+}
+
+/** O título de cada entrada, sem marcação — o que a listagem mostra e busca. */
 export function titulosDaSecao(s: Secao): string[] {
-  const titulos: string[] = [];
-  for (const b of s.blocos) if (b.t === "lista") for (const it of b.itens) titulos.push(textoSimples(it.titulo ?? primeiroParagrafo(it)));
-  return titulos.filter(Boolean);
+  return entradasDaSecao(s).map((t) => textoSimples(t));
 }
 
 export function contarItens(s: Secao): number {
-  return s.blocos.reduce((n, b) => n + (b.t === "lista" ? b.itens.length : 0), 0);
+  return entradasDaSecao(s).length;
 }
 
 function primeiroParagrafo(it: Item): string {
