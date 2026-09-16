@@ -57,10 +57,21 @@ test("c6: o aviso de cópia mora numa região sr-only, que existe em toda largur
   assert.doesNotMatch(fonte, /className="hidden[^"]*" aria-live/, "região aria-live com display:none não anuncia nada");
 });
 
-test("c7: o contador do chip não tem opacidade — 3,89:1 reprova em AA", () => {
-  const contador = /<span className="font-mono[^"]*">\{contagem\}<\/span>/.exec(ler("components/changelog/Marcadores.tsx"));
-  assert.ok(contador, "o contador do chip mudou de forma — reveja a cerca");
-  assert.doesNotMatch(contador[0], /opacity-|\/\d\d\b/, "opacidade no contador, escrita como for");
+test("c7: o contador dos chips de seção não tem opacidade — 3,89:1 reprova em AA", () => {
+  // Dois contadores, e o conserto tirou o `opacity-80` dos dois: o do `ChipSecao` (listagem) e o do
+  // chip do cabeçalho da página de versão, que não usa o `ChipSecao`. Vigiar só o primeiro deixava o
+  // segundo voltar em silêncio. O do segundo é o `<span>` DENTRO do `<a>` que leva o estilo do chip —
+  // a forma não atravessa `</a>`, então não escorrega para os outros dois `{contarItens(s)}` do
+  // arquivo (o do `h2` e o da lateral), que nunca tiveram opacidade nem são chip.
+  const contadores = [
+    ["components/changelog/Marcadores.tsx", /<span className="(font-mono[^"]*)">\{contagem\}<\/span>/],
+    ["components/changelog/PaginaVersao.tsx", /<a\b(?:(?!<\/a>)[\s\S])*?ESTILO_SECAO\[s\.tipo\]\.chip(?:(?!<\/a>)[\s\S])*?<span className="(font-mono[^"]*)">\{contarItens\(s\)\}<\/span>/],
+  ] as const;
+  for (const [arquivo, forma] of contadores) {
+    const contador = forma.exec(ler(arquivo));
+    assert.ok(contador, `${arquivo}: o contador do chip mudou de forma — reveja a cerca`);
+    assert.doesNotMatch(contador[1], /opacity-|\/\d\d\b/, `${arquivo}: opacidade no contador, escrita como for`);
+  }
 });
 
 test("d1: o placeholder da busca não tem opacidade — é o único rótulo visível do campo", () => {

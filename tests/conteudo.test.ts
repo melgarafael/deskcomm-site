@@ -11,7 +11,7 @@
  * types` (só tem `import type`), então o que se lê é o que a página renderiza.
  *
  * Correção de conteúdo vale nos três idiomas. Quando um caso só sabe olhar um deles (a frase em
- * inglês do d4, a concordância do espanhol do d3), está escrito por quê.
+ * inglês do d4, as do espanhol do d3), está escrito por quê.
  */
 import assert from "node:assert/strict";
 import { test } from "node:test";
@@ -87,6 +87,31 @@ test("d3: em espanhol, VPS é masculino — o cabeçalho da própria página diz
   const femininas = todas.filter((s) => /\b(la|una|esa|esta|misma)\s+VPS\b/i.test(s));
   assert.deepEqual(femininas, [], "a página se contradizia entre o título e o corpo");
   assert.ok(todas.some((s) => /\b(el|un)\s+VPS\b/i.test(s)), "a cerca ficaria vazia se a palavra sumisse do dicionário");
+});
+
+// As outras quatro correções do d3. Cada caso proíbe a FORMA do defeito que foi corrigido, no campo
+// onde ele estava — não julga a tradução que o substituiu, que pode mudar à vontade.
+
+test("d3: em espanhol, o rótulo `Sozinho` não é o adjetivo solto — `Sola` concordava com nada", () => {
+  assert.doesNotMatch(TEXTOS_GUIAS.es.assistentes.sozinho, /^\s*s[oó]l[oa]s?\s*$/i, "o rótulo nomeia como o assistente aciona o guia por conta própria");
+});
+
+test("d3: em espanhol, `Bom saber` não vira o decalque `Bueno saber`", () => {
+  const decalques = frases(TEXTOS_GUIAS.es).filter((s) => /\bbuen[oa]?\s+(?:de\s+)?saber\b/i.test(s));
+  assert.deepEqual(decalques, [], "decalque do português, não é como se diz em espanhol");
+});
+
+test("d3: em espanhol, o que se digita depois do nome é PASSADO ao guia — `junto a` quer dizer `ao lado de`", () => {
+  const lista = TEXTOS_GUIAS.es.lista;
+  assert.ok(lista.some((a) => a.id === "claude"), "o cartão do Claude Code, onde a frase mora, sumiu — reveja a cerca");
+  for (const a of lista)
+    assert.doesNotMatch(a.peloNome.texto, /\bjunto a\b/i, `${a.id}: "va junto a la guía" põe o texto ao lado do guia, não dentro do pedido`);
+});
+
+test("d3: em espanhol, o assistente SEGUE os guias e responde — `sigue` + gerúndio diz que ele continua respondendo", () => {
+  const item = TEXTOS_GUIAS.es.faq.itens.find((f) => /español|inglés/i.test(f.p));
+  assert.ok(item, "a pergunta sobre o idioma sumiu do FAQ — reveja a cerca");
+  assert.doesNotMatch(item.r, /\bsiguen?\s+(?!cuando\b)\p{L}+(?:ando|iendo|yendo|ándo|iéndo|yéndo)/iu, "`las sigue respondiendo` é `continua respondendo-as`");
 });
 
 test("d4: em inglês, a frase da imobiliária pede o prompt do AGENTE DE IA, não o do corretor", () => {

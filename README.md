@@ -25,7 +25,12 @@ pnpm test     # node:test; também roda sozinho antes do `pnpm build`
 pnpm build    # baixa o CHANGELOG da main do produto e gera as 42 versões × 3 idiomas
 ```
 
-Os três rodam no CI (`.github/workflows/ci.yml`) a cada push e a cada PR.
+Os três rodam no CI (`.github/workflows/ci.yml`) em todo PR e a cada push na `main` — push em
+outra branch não dispara nada. O gatilho é o bloco `on:` do arquivo:
+
+```bash
+sed -n '/^on:/,/^jobs:/p' .github/workflows/ci.yml
+```
 
 ## Estado
 
