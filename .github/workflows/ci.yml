@@ -4,10 +4,11 @@
 # eram o deploy da Vercel e o comentário de preview — nenhum dos dois roda `pnpm test`. Uma
 # suíte que só protege quem lembrar de digitá-la não protege ninguém num PR de terceiro.
 #
-# `pnpm test` também virou `prebuild` no `package.json`, então quem roda `pnpm build` localmente leva
-# a suíte junto. Se o build da Vercel também leva, depende do comando de build do projeto e de o
-# pnpm rodar scripts pre/post — confira no log do deploy. Este workflow é o que NÃO depende disso:
-# roda a suíte sozinha, e reprova com ela.
+# `pnpm test` também virou `prebuild` no `package.json`, então quem roda `pnpm build` leva a suíte
+# junto — inclusive a Vercel: o log do deploy do commit 4a867a7 (16/09/2026) mostra
+# "Running \"pnpm run build\"", "> prebuild", "> pnpm test" e "tests 32" antes do "> next build".
+# Isso vale enquanto o projeto da Vercel usar o comando de build padrão. Este workflow é o que NÃO
+# depende disso: roda a suíte sozinha, e reprova com ela.
 name: ci
 
 on:
