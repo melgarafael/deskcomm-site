@@ -89,8 +89,9 @@ test("d3: em espanhol, VPS é masculino — o cabeçalho da própria página diz
   assert.ok(todas.some((s) => /\b(el|un)\s+VPS\b/i.test(s)), "a cerca ficaria vazia se a palavra sumisse do dicionário");
 });
 
-// As outras quatro correções do d3. Cada caso proíbe a FORMA do defeito que foi corrigido, no campo
-// onde ele estava — não julga a tradução que o substituiu, que pode mudar à vontade.
+// As outras quatro correções do d3. Cada caso proíbe a FORMA do defeito que foi corrigido — no campo
+// onde ele estava, menos o `bueno (de) saber`, procurado em qualquer string do espanhol — e não
+// julga a tradução que o substituiu, que pode mudar à vontade.
 
 test("d3: em espanhol, o rótulo `Sozinho` não é o adjetivo solto — `Sola` concordava com nada", () => {
   assert.doesNotMatch(TEXTOS_GUIAS.es.assistentes.sozinho, /^\s*s[oó]l[oa]s?\s*$/i, "o rótulo nomeia como o assistente aciona o guia por conta própria");

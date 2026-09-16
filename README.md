@@ -22,11 +22,11 @@ pnpm dev
 ```bash
 pnpm typecheck
 pnpm test     # node:test; também roda sozinho antes do `pnpm build`
-pnpm build    # baixa o CHANGELOG da main do produto e gera as 42 versões × 3 idiomas
+pnpm build    # baixa o CHANGELOG da main do produto e gera uma página por versão × 3 idiomas
 ```
 
-Os três rodam no CI (`.github/workflows/ci.yml`) em todo PR e a cada push na `main` — push em
-outra branch não dispara nada. O gatilho é o bloco `on:` do arquivo:
+Os três rodam no CI (`.github/workflows/ci.yml`) num PR — ao abrir e a cada push na branch dele — e
+a cada push na `main`. Push numa branch sem PR aberto não dispara nada. O gatilho é o bloco `on:`:
 
 ```bash
 sed -n '/^on:/,/^jobs:/p' .github/workflows/ci.yml
