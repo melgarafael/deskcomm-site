@@ -1,15 +1,13 @@
 import Image from "next/image";
-import { Suspense } from "react";
 
 import type { Conteudo, Idioma } from "@/conteudo";
 import { IDIOMAS } from "@/conteudo";
 
 import { Jornada } from "./Jornada";
-import { Logotipo, Simbolo } from "./Marca";
+import { Cabecalho, GITHUB } from "./Cabecalho";
 import { Mesa } from "./mesa/MesaEstatica";
-import { StarCount } from "./StarCount";
+import { Rodape } from "./Rodape";
 
-const GITHUB = "https://github.com/melgarafael/DeskcommCRM";
 const VILOES_IMG = ["/img/viloes-01-planilha.png", "/img/viloes-02-robo.png"];
 
 export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
@@ -18,57 +16,7 @@ export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-transparent bg-bg/90 backdrop-blur-[2px]">
-        <div className="mx-auto flex h-14 max-w-[1200px] items-center gap-8 px-6">
-          <a href={base} className="flex items-center" aria-label="DeskcommCRM">
-            <Logotipo className="h-7 w-auto" />
-          </a>
-          <nav className="hidden flex-1 items-center gap-6 md:flex">
-            {[
-              [href("#como-funciona"), c.nav.comoFunciona],
-              [href("#jornada"), c.nav.prova],
-              [href("#instalar"), c.nav.instalar],
-              [href("#preco"), c.nav.preco],
-            ].map(([h, l]) => (
-              <a key={h} href={h} className="text-sm text-text-muted transition-colors duration-120 ease-out-fast hover:text-text">
-                {l}
-              </a>
-            ))}
-          </nav>
-          <div className="ml-auto flex items-center gap-2.5">
-            {/* Troca de idioma: links de verdade, não estado. Cada idioma tem
-                URL própria — é o que permite indexar e citar cada versão. */}
-            <nav aria-label="Idioma" className="hidden items-center gap-1 sm:flex">
-              {IDIOMAS.map((i) => (
-                <a
-                  key={i.codigo}
-                  href={i.caminho}
-                  hrefLang={i.codigo}
-                  aria-current={i.codigo === idioma ? "true" : undefined}
-                  className={[
-                    "rounded-[4px] px-2 py-1 font-mono text-xs uppercase transition-colors duration-120 ease-out-fast",
-                    i.codigo === idioma ? "bg-accent-50 text-accent-700" : "text-text-muted hover:text-text",
-                  ].join(" ")}
-                >
-                  {i.codigo === "pt-BR" ? "pt" : i.codigo}
-                </a>
-              ))}
-            </nav>
-            <a href={GITHUB} className="hidden items-center gap-2 rounded-[4px] border border-border px-3 py-1.5 text-sm transition-colors duration-120 ease-out-fast hover:border-accent-300 hover:bg-accent-50 sm:flex">
-              <svg viewBox="0 0 16 16" aria-hidden className="h-4 w-4 fill-current">
-                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
-              </svg>
-              <span>GitHub</span>
-              <Suspense fallback={null}>
-                <StarCount />
-              </Suspense>
-            </a>
-            <a href={href("#instalar")} className="rounded-[4px] bg-accent-600 px-4 py-2 text-sm font-bold text-white transition-colors duration-120 ease-out-fast hover:bg-accent-700">
-              {c.nav.ctaInstalar}
-            </a>
-          </div>
-        </div>
-      </header>
+      <Cabecalho c={c} idioma={idioma} pagina="home" />
 
       <main>
         {/* HERO */}
@@ -351,38 +299,7 @@ export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
         </section>
       </main>
 
-      <footer className="border-t border-border">
-        <div className="mx-auto max-w-[1200px] px-6 py-14">
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-            {c.rodape.colunas.map((col) => (
-              <div key={col.titulo} className="min-w-0">
-                <p className="font-mono text-xs uppercase tracking-[0.14em] text-text-muted">{col.titulo}</p>
-                <ul className="mt-4 space-y-2.5">
-                  {col.itens.map((i) => (
-                    <li key={i.rotulo}>
-                      <a href={i.href.startsWith("#") ? href(i.href) : `${GITHUB}${i.href}`} className="text-sm transition-colors duration-120 ease-out-fast hover:text-accent-600">
-                        {i.rotulo}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-          <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
-            <div className="flex items-center gap-3">
-              <Simbolo className="h-6 w-6" />
-              <p className="font-mono text-xs text-text-muted">{c.rodape.nota}</p>
-            </div>
-            {/* Data VISÍVEL na página, não só no schema: a pesquisa mediu que 75%
-                das páginas citadas por IA foram atualizadas nos últimos 12 meses,
-                e a data de atualização discrimina melhor que a de publicação. */}
-            <p className="font-mono text-xs text-text-muted">
-              {c.rodape.atualizado} <time dateTime="2026-07-28">28/07/2026</time>
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Rodape c={c} idioma={idioma} pagina="home" atualizadoEm="2026-07-28" />
     </>
   );
 }

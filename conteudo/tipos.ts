@@ -15,7 +15,9 @@ export const IDIOMAS: { codigo: Idioma; caminho: string; rotulo: string; ogLocal
 
 export type Conteudo = {
   meta: { titulo: string; descricao: string };
-  nav: { comoFunciona: string; prova: string; instalar: string; preco: string; ctaInstalar: string };
+  /** `guias` é o rótulo do botão no cabeçalho (≥1024 px); `guiasCurto`, o de telas médias; o ícone
+   *  sozinho, abaixo de 640 px, usa `guias` como aria-label. `idioma` é o aria-label do seletor de idioma. */
+  nav: { comoFunciona: string; prova: string; instalar: string; preco: string; ctaInstalar: string; guias: string; guiasCurto: string; changelog: string; idioma: string };
   hero: {
     sobretitulo: string;
     h1a: string;
@@ -74,5 +76,7 @@ export type Conteudo = {
   nichos: { sobretitulo: string; titulo: string; texto: string; abas: { nicho: string; lead: string; ganho: string }[] };
   revendedor: { sobretitulo: string; titulo: string; texto: string; honestidade: string; cta: string };
   faq: { titulo: string; perguntas: { p: string; r: string }[] };
+  /** `href` do rodapé: `#secao` = âncora da home; `@guias`/`@changelog` = página do site no
+   *  mesmo idioma; qualquer outro valor = caminho dentro do repositório no GitHub. */
   rodape: { colunas: { titulo: string; itens: { rotulo: string; href: string }[] }[]; nota: string; atualizado: string };
 };

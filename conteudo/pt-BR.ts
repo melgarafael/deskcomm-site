@@ -6,7 +6,7 @@ export const ptBR: Conteudo = {
     descricao:
       "Agentes de IA atendem no WhatsApp, qualificam o lead e movem o funil — com tudo registrado e auditável. No seu servidor, sem mensalidade por usuário. Open source, licença MIT.",
   },
-  nav: { comoFunciona: "Como funciona", prova: "Prova", instalar: "Instalar", preco: "Preço", ctaInstalar: "Instalar na VPS" },
+  nav: { comoFunciona: "Como funciona", prova: "Prova", instalar: "Instalar", preco: "Preço", ctaInstalar: "Instalar na VPS", guias: "Guias para devs", guiasCurto: "Guias", changelog: "Changelog", idioma: "Idioma" },
   hero: {
     sobretitulo: "Desk + comm — o comercial de mesa",
     h1a: "Sua operação comercial numa mesa só.",
@@ -152,9 +152,9 @@ export const ptBR: Conteudo = {
   rodape: {
     colunas: [
       { titulo: "Produto", itens: [{ rotulo: "Como funciona", href: "#como-funciona" }, { rotulo: "Preço", href: "#preco" }, { rotulo: "Instalar", href: "#instalar" }] },
-      { titulo: "Documentação", itens: [{ rotulo: "Guia de instalação", href: "/blob/main/docs/SETUP.md" }, { rotulo: "Para agências", href: "/blob/main/docs/white-label.md" }, { rotulo: "Arquitetura", href: "/blob/main/ARCHITECTURE.md" }, { rotulo: "Doutrina do sistema vivo", href: "/blob/main/docs/doctrine/sistema-vivo.md" }] },
+      { titulo: "Documentação", itens: [{ rotulo: "Guias do assistente", href: "@guias" }, { rotulo: "Guia de instalação", href: "/blob/main/docs/SETUP.md" }, { rotulo: "Para agências", href: "/blob/main/docs/white-label.md" }, { rotulo: "Arquitetura", href: "/blob/main/ARCHITECTURE.md" }, { rotulo: "Doutrina do sistema vivo", href: "/blob/main/docs/doctrine/sistema-vivo.md" }] },
       { titulo: "Comunidade", itens: [{ rotulo: "Discussions", href: "/discussions" }, { rotulo: "Issues", href: "/issues" }, { rotulo: "Contribuir", href: "/blob/main/CONTRIBUTING.md" }] },
-      { titulo: "Projeto", itens: [{ rotulo: "Licença MIT", href: "/blob/main/LICENSE" }, { rotulo: "Changelog", href: "/blob/main/CHANGELOG.md" }, { rotulo: "Segurança", href: "/blob/main/SECURITY.md" }] },
+      { titulo: "Projeto", itens: [{ rotulo: "Licença MIT", href: "/blob/main/LICENSE" }, { rotulo: "Changelog", href: "@changelog" }, { rotulo: "Segurança", href: "/blob/main/SECURITY.md" }] },
     ],
     nota: "DeskcommCRM · MIT · Feito no Brasil",
     atualizado: "Página atualizada em",

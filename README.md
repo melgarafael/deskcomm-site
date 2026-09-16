@@ -17,6 +17,21 @@ pnpm install
 pnpm dev
 ```
 
+## Conferir
+
+```bash
+pnpm typecheck
+pnpm test     # node:test; também roda sozinho antes do `pnpm build`
+pnpm build    # baixa o CHANGELOG da main do produto e gera uma página por versão × 3 idiomas
+```
+
+Os três rodam no CI (`.github/workflows/ci.yml`) num PR — ao abrir e a cada push na branch dele — e
+a cada push na `main`. Push numa branch sem PR aberto não dispara nada. O gatilho é o bloco `on:`:
+
+```bash
+sed -n '/^on:/,/^jobs:/p' .github/workflows/ci.yml
+```
+
 ## Estado
 
 Esqueleto com `noindex`. Sai quando a LP estiver pronta.
