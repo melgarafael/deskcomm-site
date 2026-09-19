@@ -157,7 +157,7 @@ export const en: Conteudo = {
   rodape: {
     colunas: [
       { titulo: "Product", itens: [{ rotulo: "How it works", href: "#como-funciona" }, { rotulo: "Pricing", href: "#preco" }, { rotulo: "Install", href: "#instalar" }] },
-      { titulo: "Documentation", itens: [{ rotulo: "Assistant guides", href: "@guias" }, { rotulo: "Setup guide", href: "/blob/main/docs/SETUP.md" }, { rotulo: "For agencies", href: "/blob/main/docs/white-label.md" }, { rotulo: "Architecture", href: "/blob/main/ARCHITECTURE.md" }, { rotulo: "Living system doctrine", href: "/blob/main/docs/doctrine/sistema-vivo.md" }] },
+      { titulo: "Documentation", itens: [{ rotulo: "Assistant guides", href: "@guias" }, { rotulo: "Extensions", href: "@extensoes" }, { rotulo: "Setup guide", href: "/blob/main/docs/SETUP.md" }, { rotulo: "For agencies", href: "/blob/main/docs/white-label.md" }, { rotulo: "Architecture", href: "/blob/main/ARCHITECTURE.md" }, { rotulo: "Living system doctrine", href: "/blob/main/docs/doctrine/sistema-vivo.md" }] },
       { titulo: "Community", itens: [{ rotulo: "Discussions", href: "/discussions" }, { rotulo: "Issues", href: "/issues" }, { rotulo: "Contributing", href: "/blob/main/CONTRIBUTING.md" }] },
       { titulo: "Project", itens: [{ rotulo: "MIT licence", href: "/blob/main/LICENSE" }, { rotulo: "Changelog", href: "@changelog" }, { rotulo: "Security", href: "/blob/main/SECURITY.md" }] },
     ],

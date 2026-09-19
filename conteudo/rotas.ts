@@ -14,12 +14,13 @@ import type { Idioma } from "./tipos";
  *   - o layout de cada idioma declara canonical e hreflang da home, e toda
  *     página-filha herdava — dizendo ao buscador que `/guias` É a home.
  */
-export type PaginaId = "home" | "guias" | "changelog";
+export type PaginaId = "home" | "guias" | "changelog" | "extensoes";
 
 export const ROTAS: Record<PaginaId, Record<Idioma, string>> = {
   home: { "pt-BR": "/", en: "/en", es: "/es" },
   guias: { "pt-BR": "/guias", en: "/en/guides", es: "/es/guias" },
   changelog: { "pt-BR": "/changelog", en: "/en/changelog", es: "/es/changelog" },
+  extensoes: { "pt-BR": "/extensoes", en: "/en/extensions", es: "/es/extensiones" },
 };
 
 /** Âncora de uma seção da home, válida de qualquer página: `/#instalar`, `/en#instalar`. */

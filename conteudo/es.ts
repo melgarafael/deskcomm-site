@@ -163,7 +163,7 @@ export const es: Conteudo = {
   rodape: {
     colunas: [
       { titulo: "Producto", itens: [{ rotulo: "Cómo funciona", href: "#como-funciona" }, { rotulo: "Precio", href: "#preco" }, { rotulo: "Instalar", href: "#instalar" }] },
-      { titulo: "Documentación", itens: [{ rotulo: "Guías del asistente", href: "@guias" }, { rotulo: "Guía de instalación", href: "/blob/main/docs/SETUP.md" }, { rotulo: "Para agencias", href: "/blob/main/docs/white-label.md" }, { rotulo: "Arquitectura", href: "/blob/main/ARCHITECTURE.md" }, { rotulo: "Doctrina del sistema vivo", href: "/blob/main/docs/doctrine/sistema-vivo.md" }] },
+      { titulo: "Documentación", itens: [{ rotulo: "Guías del asistente", href: "@guias" }, { rotulo: "Extensiones", href: "@extensoes" }, { rotulo: "Guía de instalación", href: "/blob/main/docs/SETUP.md" }, { rotulo: "Para agencias", href: "/blob/main/docs/white-label.md" }, { rotulo: "Arquitectura", href: "/blob/main/ARCHITECTURE.md" }, { rotulo: "Doctrina del sistema vivo", href: "/blob/main/docs/doctrine/sistema-vivo.md" }] },
       { titulo: "Comunidad", itens: [{ rotulo: "Discussions", href: "/discussions" }, { rotulo: "Issues", href: "/issues" }, { rotulo: "Contribuir", href: "/blob/main/CONTRIBUTING.md" }] },
       { titulo: "Proyecto", itens: [{ rotulo: "Licencia MIT", href: "/blob/main/LICENSE" }, { rotulo: "Changelog", href: "@changelog" }, { rotulo: "Seguridad", href: "/blob/main/SECURITY.md" }] },
     ],

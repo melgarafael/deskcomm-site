@@ -17,6 +17,7 @@ function resolver(href: string, idioma: Idioma, naHome: boolean): string {
   if (href.startsWith("#")) return ancoraDaHome(idioma, href, naHome);
   if (href === "@guias") return ROTAS.guias[idioma];
   if (href === "@changelog") return ROTAS.changelog[idioma];
+  if (href === "@extensoes") return ROTAS.extensoes[idioma];
   return `${GITHUB}${href}`;
 }
 
