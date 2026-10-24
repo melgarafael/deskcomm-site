@@ -22,6 +22,13 @@ export const ROTAS: Record<PaginaId, Record<Idioma, string>> = {
   changelog: { "pt-BR": "/changelog", en: "/en/changelog", es: "/es/changelog" },
 };
 
+/**
+ * O curso em imagens: página estática em `public/curso/`, gerada no repositório do
+ * produto (`curso/montar.ts`, com CURSO_BASE="/curso/"). Um idioma só — as fotos são
+ * da tela em português —, então fica fora de ROTAS, que promete os três.
+ */
+export const CURSO = "/curso";
+
 /** Âncora de uma seção da home, válida de qualquer página: `/#instalar`, `/en#instalar`. */
 export function ancoraDaHome(idioma: Idioma, fragmento: string, naHome: boolean): string {
   if (naHome) return fragmento;

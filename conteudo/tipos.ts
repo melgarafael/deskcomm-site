@@ -56,6 +56,7 @@ export type Conteudo = {
     atualizarTitulo: string;
     atualizarTexto: string;
   };
+  curso: { sobretitulo: string; titulo: string; sub: string; itens: string[]; cta: string; nota: string; alt: string };
   preco: {
     sobretitulo: string;
     titulo: string;
@@ -76,7 +77,7 @@ export type Conteudo = {
   nichos: { sobretitulo: string; titulo: string; texto: string; abas: { nicho: string; lead: string; ganho: string }[] };
   revendedor: { sobretitulo: string; titulo: string; texto: string; honestidade: string; cta: string };
   faq: { titulo: string; perguntas: { p: string; r: string }[] };
-  /** `href` do rodapé: `#secao` = âncora da home; `@guias`/`@changelog` = página do site no
+  /** `href` do rodapé: `#secao` = âncora da home; `@guias`/`@changelog`/`@curso` = página do site no
    *  mesmo idioma; qualquer outro valor = caminho dentro do repositório no GitHub. */
   rodape: { colunas: { titulo: string; itens: { rotulo: string; href: string }[] }[]; nota: string; atualizado: string };
 };
