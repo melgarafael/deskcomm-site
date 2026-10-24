@@ -4,6 +4,8 @@ import type { Conteudo, Idioma } from "@/conteudo";
 import { IDIOMAS } from "@/conteudo";
 
 import { Jornada } from "./Jornada";
+import { CURSO } from "@/conteudo/rotas";
+
 import { Cabecalho, GITHUB } from "./Cabecalho";
 import { Mesa } from "./mesa/MesaEstatica";
 import { Rodape } from "./Rodape";
@@ -147,6 +149,40 @@ export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
                   </p>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CURSO EM IMAGENS — depois de instalar, a pergunta seguinte é "e agora, como uso?" */}
+        <section id="curso" className="border-t border-border/70">
+          <div className="mx-auto max-w-[1200px] px-6 py-20 sm:py-28">
+            <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,42%)_minmax(0,58%)] lg:gap-16">
+              <div className="min-w-0">
+                <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent-600">{c.curso.sobretitulo}</p>
+                <h2 className="mt-5 text-pretty text-[2rem] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[2.6rem]">{c.curso.titulo}</h2>
+                <p className="mt-6 max-w-[42ch] text-lg leading-relaxed text-text-muted">{c.curso.sub}</p>
+                <ul className="mt-8 space-y-3">
+                  {c.curso.itens.map((item) => (
+                    <li key={item} className="flex gap-3 leading-relaxed">
+                      <span aria-hidden className="mt-[0.6em] h-1.5 w-1.5 shrink-0 rounded-full bg-accent-500" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <a href={CURSO} className="mt-10 inline-block rounded-[4px] bg-accent-600 px-5 py-3 text-sm font-bold text-white transition-colors duration-120 ease-out-fast hover:bg-accent-700">
+                  {c.curso.cta}
+                </a>
+                <p className="mt-4 max-w-[46ch] text-sm leading-relaxed text-text-muted">{c.curso.nota}</p>
+              </div>
+              <a href={CURSO} className="block min-w-0 overflow-hidden rounded-[12px] border border-border bg-surface transition-colors duration-150 ease-out-fast hover:border-accent-300">
+                <div className="flex items-center gap-2 border-b border-border px-4 py-2.5">
+                  {[0, 1, 2].map((i) => (
+                    <span key={i} aria-hidden className="h-2 w-2 rounded-full bg-border" />
+                  ))}
+                  <span className="ml-1.5 font-mono text-xs text-text-muted">deskcomm.com.br{CURSO}</span>
+                </div>
+                <Image src={`${CURSO}/capturas/assumir-e-responder--p1.jpg`} alt={c.curso.alt} width={1440} height={900} className="h-auto w-full" />
+              </a>
             </div>
           </div>
         </section>

@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Curso em imagens do DeskComm: cada tela do sistema com fotos reais, setas e um simulador para treinar.">
+<title>Curso DeskComm</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a casca do próprio DeskComm (menu lateral com os grupos reais + área de trabalho);
+   cada lição é uma página de manual de campo, com a foto da tela como figura principal. */
+:root {
+  --papel: #faf9f6;
+  --folha: #ffffff;
+  --folha-2: #f5f3ee;
+  --tinta: #1c1a16;
+  --tinta-2: #5d594f;
+  --tinta-3: #7d786c;
+  --linha: #e7e3da;
+  --linha-forte: #d2cdbf;
+  --oliva: #506d48;
+  --oliva-forte: #41573b;
+  --oliva-suave: #e4ebe0;
+  --sobre-oliva: #ffffff;
+  --marca: #c2602a;            /* cor das anotações: precisa saltar sobre qualquer print */
+  --marca-suave: rgba(194, 96, 42, 0.14);
+  --sobre-marca: #ffffff;
+  --veu: rgba(28, 26, 22, 0.32);
+  --aviso: #875a1a;
+  --aviso-fundo: rgba(176, 122, 43, 0.12);
+  --sombra: 0 1px 2px rgba(28, 26, 22, 0.06), 0 8px 24px rgba(28, 26, 22, 0.08);
+
+  --fonte: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --t-1: 0.8125rem;
+  --t-2: 0.9375rem;
+  --t-3: 1.0625rem;
+  --t-4: 1.375rem;
+  --t-5: 1.875rem;
+  --t-6: 2.5rem;
+  --raio: 8px;
+  --menu-largura: 248px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --papel: #161510; --folha: #1d1c17; --folha-2: #272620;
+    --tinta: #f5f4ef; --tinta-2: #b4b0a3; --tinta-3: #8e8b7f;
+    --linha: #33312a; --linha-forte: #46433a;
+    --oliva: #8fae84; --oliva-forte: #a9c49f; --oliva-suave: rgba(143, 174, 132, 0.16); --sobre-oliva: #161510;
+    --marca: #ec8a52; --marca-suave: rgba(236, 138, 82, 0.18); --sobre-marca: #1c1a16;
+    --veu: rgba(0, 0, 0, 0.38);
+    --aviso: #e0b067; --aviso-fundo: rgba(224, 176, 103, 0.12);
+    --sombra: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --papel: #161510; --folha: #1d1c17; --folha-2: #272620;
+  --tinta: #f5f4ef; --tinta-2: #b4b0a3; --tinta-3: #8e8b7f;
+  --linha: #33312a; --linha-forte: #46433a;
+  --oliva: #8fae84; --oliva-forte: #a9c49f; --oliva-suave: rgba(143, 174, 132, 0.16); --sobre-oliva: #161510;
+  --marca: #ec8a52; --marca-suave: rgba(236, 138, 82, 0.18); --sobre-marca: #1c1a16;
+  --veu: rgba(0, 0, 0, 0.38);
+  --aviso: #e0b067; --aviso-fundo: rgba(224, 176, 103, 0.12);
+  --sombra: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+/* o que o esqueleto do Artifact já dava, e o site precisa declarar */
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body {
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--fonte);
+  font-size: var(--t-2);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--papel); }
+a { color: var(--oliva); }
+h1, h2, h3 { text-wrap: balance; line-height: 1.2; margin: 0; }
+p { margin: 0; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--oliva); outline-offset: 2px; border-radius: 4px; }
+.visualmente-oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- casca ---------- */
+.casca { display: grid; grid-template-columns: var(--menu-largura) minmax(0, 1fr); min-height: 100%; }
+.menu {
+  position: sticky; top: env(safe-area-inset-top, 0px); align-self: start;
+  height: calc(100vh - env(safe-area-inset-top, 0px)); overflow-y: auto;
+  background: var(--folha); border-right: 1px solid var(--linha);
+  padding-block: 18px 24px; padding-left: max(14px, env(safe-area-inset-left, 0px)); padding-right: 14px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.marca { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--tinta); padding-inline: 6px; }
+.marca-d { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 7px; background: var(--oliva); color: var(--sobre-oliva); font-weight: 700; }
+.marca-nome { font-weight: 700; font-size: var(--t-3); }
+.marca-selo { font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--oliva); background: var(--oliva-suave); padding: 2px 7px; border-radius: 99px; }
+#menu-grupos { display: flex; flex-direction: column; gap: 16px; }
+.grupo-titulo { font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tinta-3); padding-inline: 8px; margin-bottom: 4px; }
+.grupo-itens { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
+.item-menu {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 6px 8px; border-radius: 6px; text-decoration: none; color: var(--tinta-2); font-size: var(--t-2);
+}
+.item-menu:hover { background: var(--folha-2); color: var(--tinta); }
+.item-menu[aria-current="page"] { background: var(--oliva-suave); color: var(--oliva-forte); font-weight: 700; }
+.item-menu .breve { font-size: 0.6875rem; color: var(--tinta-3); }
+.item-menu .qtd { font-family: var(--mono); font-size: 0.75rem; color: var(--oliva); }
+.sublicoes { list-style: none; margin: 2px 0 6px 10px; padding: 0 0 0 10px; border-left: 1px solid var(--linha); display: flex; flex-direction: column; gap: 1px; }
+.sublicoes a { display: flex; gap: 6px; padding: 4px 8px; border-radius: 6px; text-decoration: none; color: var(--tinta-2); font-size: var(--t-1); }
+.sublicoes a:hover { color: var(--tinta); background: var(--folha-2); }
+.sublicoes a[aria-current="page"] { color: var(--tinta); font-weight: 700; }
+.feito { color: var(--oliva); font-weight: 700; }
+
+.principal { min-width: 0; display: flex; flex-direction: column; }
+.barra {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  display: flex; align-items: center; gap: 12px;
+  background: color-mix(in srgb, var(--papel) 88%, transparent); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--linha);
+  padding-block: 10px; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px));
+}
+.botao-menu { display: none; border: 1px solid var(--linha-forte); background: var(--folha); border-radius: var(--raio); padding: 7px 12px; cursor: pointer; }
+.busca { position: relative; flex: 1; max-width: 560px; }
+.busca input {
+  width: 100%; font: inherit; color: var(--tinta); background: var(--folha);
+  border: 1px solid var(--linha-forte); border-radius: var(--raio); padding: 9px 36px 9px 12px;
+}
+.busca input::placeholder { color: var(--tinta-3); }
+.busca-atalho { position: absolute; right: 10px; top: 50%; translate: 0 -50%; font-family: var(--mono); font-size: 0.75rem; color: var(--tinta-3); border: 1px solid var(--linha); border-radius: 4px; padding: 0 6px; }
+.resultados {
+  position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 20;
+  list-style: none; margin: 0; padding: 6px; background: var(--folha); border: 1px solid var(--linha); border-radius: 10px; box-shadow: var(--sombra);
+  max-height: min(70vh, 520px); overflow-y: auto;
+}
+.resultados li a { display: block; padding: 8px 10px; border-radius: 6px; text-decoration: none; color: var(--tinta); }
+.resultados li[aria-selected="true"] a, .resultados li a:hover { background: var(--oliva-suave); }
+.res-onde { font-size: var(--t-1); color: var(--tinta-3); }
+.res-titulo { font-weight: 700; }
+.res-trecho { font-size: var(--t-1); color: var(--tinta-2); }
+.res-vazio { padding: 10px; color: var(--tinta-2); }
+
+#vista {
+  flex: 1; outline: none;
+  padding-block: 32px 64px; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px));
+}
+.coluna { max-width: 1120px; margin-inline: auto; display: flex; flex-direction: column; gap: 28px; }
+.coluna-texto { max-width: 68ch; }
+.rodape { color: var(--tinta-3); font-size: var(--t-1); padding-block: 0 28px; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+.rodape .coluna { gap: 4px; }
+
+/* ---------- elementos comuns ---------- */
+.trilha { font-size: var(--t-1); color: var(--tinta-3); display: flex; gap: 6px; flex-wrap: wrap; }
+.trilha a { color: var(--tinta-2); text-decoration: none; }
+.trilha a:hover { text-decoration: underline; }
+.titulo-pagina { font-size: var(--t-6); font-weight: 700; letter-spacing: -0.01em; }
+.subtitulo { font-size: var(--t-3); color: var(--tinta-2); max-width: 62ch; }
+.rotulo-mono { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--tinta-3); }
+.botao {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer; text-decoration: none;
+  border-radius: var(--raio); padding: 9px 16px; font-weight: 700; border: 1px solid transparent;
+}
+.botao-primario { background: var(--oliva); color: var(--sobre-oliva); }
+.botao-primario:hover { background: var(--oliva-forte); }
+.botao-secundario { background: var(--folha); color: var(--tinta); border-color: var(--linha-forte); }
+.botao-secundario:hover { background: var(--folha-2); }
+.acoes { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+/* ---------- início ---------- */
+.abertura { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 36px; align-items: center; }
+.abertura .titulo-pagina { font-size: clamp(2rem, 4vw, 3rem); }
+.abertura-figura { transform: rotate(-1.2deg); }
+.como { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.como div { border-top: 2px solid var(--oliva); padding-top: 10px; display: flex; flex-direction: column; gap: 4px; }
+.como strong { font-size: var(--t-3); }
+.como span { color: var(--tinta-2); }
+.secao-titulo { font-size: var(--t-4); font-weight: 700; }
+.cartoes { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.cartao {
+  display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: var(--tinta);
+  background: var(--folha); border: 1px solid var(--linha); border-radius: 12px; padding: 18px;
+}
+a.cartao:hover { border-color: var(--oliva); box-shadow: var(--sombra); }
+.cartao h3 { font-size: var(--t-3); }
+.cartao p { color: var(--tinta-2); }
+.cartao .rodape-cartao { margin-top: auto; display: flex; justify-content: space-between; gap: 8px; font-size: var(--t-1); color: var(--tinta-3); }
+.em-breve { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 2px 24px; list-style: none; padding: 0; margin: 0; }
+.em-breve li { padding: 8px 0; border-bottom: 1px solid var(--linha); display: flex; flex-direction: column; }
+.em-breve strong { font-size: var(--t-2); }
+.em-breve span { font-size: var(--t-1); color: var(--tinta-2); }
+
+/* ---------- lição: modo leitura ---------- */
+.cabeca-licao { display: flex; flex-direction: column; gap: 12px; }
+.alternador { align-self: flex-start; display: inline-flex; border: 1px solid var(--linha-forte); border-radius: var(--raio); padding: 3px; background: var(--folha); }
+.alternador a { padding: 6px 14px; border-radius: 6px; text-decoration: none; color: var(--tinta-2); font-weight: 700; font-size: var(--t-1); }
+.alternador a[aria-current="page"] { background: var(--oliva); color: var(--sobre-oliva); }
+.passo { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 0 18px; scroll-margin-top: 80px; }
+.passo-num { font-family: var(--mono); font-size: var(--t-5); line-height: 1; color: var(--oliva); padding-top: 2px; }
+.passo-corpo { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.passo-corpo h2 { font-size: var(--t-4); }
+.passo-corpo .texto { font-size: var(--t-3); max-width: 68ch; }
+.dica { background: var(--aviso-fundo); color: var(--tinta); border-radius: var(--raio); padding: 10px 14px; max-width: 68ch; font-size: var(--t-2); }
+.dica b { color: var(--aviso); }
+.legenda { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.legenda li { display: flex; align-items: baseline; gap: 8px; color: var(--tinta-2); }
+.fim-licao { border-top: 1px solid var(--linha); padding-top: 22px; display: flex; flex-direction: column; gap: 14px; }
+
+.sob-figura { display: flex; justify-content: space-between; align-items: baseline; gap: 8px 18px; flex-wrap: wrap; }
+.ampliar-dica { font-size: var(--t-1); color: var(--tinta-3); }
+.passo .tela { cursor: zoom-in; }
+.ampliada { width: min(96vw, 1600px); max-width: none; max-height: 96vh; padding: 12px; border: 0; border-radius: 12px; background: var(--folha); color: var(--tinta); overflow: auto; }
+.ampliada::backdrop { background: var(--veu); }
+.ampliada-conteudo .tela { cursor: default; }
+.ampliada-fechar { position: sticky; top: 0; float: right; z-index: 2; margin-bottom: 8px; }
+
+/* ---------- a foto anotada ---------- */
+.tela {
+  position: relative; margin: 0; max-width: 100%; aspect-ratio: var(--proporcao, 16 / 10);
+  border-radius: 10px; overflow: hidden; border: 1px solid var(--linha-forte); box-shadow: var(--sombra); background: var(--folha-2);
+}
+.tela img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.tela svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.tela .veu { fill: var(--veu); }
+.tela .contorno { fill: none; stroke: var(--marca); stroke-width: 3; }
+.tela .seta-linha { fill: none; stroke: var(--marca); stroke-width: 3; stroke-linecap: round; }
+.tela .seta-ponta { fill: var(--marca); }
+.selo {
+  position: absolute; translate: -50% -50%;
+  display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--marca); color: var(--sobre-marca); font-family: var(--mono); font-size: 0.8125rem; font-weight: 500;
+  box-shadow: 0 0 0 3px var(--folha); pointer-events: none;
+}
+.legenda .selo { position: static; translate: none; flex: none; box-shadow: none; }
+
+/* ---------- simulador ---------- */
+.simulador { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 22px; align-items: start; }
+.simulador .tela { cursor: crosshair; }
+.alvo-clique {
+  position: absolute; border: 0; padding: 0; background: transparent; cursor: pointer; border-radius: 8px;
+  box-shadow: 0 0 0 3px var(--marca), 0 0 0 9px var(--marca-suave);
+  animation: pulsar 1.6s ease-in-out infinite;
+}
+@keyframes pulsar { 50% { box-shadow: 0 0 0 3px var(--marca), 0 0 0 16px transparent; } }
+.painel {
+  position: sticky; top: calc(env(safe-area-inset-top, 0px) + 76px);
+  background: var(--folha); border: 1px solid var(--linha); border-radius: 12px; padding: 18px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.painel h2 { font-size: var(--t-4); }
+.progresso { display: flex; gap: 4px; }
+.progresso span { flex: 1; height: 4px; border-radius: 2px; background: var(--linha); }
+.progresso span.ok { background: var(--oliva); }
+.recado { font-size: var(--t-2); color: var(--aviso); min-height: 1.5em; }
+.tela.errou { animation: tremer 0.3s; }
+@keyframes tremer { 25% { translate: -4px 0; } 75% { translate: 4px 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .alvo-clique, .tela.errou { animation: none; }
+  .abertura-figura { transform: none; }
+}
+
+/* ---------- telas estreitas ---------- */
+@media (max-width: 1000px) {
+  .simulador { grid-template-columns: minmax(0, 1fr); }
+  .painel { position: static; }
+  .abertura { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 860px) {
+  .casca { grid-template-columns: minmax(0, 1fr); }
+  .menu { display: none; position: fixed; inset: 0 auto 0 0; width: min(86vw, 300px); height: 100%; z-index: 30; box-shadow: var(--sombra); padding-top: max(18px, env(safe-area-inset-top, 0px)); }
+  .menu.aberto { display: flex; }
+  .botao-menu { display: inline-block; }
+  .barra, #vista, .rodape { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .como { grid-template-columns: minmax(0, 1fr); }
+  .passo { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .passo-num { font-size: var(--t-4); }
+  .titulo-pagina { font-size: var(--t-5); }
+  .busca-atalho, .ampliar-dica { display: none; }
+  .selo { width: 20px; height: 20px; font-size: 0.6875rem; box-shadow: 0 0 0 2px var(--folha); }
+}
+
+</style>
+
+<div class="casca">
+  <aside class="menu" id="menu" aria-label="Menu do sistema">
+    <a class="marca" href="#inicio">
+      <span class="marca-d" aria-hidden="true">D</span>
+      <span class="marca-nome">DeskComm</span>
+      <span class="marca-selo">Curso</span>
+    </a>
+    <nav id="menu-grupos"></nav>
+  </aside>
+
+  <div class="principal">
+    <header class="barra">
+      <button class="botao-menu" id="botao-menu" type="button" aria-controls="menu" aria-expanded="false">Menu</button>
+      <div class="busca">
+        <label class="visualmente-oculto" for="busca">Buscar no curso</label>
+        <input id="busca" type="search" autocomplete="off" placeholder="Buscar no curso (ex.: transferir conversa)" aria-controls="resultados" aria-expanded="false">
+        <kbd class="busca-atalho" aria-hidden="true">/</kbd>
+        <ul class="resultados" id="resultados" role="listbox" hidden></ul>
+      </div>
+    </header>
+    <main id="vista" tabindex="-1"></main>
+    <footer class="rodape" id="rodape"></footer>
+  </div>
+</div>
+
+<dialog class="ampliada" id="ampliada" aria-label="Foto ampliada">
+  <button class="botao botao-secundario ampliada-fechar" type="button" data-fechar>Fechar</button>
+  <div class="ampliada-conteudo"></div>
+</dialog>
+
+<script id="dados" type="application/json">{"versao":"1.88.0","gerado":"2026-10-24","largura":1440,"altura":900,"modulos":[{"id":"inbox","titulo":"Inbox","tela":"/app/inbox","resumo":"Onde você e a IA atendem os clientes do WhatsApp lado a lado: a fila de quem espera, a conversa, a ficha do cliente e os atalhos do dia a dia.","licoes":[{"id":"conhecendo-a-tela","titulo":"Conhecendo a Inbox","objetivo":"Reconhecer as três partes da Inbox (lista, conversa e ficha do cliente) e abrir a primeira conversa.","papel":"admin","busca":["inbox","caixa de entrada","conversas","tela principal","whatsapp","atendimento","ficha do cliente"],"passos":[{"id":"p1","titulo":"As três partes da tela","texto":"A Inbox é onde você lê e responde os clientes. À esquerda fica a lista de conversas, no meio aparece a conversa que você abrir e à direita fica a ficha do cliente. Quando você entra pelo menu, ela abre na aba Fila, que mostra quem está esperando por uma pessoa. Ao lado ficam as abas Automático (conversas que o atendimento automático está cuidando) e Minhas (as que estão com você). Na linha de baixo, as abas Todas, Fechadas e Arquivadas mostram todas as conversas, as já encerradas e as guardadas fora da fila.","dica":"No meio da tela aparece \"Ou navegue com J e K\": as teclas \"j\" e \"k\" passam para a próxima conversa e para a anterior. Você aprende esses atalhos na última lição.","rota":"/app/inbox","antes":[],"destaques":[{"alvo":{"css":"div:has(> div.min-h-0.flex-1.overflow-hidden [data-testid='selecionar-todas-visiveis'])"},"rotulo":"Lista de conversas","tipo":"caixa"},{"alvo":{"css":"div[class~='group/conversa']"},"rotulo":"Aqui aparece a conversa aberta","tipo":"caixa"},{"alvo":{"texto":"para ver detalhes do contato"},"rotulo":"Aqui fica a ficha do cliente","tipo":"caixa"},{"alvo":{"role":"tablist"},"rotulo":"Abas da lista (abre na Fila)","tipo":"caixa"}]},{"id":"p2","titulo":"Começar uma conversa você mesmo","texto":"O botão \"Iniciar conversa\", no alto da lista, serve para você mandar a primeira mensagem para um cliente, sem esperar que ele escreva. A conversa abre no seu nome e o atendimento automático não responde nela. A exceção é quando outro atendente já está cuidando daquele número: aí a conversa continua com ele. Para seguir, clique na conversa da Mariana Souza, a primeira da lista.","dica":"Só quem é atendente ou tem cargo acima vê este botão.","antes":[],"destaques":[{"alvo":{"role":"button","nome":"Iniciar conversa","exato":true},"rotulo":"Falar primeiro com um cliente","tipo":"seta"}],"clicar":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000001\"]"}},{"id":"p3","titulo":"Abrindo uma conversa","texto":"Clique numa linha da lista para abrir a conversa no meio da tela. A linha aberta fica com o fundo destacado e uma barra colorida à esquerda. Um segundo e meio depois de abrir, o contador de mensagens não lidas some sozinho. Nesta conversa aparece o cartão \"Por que a IA passou para você\": é o resumo que o atendimento automático deixa quando passa o cliente para uma pessoa. O botão \"Assumir e responder\" do cartão passa a conversa para você; isso fica para a lição sobre assumir um cliente.","antes":[{"acao":"click","alvo":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000001\"]"}},{"acao":"aguardar","alvo":{"testid":"chat-thread"}},{"acao":"esperar","ms":3000}],"destaques":[{"alvo":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000001\"]"},"rotulo":"Conversa aberta","tipo":"caixa"},{"alvo":{"testid":"cartao-passagem"},"rotulo":"Resumo deixado pela IA","tipo":"caixa"}]},{"id":"p4","titulo":"O topo da conversa","texto":"No topo aparecem o nome do cliente, um selo que diz se o atendimento está aberto ou já terminou e quem está cuidando dele agora: uma pessoa, o atendimento automático ou ninguém (\"Sem responsável\"). Ao lado do nome aparece também o número por onde o cliente chegou (aqui, \"Recepção Bem Viver\"). Os botões logo abaixo, como Assumir e Fechar, valem para esta conversa. No canto direito, abaixo dos botões, o aviso \"Automático pausado\" diz que o atendimento automático não responde nesta conversa. \"Reservar serviço\" marca um horário na agenda e \"Marcar como pessoal\" tira o contato da Inbox; os outros botões aparecem nas próximas lições.","antes":[],"destaques":[{"alvo":{"texto":"Aberta","exato":true,"n":0},"rotulo":"Situação do atendimento","tipo":"caixa"},{"alvo":{"testid":"canal-da-conversa"},"rotulo":"Número por onde o cliente chegou","tipo":"caixa"},{"alvo":{"testid":"comando-da-conversa"},"rotulo":"Quem está cuidando agora","tipo":"caixa"},{"alvo":{"role":"button","nome":"Assumir","exato":true},"rotulo":"Assumir: a conversa passa para você","tipo":"caixa"},{"alvo":{"role":"button","nome":"Fechar","exato":true},"rotulo":"Fechar: encerra o atendimento","tipo":"caixa"},{"alvo":{"testid":"badge-atendimento-humano"},"rotulo":"Automático pausado","tipo":"caixa"}]},{"id":"p5","titulo":"A ficha do cliente","texto":"A coluna da direita é a ficha do cliente. No alto ficam o telefone e as etiquetas do cliente. Mais abaixo vêm as \"Tags da conversa\", que valem só para este atendimento, e as \"Demandas abertas\" (o que ele pediu e ainda não foi resolvido). Rolando a ficha para baixo aparecem os \"Leads recentes\" (os negócios dele no funil) e os \"Pedidos recentes\". Tudo sem você precisar sair da conversa. Os outros blocos, como \"Sobre a empresa\" e \"Tarefas desta demanda\", ficam para a lição sobre a ficha. Em telas largas de computador ela fica à vista (dá para escondê-la no botão \"Recolher\"); no celular, ela abre pelo botão \"Ficha\".","antes":[],"destaques":[{"alvo":{"css":"aside:has([data-testid='inbox-demandas'])"},"rotulo":"Ficha do cliente","tipo":"caixa"},{"alvo":{"testid":"inbox-demandas"},"rotulo":"Demandas abertas","tipo":"caixa"}]},{"id":"p6","titulo":"Ajustar a largura da lista","texto":"Para deixar a lista de conversas mais larga ou mais estreita, arraste a divisória entre a lista e a conversa. Dar dois cliques nela volta as colunas à largura padrão, e o navegador guarda a largura que você escolheu.","dica":"Com o foco na divisória, as setas ← e → do teclado também mudam a largura.","antes":[{"acao":"hover","alvo":{"role":"separator","nome":"Ajustar largura da lista de conversas","exato":true}}],"destaques":[{"alvo":{"role":"separator","nome":"Ajustar largura da lista de conversas","exato":true},"rotulo":"Arraste para ajustar","tipo":"seta"}]}]},{"id":"abas-e-sinais","titulo":"Entendendo a lista: abas, cores e contadores","objetivo":"Saber o que cada aba mostra e ler de relance quem está cuidando de cada cliente, quem espera há mais tempo e quem tem mensagem nova.","papel":"admin","busca":["abas","fila","automático","minhas","todas","fechadas","arquivadas","bolinha","não lidas","contador","quem está atendendo","posição na fila"],"passos":[{"id":"p1","titulo":"As seis abas","texto":"As abas separam as conversas: Automático (o robô está atendendo), Fila (esperando uma pessoa), Minhas (as suas que ainda estão abertas), Todas (todas as conversas, inclusive as fechadas e as arquivadas), Fechadas e Arquivadas. O número cinza ao lado de cada aba mostra quantas conversas há nela. Quando o número é zero, ele não aparece.","dica":"O número das abas se atualiza sozinho a cada 30 segundos.","rota":"/app/inbox","antes":[],"destaques":[{"alvo":{"role":"tablist"},"rotulo":"As seis abas","tipo":"caixa"},{"alvo":{"css":"span.tabular-nums","dentro":{"role":"tab","nome":"^Fila","regex":true}},"rotulo":"Quantas conversas há na aba","tipo":"seta"}]},{"id":"p2","titulo":"Quem espera há mais tempo","texto":"Na Fila, quem espera há mais tempo fica em cima. Cada linha mostra a posição (1º, 2º…) e há quanto tempo o cliente aguarda resposta. A bolinha âmbar no canto de baixo, à esquerda, do círculo com as iniciais quer dizer \"Aguardando atendente\". O número em destaque à direita é a quantidade de mensagens que ainda não foram lidas.","dica":"Ao abrir a conversa, o contador de não lidas zera.","antes":[],"destaques":[{"alvo":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000001\"] [aria-label=\"Posição 1 na fila\"]"},"rotulo":"Posição na fila","tipo":"seta"},{"alvo":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000001\"] span.rounded-full.bg-accent"},"rotulo":"Mensagens não lidas","tipo":"seta"},{"alvo":{"texto":"^Aguardando","regex":true,"dentro":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000002\"]"}},"rotulo":"Há quanto tempo espera","tipo":"caixa"},{"alvo":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000002\"] [role=img][title=\"Aguardando atendente\"]"},"rotulo":"Âmbar = esperando uma pessoa","tipo":"seta"}],"clicar":{"role":"tab","nome":"^Automático","regex":true}},{"id":"p3","titulo":"O que o robô está atendendo","texto":"A aba Automático mostra as conversas em que o atendimento automático está respondendo sozinho. Essas conversas aparecem com a bolinha roxa, que quer dizer \"Automático atendendo\". Nas outras abas, como a Todas, um ícone de robô antes da prévia da mensagem indica a mesma coisa.","antes":[{"acao":"click","alvo":{"role":"tab","nome":"^Automático","regex":true}}],"destaques":[{"alvo":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000003\"] [role=img][title=\"Automático atendendo\"]"},"rotulo":"Roxo = robô atendendo","tipo":"seta"}],"clicar":{"role":"tab","nome":"^Minhas","regex":true}},{"id":"p4","titulo":"As suas conversas","texto":"A aba Minhas lista as conversas que estão no seu nome e ainda estão abertas. A bolinha azul quer dizer \"Em atendimento\": uma pessoa da equipe está cuidando.","antes":[{"acao":"click","alvo":{"role":"tab","nome":"^Minhas","regex":true}}],"destaques":[{"alvo":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000005\"] [role=img][title=\"Em atendimento\"]"},"rotulo":"Azul = uma pessoa está cuidando","tipo":"seta"}],"clicar":{"role":"tab","nome":"^Todas","regex":true}},{"id":"p5","titulo":"Quem cuida e o que é grupo","texto":"Na aba Todas aparecem selos nas linhas. \"Grupo\" marca um grupo de WhatsApp. O nome da pessoa da equipe diz quem cuida daquele cliente. Nesta clínica de exemplo, você é a Helena Prado (o \"HP\" no canto de cima). O ícone de robô antes da prévia da mensagem quer dizer que o atendimento automático está respondendo.","dica":"O nome da pessoa não aparece nas abas Fila, Automático e Minhas, nem quando todas as conversas da lista são da mesma pessoa.","antes":[{"acao":"click","alvo":{"role":"tab","nome":"^Todas","regex":true}}],"destaques":[{"alvo":{"texto":"Grupo","exato":true,"dentro":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000010\"]"}},"rotulo":"Grupo de WhatsApp","tipo":"caixa"},{"alvo":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000007\"] [aria-label^=\"Responsável:\"]"},"rotulo":"Quem da equipe cuida","tipo":"caixa"},{"alvo":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000003\"] p > svg"},"rotulo":"Robô = atendimento automático","tipo":"seta"}]},{"id":"p6","titulo":"Selos de cuidado","texto":"Mais abaixo na mesma lista aparecem outros dois selos. \"Exemplo para a IA\" marca uma conversa usada para ensinar o robô a responder. O ícone de brilho à direita de cada linha liga ou desliga esse selo: cheio e verde, está ligado; só o contorno, desligado. \"Bloqueado\" marca um cliente que pediu para não receber mais mensagens.","antes":[{"acao":"hover","alvo":{"texto":"Bloqueado","exato":true,"dentro":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000011\"]"}}}],"destaques":[{"alvo":{"testid":"selo-exemplo-ia"},"rotulo":"Ensina a IA","tipo":"caixa"},{"alvo":{"testid":"exemplo-ia-be100000-0000-4000-8000-000000000012"},"rotulo":"Liga ou desliga o exemplo","tipo":"seta"},{"alvo":{"texto":"Bloqueado","exato":true,"dentro":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000011\"]"}},"rotulo":"Pediu para não receber mensagens","tipo":"caixa"}],"clicar":{"role":"tab","nome":"^Fechadas","regex":true}},{"id":"p7","titulo":"Atendimentos encerrados","texto":"A aba Fechadas guarda os atendimentos que já foram encerrados. A aba Arquivadas guarda o que você tirou da frente sem apagar. Uma conversa fechada ou arquivada sem responsável fica com a bolinha cinza clara. Ao passar o mouse sobre a bolinha de qualquer conversa fechada, aparece a palavra \"Encerrada\".","dica":"Uma conversa fechada que tem responsável continua com a bolinha azul, mas o texto dela diz \"Encerrada\".","antes":[{"acao":"click","alvo":{"role":"tab","nome":"^Fechadas","regex":true}},{"acao":"esperar","ms":1500}],"destaques":[{"alvo":{"role":"tab","nome":"^Fechadas","regex":true},"rotulo":"Atendimentos encerrados","tipo":"caixa"},{"alvo":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000011\"] [role=img][title=\"Encerrada\"]"},"rotulo":"Cinza claro = Encerrada","tipo":"seta"},{"alvo":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000008\"] [role=img][title=\"Encerrada\"]"},"rotulo":"Encerrada, com responsável: continua azul","tipo":"seta"},{"alvo":{"role":"tab","nome":"^Arquivadas","regex":true},"rotulo":"Guardadas sem apagar","tipo":"seta"}]}]},{"id":"achando-a-conversa","titulo":"Achando a conversa certa","objetivo":"Usar a busca e os filtros (Não lidos, Grupos, etiquetas) e desfazer tudo quando a lista parecer vazia.","papel":"admin","busca":["buscar","pesquisar","procurar cliente","filtro","não lidos","grupos","etiqueta","tag","todas as tags","limpar filtros","lista vazia"],"passos":[{"id":"p1","titulo":"Buscar pelo nome","texto":"Digite o nome ou o telefone do cliente na busca. Aqui digitamos \"Mari\" e a lista já mostra a Mariana. A lista filtra logo depois que você para de digitar. A busca também encontra palavras da última mensagem da conversa, mas não das mensagens mais antigas.","dica":"Digite pelo menos 2 letras. Para buscar pelo telefone, digite pelo menos 4 números. A busca não muda o número ao lado de \"Todas\": ele continua contando a aba toda.","rota":"/app/inbox?filter=all","antes":[{"acao":"fill","alvo":{"role":"textbox","nome":"Buscar conversas","exato":true},"valor":"Mari"},{"acao":"esperar","ms":800}],"destaques":[{"alvo":{"role":"textbox","nome":"Buscar conversas","exato":true},"rotulo":"Nome, telefone ou última mensagem","tipo":"seta"}],"clicar":{"role":"button","nome":"Não lidos","exato":true}},{"id":"p2","titulo":"Só o que ainda não foi lido","texto":"O botão \"Não lidos\" liga e desliga um filtro. Quando está ligado, fica colorido, e a lista mostra só as conversas com mensagens que ninguém leu ainda.","dica":"Com \"Não lidos\" ligado, o número ao lado de cada aba também passa a contar só as conversas não lidas. Aqui, \"Todas\" mostra 4 em vez de 12. Como os números mudam de tamanho, as abas podem trocar de linha.","antes":[{"acao":"fill","alvo":{"role":"textbox","nome":"Buscar conversas","exato":true},"valor":""},{"acao":"click","alvo":{"role":"button","nome":"Não lidos","exato":true}},{"acao":"esperar","ms":800}],"destaques":[{"alvo":{"role":"button","nome":"Não lidos","exato":true},"rotulo":"Ligado: só não lidas","tipo":"seta"}],"clicar":{"role":"button","nome":"Grupos","exato":true}},{"id":"p3","titulo":"Só os grupos","texto":"O botão \"Grupos\" mostra só as conversas de grupos de WhatsApp e esconde, por enquanto, as conversas com um cliente só.","dica":"O filtro \"Grupos\" não muda o número ao lado de \"Todas\" (continua 12): ele só esconde as outras conversas da lista. Um grupo só entra na Inbox depois de ligado em Conexões › Grupos, a partir da primeira mensagem que chegar depois disso.","antes":[{"acao":"click","alvo":{"role":"button","nome":"Não lidos","exato":true}},{"acao":"click","alvo":{"role":"button","nome":"Grupos","exato":true}},{"acao":"esperar","ms":800}],"destaques":[{"alvo":{"role":"button","nome":"Grupos","exato":true},"rotulo":"Ligado: só grupos","tipo":"seta"},{"alvo":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000010\"]"},"rotulo":"Conversa de grupo","tipo":"caixa"}],"clicar":{"role":"button","nome":"Filtrar por tag","exato":true}},{"id":"p4","titulo":"Filtrar por etiqueta","texto":"Clique no botão \"Todas as tags\", logo abaixo da busca, e marque uma ou mais etiquetas, como \"retorno\" ou \"convenio\", para ver só os clientes marcados com elas. O menu fica aberto enquanto você marca. Se a lista for longa, use o campo \"Buscar etiqueta\" no topo do menu.","dica":"Com duas ou mais etiquetas marcadas, aparecem as opções \"Todas (E)\" (a conversa precisa ter todas) e \"Qualquer uma (OU)\" (basta ter uma).","antes":[{"acao":"click","alvo":{"role":"button","nome":"Grupos","exato":true}},{"acao":"click","alvo":{"role":"button","nome":"Filtrar por tag","exato":true}},{"acao":"aguardar","alvo":{"role":"menuitemcheckbox","nome":"retorno","exato":true}}],"destaques":[{"alvo":{"role":"menuitemcheckbox","nome":"retorno","exato":true},"rotulo":"Marque a etiqueta","tipo":"seta"}],"clicar":{"role":"menuitemcheckbox","nome":"retorno","exato":true}},{"id":"p5","titulo":"A lista filtrada","texto":"Agora a lista mostra só os clientes com a etiqueta escolhida, e o botão passa a mostrar essa etiqueta em destaque. Na própria linha do cliente, as etiquetas aparecem em selos. Quando são mais de duas, as outras viram um \"+1\", \"+2\"… Repare que o número ao lado de \"Todas\" também caiu, para 1: a etiqueta muda a contagem das abas, assim como \"Não lidos\".","antes":[{"acao":"click","alvo":{"role":"menuitemcheckbox","nome":"retorno","exato":true}},{"acao":"press","tecla":"Escape"},{"acao":"esperar","ms":800}],"destaques":[{"alvo":{"role":"button","nome":"Filtrar por tag","exato":true},"rotulo":"Filtro de etiqueta ligado","tipo":"caixa"},{"alvo":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000005\"]"},"rotulo":"Cliente com a etiqueta","tipo":"caixa"}]},{"id":"p6","titulo":"Quando a lista fica vazia","texto":"Aqui buscamos \"Joa\" com a etiqueta \"retorno\" ainda ligada. Nenhuma conversa combina com os dois ao mesmo tempo, então aparece \"Nenhuma conversa com esses filtros\" e, logo abaixo, os filtros que estão ligados (\"Ativos: Busca · Etiqueta\"). A caixa não está vazia: são os filtros que estão escondendo as conversas. O \"1\" ao lado de \"Todas\" é a Fernanda: ela tem a etiqueta, mas não combina com a busca \"Joa\". A busca não muda esse número.","antes":[{"acao":"fill","alvo":{"role":"textbox","nome":"Buscar conversas","exato":true},"valor":"Joa"},{"acao":"aguardar","alvo":{"texto":"Nenhuma conversa com esses filtros","exato":true}}],"destaques":[{"alvo":{"texto":"Nenhuma conversa com esses filtros","exato":true},"rotulo":"Os filtros esconderam tudo","tipo":"caixa"},{"alvo":{"role":"button","nome":"Limpar filtros","exato":true},"rotulo":"Desfazer de uma vez","tipo":"seta"}],"clicar":{"role":"button","nome":"Limpar filtros","exato":true}},{"id":"p7","titulo":"Limpar tudo","texto":"\"Limpar filtros\" desliga de uma vez a busca, Não lidos, Grupos, as etiquetas e os demais filtros. O botão de etiqueta volta a dizer \"Todas as tags\", a lista volta inteira e você continua na mesma aba.","dica":"Os filtros se perdem quando você recarrega a página. Só a aba escolhida fica guardada.","antes":[{"acao":"click","alvo":{"role":"button","nome":"Limpar filtros","exato":true}},{"acao":"esperar","ms":800}],"destaques":[{"alvo":{"role":"textbox","nome":"Buscar conversas","exato":true},"rotulo":"Busca vazia de novo","tipo":"caixa"},{"alvo":{"role":"button","nome":"Filtrar por tag","exato":true},"rotulo":"Etiquetas desligadas","tipo":"caixa"},{"alvo":{"role":"tab","nome":"^Todas","regex":true},"rotulo":"Mesma aba","tipo":"seta"}]}]},{"id":"lendo-o-historico","titulo":"Lendo o histórico da conversa","objetivo":"Entender as mensagens: de quem é cada uma, se foi entregue e lida, quando falhou, e como achar ou citar uma mensagem antiga.","papel":"admin","busca":["histórico","mensagens","enviada","entregue","lida","checks","falhou","IA respondeu","responder mensagem","citar","buscar na conversa"],"passos":[{"id":"p1","titulo":"Cliente à esquerda, empresa à direita","texto":"As mensagens do cliente ficam à esquerda, em cinza. As mensagens da empresa ficam à direita, na cor da marca. Pílulas como \"Hoje\" e \"Ontem\" separam os dias.","rota":"/app/inbox?id=be100000-0000-4000-8000-000000000005","antes":[{"acao":"aguardar","alvo":{"css":"[data-testid=\"message-bubble\"]:has-text(\"Preciso levar algum exame?\")"}},{"acao":"esperar","ms":800}],"destaques":[{"alvo":{"css":"[data-testid=\"message-bubble\"]:has-text(\"Preciso levar algum exame?\")"},"rotulo":"Mensagem do cliente","tipo":"caixa"},{"alvo":{"css":"[data-testid=\"message-bubble\"]:has-text(\"Tenho quinta às 9h30\")"},"rotulo":"Mensagem da empresa","tipo":"caixa"},{"alvo":{"texto":"Hoje","exato":true,"dentro":{"testid":"chat-thread"}},"rotulo":"Dia da conversa","tipo":"caixa"}]},{"id":"p2","titulo":"Quem mandou cada mensagem","texto":"Toda mensagem que sai da empresa mostra, em cima, quem a mandou: \"IA\", com um robozinho, para o atendimento automático; \"Você\" para o que você escreveu; \"Atendente\" para outra pessoa da equipe; e \"Celular\" quando alguém respondeu pelo WhatsApp do telefone. Lembretes e follow-ups automáticos aparecem como \"Automação\". Assim dá para saber o que o robô respondeu e o que foi escrito por uma pessoa.","antes":[],"destaques":[{"alvo":{"css":"[data-testid=\"message-bubble\"]:has-text(\"Que bom ter notícias suas\")"},"rotulo":"Respondida pela IA","tipo":"seta"},{"alvo":{"css":"[data-testid=\"message-bubble\"]:has-text(\"Tenho quinta às 9h30\")"},"rotulo":"Escrita por você","tipo":"seta"}]},{"id":"p3","titulo":"Enviada, entregue e lida","texto":"Nas mensagens enviadas pela empresa, os tiques ao lado da hora mostram o caminho da mensagem: um tique quer dizer enviada, dois tiques cinza quer dizer entregue, e dois tiques azuis quer dizer que o cliente leu. Repare na cor: é ela que separa entregue de lida.","antes":[],"destaques":[{"alvo":{"rotulo":"Entregue","exato":true,"dentro":{"css":"[data-testid=\"message-bubble\"]:has-text(\"Traga o laudo\")"}},"rotulo":"Entregue: dois tiques cinza","tipo":"seta"},{"alvo":{"rotulo":"Lida","exato":true,"dentro":{"css":"[data-testid=\"message-bubble\"]:has-text(\"Tenho quinta às 9h30\")"}},"rotulo":"Lida: dois tiques azuis","tipo":"seta"}]},{"id":"p4","titulo":"Mensagem que não saiu","texto":"Quando uma mensagem não sai, ela ganha uma borda vermelha e o selo \"Falhou\", ao lado da hora. Logo abaixo vem o motivo. Quando o sistema não sabe o motivo, aparece um aviso geral, como na foto. Nas mensagens escritas pela equipe costuma aparecer o botão \"Tentar de novo\", que manda a mesma mensagem outra vez. Quando há chance de ela já ter chegado ao cliente, o sistema pede confirmação antes. Se mandar de novo não resolveria, como num número sem WhatsApp, o botão não aparece. As respostas da IA não ganham esse botão: o próprio sistema tenta de novo.","antes":[],"destaques":[{"alvo":{"texto":"Falhou","exato":true,"dentro":{"testid":"chat-thread"}},"rotulo":"Selo de falha","tipo":"seta"},{"alvo":{"testid":"motivo-da-falha"},"rotulo":"Por que não saiu","tipo":"caixa"},{"alvo":{"role":"button","nome":"Tentar de novo","exato":true,"dentro":{"testid":"chat-thread"}},"rotulo":"Mandar de novo","tipo":"seta"}]},{"id":"p5","titulo":"O menu de cada mensagem","texto":"Passe o mouse sobre uma mensagem e clique na setinha \"Opções da mensagem\". Esse menu reúne as ações daquela mensagem, como responder a ela ou encaminhá-la para outra conversa. Nas mensagens do cliente, gestores e administradores também veem \"Ocultar no CRM\". Ele esconde a mensagem só aqui dentro: ela continua no WhatsApp do cliente.","dica":"No computador, a setinha só aparece quando o mouse passa sobre a mensagem. No celular, ela fica sempre à vista.","antes":[{"acao":"hover","alvo":{"css":"[data-testid=\"message-bubble\"]:has-text(\"Preciso levar algum exame?\")"}},{"acao":"click","alvo":{"role":"button","nome":"Opções da mensagem","exato":true,"dentro":{"css":"[data-testid=\"message-bubble\"]:has-text(\"Preciso levar algum exame?\")"}}}],"destaques":[{"alvo":{"role":"menuitem","nome":"Responder a esta mensagem","exato":true},"rotulo":"Responder citando","tipo":"seta"},{"alvo":{"role":"menuitem","nome":"Encaminhar","exato":true},"rotulo":"Mandar para outra conversa","tipo":"caixa"},{"alvo":{"role":"menuitem","nome":"Ocultar no CRM","exato":true},"rotulo":"Esconder só aqui no CRM","tipo":"caixa"}],"clicar":{"role":"menuitem","nome":"Responder a esta mensagem","exato":true}},{"id":"p6","titulo":"Responder em cima de uma mensagem","texto":"Com \"Responder a esta mensagem\", o trecho escolhido aparece acima do campo de escrever. Quando você envia uma resposta escrita, ela sai citando essa mensagem, como no WhatsApp. O X desfaz a escolha.","dica":"Arquivos enviados saem sem a citação.","antes":[{"acao":"click","alvo":{"role":"menuitem","nome":"Responder a esta mensagem","exato":true}}],"destaques":[{"alvo":{"css":"div:has(> button[aria-label=\"Cancelar resposta\"])"},"rotulo":"Mensagem que você vai citar","tipo":"caixa"},{"alvo":{"role":"button","nome":"Cancelar resposta","exato":true},"rotulo":"Desfazer a citação","tipo":"seta"},{"alvo":{"role":"textbox","nome":"Mensagem","exato":true},"rotulo":"Sua resposta vai aqui","tipo":"caixa"}],"clicar":{"role":"button","nome":"Cancelar resposta","exato":true}},{"id":"p7","titulo":"Buscar dentro da conversa","texto":"A lupa no topo abre uma busca dentro da conversa. As mensagens que têm a palavra ganham um contorno, e um contador mostra quantas foram encontradas. A busca só olha as mensagens que já estão carregadas na tela, e as notas internas ficam de fora.","dica":"A tecla Esc fecha a busca. Em conversas longas, aparece no topo do histórico o botão \"Carregar mais antigas\": clique nele antes, para a busca alcançar mensagens mais antigas.","antes":[{"acao":"click","alvo":{"role":"button","nome":"Cancelar resposta","exato":true}},{"acao":"click","alvo":{"role":"button","nome":"Buscar nesta conversa","exato":true}},{"acao":"fill","alvo":{"role":"searchbox","nome":"Buscar nas mensagens carregadas","exato":true},"valor":"laudo"}],"destaques":[{"alvo":{"role":"searchbox","nome":"Buscar nas mensagens carregadas","exato":true},"rotulo":"Palavra procurada","tipo":"seta"},{"alvo":{"texto":"Resultados nas mensagens carregadas","dentro":{"testid":"chat-thread"}},"rotulo":"Quantas foram achadas","tipo":"caixa"},{"alvo":{"css":"[data-search-match] [data-testid=\"message-bubble\"]"},"rotulo":"Mensagem encontrada (repare no contorno)","tipo":"seta"}]}]},{"id":"assumir-e-responder","titulo":"Assumir um cliente e preparar a resposta","objetivo":"Pegar uma conversa que a IA passou para a equipe e montar a resposta com texto, respostas prontas e anexos.","papel":"admin","busca":["assumir","pegar conversa","IA passou","passagem","responder","escrever mensagem","resposta pronta","respostas rápidas","atalho barra","anexar","enviar","sugerir resposta"],"passos":[{"id":"p1","titulo":"Por que a IA passou para você","texto":"Quando o atendimento automático entrega um cliente para a equipe, aparece este cartão dentro da conversa. Ele mostra o motivo da troca, o que o cliente quer, o que a IA já tentou, as últimas palavras dele e se ele já foi avisado de que uma pessoa vai assumir.","rota":"/app/inbox","antes":[{"acao":"click","alvo":{"css":"[data-conversation-id=\"be100000-0000-4000-8000-000000000001\"]"}},{"acao":"aguardar","alvo":{"testid":"cartao-passagem"}}],"destaques":[{"alvo":{"testid":"passagem-motivo"},"rotulo":"Motivo da troca","tipo":"seta"},{"alvo":{"testid":"cartao-passagem"},"rotulo":"Resumo para quem vai assumir","tipo":"caixa"},{"alvo":{"testid":"passagem-assumir"},"rotulo":"Pegar este cliente","tipo":"seta"}],"clicar":{"testid":"passagem-assumir"}},{"id":"p2","titulo":"Agora a conversa é sua","texto":"Ao clicar em \"Assumir e responder\", a conversa passa para o seu nome. Ela sai da aba Fila e agora fica na aba Minhas. Por isso ela some da lista da esquerda, que continua mostrando a Fila: para achá-la de novo, clique em Minhas. O topo da conversa mostra você como responsável. O atendimento automático, que já tinha parado quando passou o cliente para a equipe, continua parado: o selo no topo diz \"Automático pausado — alguém assumiu\".","dica":"Antes de assumir, o botão \"Assumir\" no topo da conversa faz a mesma coisa. Depois que a conversa é sua, ali aparece \"Liberar\", para soltá-la.","antes":[{"acao":"click","alvo":{"testid":"passagem-assumir"}},{"acao":"aguardar","alvo":{"texto":"Helena Prado","dentro":{"testid":"comando-da-conversa"}}}],"destaques":[{"alvo":{"testid":"comando-da-conversa"},"rotulo":"Você é o responsável","tipo":"seta"},{"alvo":{"testid":"badge-atendimento-humano"},"rotulo":"Automático pausado","tipo":"seta"},{"alvo":{"role":"tab","nome":"^Minhas","regex":true},"rotulo":"Agora está em Minhas","tipo":"caixa"}],"clicar":{"role":"textbox","nome":"Mensagem","exato":true}},{"id":"p3","titulo":"Escrever a resposta","texto":"Escreva no campo de baixo. Quando está vazio, ele mostra \"Escreva uma mensagem…\". O Enter envia, e Shift + Enter pula uma linha sem enviar. O botão de avião, à direita, também envia. A estrelinha, entre o rosto e o campo, pede ao agente de IA uma sugestão de resposta. A sugestão aparece num quadro acima do campo, com \"Aprovar e enviar\" e \"Rejeitar\": nada sai sem o seu clique.","dica":"Com o campo vazio, no lugar do avião aparece o microfone, que serve para gravar áudio.","antes":[{"acao":"fill","alvo":{"role":"textbox","nome":"Mensagem","exato":true},"valor":"Oi, Mariana! Aqui é a Helena, da recepção."}],"destaques":[{"alvo":{"role":"textbox","nome":"Mensagem","exato":true},"rotulo":"Escreva aqui","tipo":"caixa"},{"alvo":{"role":"button","nome":"Enviar","exato":true},"rotulo":"Enviar","tipo":"caixa"},{"alvo":{"role":"button","nome":"Sugerir resposta","exato":true},"rotulo":"Sugestão da IA","tipo":"seta"}]},{"id":"p4","titulo":"Respostas prontas num clique","texto":"Os botões logo acima do campo são as respostas rápidas da equipe. Um clique coloca o texto pronto no campo, no lugar do que estiver escrito, já com o primeiro nome do cliente, para você conferir antes de enviar. Nada é enviado sozinho.","dica":"As respostas rápidas são criadas no item \"Respostas rápidas\" do menu lateral. A aba \"Nota interna\", ao lado de \"Responder\", serve para escrever recados que só a equipe vê.","antes":[{"acao":"fill","alvo":{"role":"textbox","nome":"Mensagem","exato":true},"valor":""}],"destaques":[{"alvo":{"testid":"barra-de-recursos"},"rotulo":"Respostas rápidas","tipo":"caixa"},{"alvo":{"role":"button","nome":"Horários da nutricionista","exato":true,"dentro":{"testid":"barra-de-recursos"}},"rotulo":"Clique para usar","tipo":"seta"}],"clicar":{"role":"button","nome":"Horários da nutricionista","exato":true,"dentro":{"testid":"barra-de-recursos"}}},{"id":"p4b","titulo":"O nome do cliente já vem trocado","texto":"Depois do clique, o texto da resposta pronta fica no campo, já com \"Mariana\" no lugar do nome. Confira, ajuste se quiser e só então envie.","antes":[{"acao":"click","alvo":{"role":"button","nome":"Horários da nutricionista","exato":true,"dentro":{"testid":"barra-de-recursos"}}}],"destaques":[{"alvo":{"role":"textbox","nome":"Mensagem","exato":true},"rotulo":"Nome já trocado: confira e envie","tipo":"caixa"}]},{"id":"p5","titulo":"Ou chame pelo atalho /","texto":"Digitar uma barra (/) no começo do campo abre a lista das respostas prontas. Continue digitando, sem espaço, parte do nome (por exemplo /exame) ou o atalho cadastrado em Respostas rápidas (por exemplo /jejum). A lista filtra: na foto, /exame deixou só \"Preparo para exame de sangue\". Clique na que quiser.","dica":"O {{primeiro_nome}} que aparece na lista é trocado pelo primeiro nome do cliente quando você escolhe a resposta. Neste menu o Enter não escolhe: é preciso clicar. A tecla Esc fecha a lista.","antes":[{"acao":"fill","alvo":{"role":"textbox","nome":"Mensagem","exato":true},"valor":"/exame"}],"destaques":[{"alvo":{"role":"listbox","nome":"Templates de script","exato":true},"rotulo":"Escolha com um clique","tipo":"caixa"}],"clicar":{"role":"button","nome":"^Preparo para exame de sangue","regex":true,"dentro":{"role":"listbox","nome":"Templates de script","exato":true}}},{"id":"p6","titulo":"Anexar foto, documento ou contato","texto":"O botão \"+\" abre as opções de anexo. Em \"Fotos e vídeos\" ou \"Documento\" você escolhe um arquivo, e a janela \"Enviar anexo\" mostra como ele vai ficar e deixa escrever uma legenda antes de enviar. \"Contato\" abre a janela \"Enviar contato\", onde você escolhe alguém da sua base ou digita nome e telefone.","dica":"Você também pode colar uma imagem copiada (Ctrl+V, ou Cmd+V no Mac) direto no campo de mensagem.","antes":[{"acao":"fill","alvo":{"role":"textbox","nome":"Mensagem","exato":true},"valor":""},{"acao":"click","alvo":{"role":"button","nome":"Anexar","exato":true}}],"destaques":[{"alvo":{"role":"button","nome":"Anexar","exato":true},"rotulo":"Botão +","tipo":"seta"},{"alvo":{"role":"button","nome":"Fotos e vídeos","exato":true},"rotulo":"Foto ou vídeo","tipo":"caixa"},{"alvo":{"role":"button","nome":"Documento","exato":true},"rotulo":"PDF, planilha…","tipo":"caixa"},{"alvo":{"role":"button","nome":"Contato","exato":true},"rotulo":"Cartão de contato","tipo":"caixa"}]}]},{"id":"nota-interna","titulo":"Recados para a equipe com a nota interna","objetivo":"Registrar um recado que só a equipe vê e chamar um colega com @.","papel":"admin","busca":["nota interna","recado","anotação","só a equipe vê","mencionar","@","marcar colega","avisar colega"],"passos":[{"id":"p1","titulo":"O que é uma nota interna","texto":"As notas internas aparecem no meio da conversa, num balão amarelado, com o nome de quem escreveu e o aviso \"Nota interna · só o time vê\". Elas nunca chegam ao cliente e servem para combinar coisas com a equipe. A mensagem com borda vermelha logo acima é outro assunto: um envio que falhou, que se manda de novo em \"Tentar de novo\".","rota":"/app/inbox?id=be100000-0000-4000-8000-000000000005","antes":[{"acao":"aguardar","alvo":{"texto":"Nota interna · só o time vê"}}],"destaques":[{"alvo":{"css":"div.rounded-xl.bg-warning-bg:has-text(\"Paciente pós-operatória\")"},"rotulo":"Nota interna: só a equipe vê","tipo":"caixa"}],"clicar":{"role":"button","nome":"Nota interna","exato":true}},{"id":"p2","titulo":"Mudar para Nota interna","texto":"Acima do campo de escrever há duas opções: \"Responder\" manda a mensagem para o cliente e \"Nota interna\" guarda um recado só para a equipe. Com a nota escolhida, o botão \"Nota interna\" fica colorido, o fundo em volta do campo fica amarelado e o campo passa a mostrar \"Escreva uma nota interna… (só o time vê)\". Os botões de respostas rápidas somem, porque elas são para o cliente.","antes":[{"acao":"click","alvo":{"role":"button","nome":"Nota interna","exato":true}}],"destaques":[{"alvo":{"role":"button","nome":"Responder","exato":true},"rotulo":"Responder: vai para o cliente","tipo":"caixa"},{"alvo":{"role":"button","nome":"Nota interna","exato":true},"rotulo":"Nota interna ligada: só a equipe vê","tipo":"caixa"},{"alvo":{"role":"textbox","nome":"Mensagem","exato":true},"rotulo":"Escreva o recado aqui","tipo":"caixa"}]},{"id":"p3","titulo":"Chamar um colega com @","texto":"Na nota, digite @ para abrir a lista da equipe e clique no colega. O seu próprio nome também aparece na lista. Quando a nota for salva, o colega recebe o aviso \"Você foi mencionado\": na tela, se estiver com o sistema aberto, e no celular ou computador, se tiver ativado as notificações.","dica":"Deixe um espaço antes do @. Você também pode digitar as primeiras letras do nome para filtrar a lista. O @ só chama a lista na nota interna. Ao responder o cliente, ele vira texto comum.","antes":[{"acao":"fill","alvo":{"role":"textbox","nome":"Mensagem","exato":true},"valor":"Retorno confirmado para quinta às 9h30. @"},{"acao":"aguardar","alvo":{"role":"option","nome":"Carlos Mendes","exato":true}}],"destaques":[{"alvo":{"role":"option","nome":"Carlos Mendes","exato":true},"rotulo":"Lista da equipe: clique em Carlos Mendes","tipo":"caixa"}],"clicar":{"role":"option","nome":"Carlos Mendes","exato":true}},{"id":"p4","titulo":"Salvar a nota","texto":"O nome do colega entra no texto. Aperte Enter, ou clique no aviãozinho ao lado, para salvar a nota. Para pular linha, use Shift+Enter.","antes":[{"acao":"click","alvo":{"role":"option","nome":"Carlos Mendes","exato":true}}],"destaques":[{"alvo":{"role":"textbox","nome":"Mensagem","exato":true},"rotulo":"Enter salva a nota","tipo":"caixa"},{"alvo":{"role":"button","nome":"Enviar","exato":true},"rotulo":"Ou clique no aviãozinho","tipo":"seta"}]},{"id":"p5","titulo":"A nota no histórico","texto":"A nota aparece no histórico com o seu nome e a hora, e a menção ao colega fica destacada. Ao passar o mouse sobre a nota, aparece uma lixeira no canto. Quem escreveu a nota, e também gestores e administradores, podem apagá-la por ela. A nota é apagada na hora, sem pedir confirmação.","antes":[{"acao":"press","tecla":"Enter","alvo":{"role":"textbox","nome":"Mensagem","exato":true}},{"acao":"aguardar","alvo":{"texto":"Retorno confirmado para quinta às 9h30."}},{"acao":"hover","alvo":{"css":"div.rounded-xl.bg-warning-bg:has-text(\"Retorno confirmado para quinta às 9h30.\")"}}],"destaques":[{"alvo":{"css":"div.rounded-xl.bg-warning-bg:has-text(\"Retorno confirmado para quinta às 9h30.\")"},"rotulo":"Sua nota, com seu nome, a hora e o colega marcado","tipo":"caixa"},{"alvo":{"css":"div.rounded-xl.bg-warning-bg:has-text(\"Retorno confirmado para quinta às 9h30.\") button[aria-label=\"Excluir nota\"]"},"rotulo":"Lixeira: apaga na hora, sem confirmar","tipo":"seta"}]}]},{"id":"passar-pausar-encerrar","titulo":"Pausar o robô, passar adiante e encerrar","objetivo":"Controlar quem atende (pausar e devolver o automático, transferir), pedir um lembrete e encerrar, reabrir e arquivar um atendimento.","papel":"admin","busca":["pausar robô","pausar IA","devolver ao automático","transferir","passar para colega","lembrete","lembrar","fechar conversa","encerrar","reabrir","arquivar"],"passos":[{"id":"p1","titulo":"Calar o robô numa conversa sua","texto":"Esta conversa já está no seu nome, mas o atendimento automático (o robô) ainda pode responder nela. O seu nome aparece logo abaixo do nome do cliente (nesta demonstração, Helena Prado). \"Pausar o automático\" faz o robô parar de responder nesta conversa, e o responsável continua o mesmo. O botão \"Liberar\", logo à esquerda, faz outra coisa: solta a conversa, que fica sem responsável.","dica":"Numa conversa sem responsável, o botão que cala o robô é o \"Assumir\".","rota":"/app/inbox?id=be100000-0000-4000-8000-000000000007","antes":[],"destaques":[{"alvo":{"testid":"pausar-o-automatico"},"rotulo":"Parar o robô aqui","tipo":"caixa"},{"alvo":{"testid":"comando-da-conversa"},"rotulo":"Responsável: você (aqui, Helena Prado)","tipo":"caixa"},{"alvo":{"role":"button","nome":"Liberar","exato":true},"rotulo":"Soltar a conversa (é outra coisa)","tipo":"caixa"}],"clicar":{"testid":"pausar-o-automatico"}},{"id":"p2","titulo":"Devolver ao automático","texto":"Com o robô pausado, aparece o aviso \"Automático pausado — alguém assumiu\", e o botão muda para \"Devolver ao automático\". Ao devolver, o robô volta a atender e a conversa fica sem responsável.","dica":"Se o robô estava parado para o cliente inteiro (isso acontece quando ele pediu para falar com uma pessoa), devolver religa o robô em todas as conversas desse cliente. Se a ficha do cliente estiver marcada como \"Sempre atendimento humano\", o sistema não deixa devolver.","antes":[{"acao":"click","alvo":{"testid":"pausar-o-automatico"}},{"acao":"aguardar","alvo":{"testid":"devolver-ao-automatico"}}],"destaques":[{"alvo":{"testid":"badge-atendimento-humano"},"rotulo":"Por que o robô está parado","tipo":"caixa"},{"alvo":{"testid":"devolver-ao-automatico"},"rotulo":"Religar o robô","tipo":"caixa"}],"clicar":{"testid":"devolver-ao-automatico"}},{"id":"p3","titulo":"Transferir para um colega","texto":"Ao devolver, a conversa ficou sem responsável: no topo, o botão voltou a ser \"Assumir\". \"Transferir\" passa a conversa para outra pessoa da equipe na hora, sem ela precisar aceitar. Escolha quem vai continuar e, se quiser, escreva o motivo: a troca fica registrada, e o motivo aparece no histórico do negócio desse cliente.","dica":"Transferir também faz o robô parar de responder nesta conversa.","antes":[{"acao":"click","alvo":{"testid":"devolver-ao-automatico"}},{"acao":"click","alvo":{"role":"button","nome":"Transferir","exato":true}},{"acao":"click","alvo":{"rotulo":"Transferir para"}},{"acao":"click","alvo":{"role":"option","nome":"Ana Ribeiro"}},{"acao":"fill","alvo":{"rotulo":"Motivo (opcional)"},"valor":"Cliente quer falar sobre a avaliação postural com a fisioterapeuta."}],"destaques":[{"alvo":{"role":"dialog","nome":"Transferir conversa"},"rotulo":"Janela de transferência","tipo":"caixa"},{"alvo":{"rotulo":"Transferir para"},"rotulo":"Quem continua","tipo":"numero"},{"alvo":{"rotulo":"Motivo (opcional)"},"rotulo":"Recado para o colega","tipo":"numero"},{"alvo":{"role":"button","nome":"Transferir","exato":true,"dentro":{"role":"dialog","nome":"Transferir conversa"}},"rotulo":"Confirmar","tipo":"numero"}],"clicar":{"role":"button","nome":"Transferir","exato":true,"dentro":{"role":"dialog","nome":"Transferir conversa"}}},{"id":"p4","titulo":"Pedir um lembrete","texto":"\"Lembrar\" serve para quando você está esperando o cliente responder. Escolha o prazo: se ele não responder até lá, a conversa sobe para o topo da lista e aparece um aviso na Central dizendo que o cliente não respondeu no prazo. Nada é enviado ao cliente. Nesta conversa o robô já estava pausado. O balão vermelho é uma mensagem que não saiu, e o quadro bege é um recado interno da equipe: nada disso tem a ver com o lembrete.","dica":"Com um lembrete ligado, o botão passa a dizer \"Lembrete ativo\", e é por ele que você cancela.","rota":"/app/inbox?id=be100000-0000-4000-8000-000000000005","antes":[{"acao":"click","alvo":{"role":"button","nome":"Lembrar","exato":true}}],"destaques":[{"alvo":{"css":"button[aria-haspopup=\"menu\"][data-state=\"open\"]"},"rotulo":"Botão Lembrar","tipo":"caixa"},{"alvo":{"role":"menuitem","nome":"Em 1 hora","exato":true},"rotulo":"Prazo do lembrete","tipo":"seta"}],"clicar":{"role":"menuitem","nome":"Em 1 hora","exato":true}},{"id":"p5","titulo":"Encerrar o atendimento","texto":"Quando o assunto terminou, clique em \"Fechar\". Uma confirmação aparece antes de encerrar. Ela diz que dá para reabrir depois, mas nem sempre é preciso: se o cliente escrever de novo, a conversa reabre sozinha, sem responsável.","dica":"O lembrete marcado no passo anterior continua ligado. Se o prazo vencer com a conversa fechada, nada acontece. Se ela for reaberta antes, o lembrete volta a valer.","antes":[{"acao":"click","alvo":{"role":"menuitem","nome":"Em 1 hora","exato":true}},{"acao":"aguardar","alvo":{"role":"button","nome":"Lembrete ativo","exato":true}},{"acao":"click","alvo":{"role":"button","nome":"Fechar","exato":true}}],"destaques":[{"alvo":{"role":"alertdialog","nome":"Fechar esta conversa?"},"rotulo":"Confirme o encerramento","tipo":"caixa"},{"alvo":{"role":"button","nome":"Fechar","exato":true,"dentro":{"role":"alertdialog","nome":"Fechar esta conversa?"}},"rotulo":"Encerrar","tipo":"seta"}],"clicar":{"role":"button","nome":"Fechar","exato":true,"dentro":{"role":"alertdialog","nome":"Fechar esta conversa?"}}},{"id":"p6","titulo":"Reabrir","texto":"Depois de fechada, a conversa mostra o selo \"Fechada\", e o campo de mensagem fica travado: parece normal, mas não aceita texto. \"Reabrir\" começa um novo atendimento com o mesmo cliente, mas sem responsável: até alguém clicar em \"Assumir\", quem cuida dela é o atendimento automático.","antes":[{"acao":"click","alvo":{"role":"button","nome":"Fechar","exato":true,"dentro":{"role":"alertdialog","nome":"Fechar esta conversa?"}}},{"acao":"aguardar","alvo":{"role":"button","nome":"Reabrir","exato":true}}],"destaques":[{"alvo":{"texto":"Fechada","exato":true},"rotulo":"Atendimento encerrado","tipo":"caixa"},{"alvo":{"role":"textbox","nome":"Mensagem","exato":true},"rotulo":"Campo travado: não aceita texto","tipo":"caixa"},{"alvo":{"role":"button","nome":"Reabrir","exato":true},"rotulo":"Voltar a atender","tipo":"caixa"}],"clicar":{"role":"button","nome":"Reabrir","exato":true}},{"id":"p7","titulo":"Arquivar sem apagar","texto":"\"Arquivar\" tira a conversa da Fila e da aba Minhas e a guarda na aba Arquivadas (é o \"histórico\" de que a confirmação fala). Nada é apagado. Se a conversa ainda estava aberta, o atendimento é encerrado; se o cliente escrever de novo, ela volta, sem responsável.","dica":"O lembrete marcado antes continua ligado. Depois de reabrir, o botão no topo da conversa diz \"Lembrete ativo\", e é por ele que você cancela.","antes":[{"acao":"click","alvo":{"role":"button","nome":"Reabrir","exato":true}},{"acao":"aguardar","alvo":{"role":"button","nome":"Fechar","exato":true}},{"acao":"click","alvo":{"role":"button","nome":"Arquivar","exato":true}}],"destaques":[{"alvo":{"role":"alertdialog","nome":"Arquivar esta conversa?"},"rotulo":"Confirme","tipo":"caixa"},{"alvo":{"role":"button","nome":"Arquivar","exato":true,"dentro":{"role":"alertdialog","nome":"Arquivar esta conversa?"}},"rotulo":"Guardar","tipo":"seta"}],"clicar":{"role":"button","nome":"Arquivar","exato":true,"dentro":{"role":"alertdialog","nome":"Arquivar esta conversa?"}}}]},{"id":"ficha-do-cliente","titulo":"A ficha do cliente ao lado da conversa","objetivo":"Organizar o cliente sem sair da conversa: etiquetas, próximo passo da demanda e etapa no funil.","papel":"admin","busca":["ficha","painel do contato","etiqueta","tag do contato","tag da conversa","demanda","próximo passo","funil","etapa","lead","recolher painel"],"passos":[{"id":"p1","titulo":"O que a ficha mostra","texto":"No alto da ficha ficam o nome, o telefone e as etiquetas do cliente. Logo abaixo há atalhos: \"Marcar compromisso\" abre a Agenda já com este cliente escolhido, \"Tags do contato\" abre o editor de etiquetas, \"Novo Lead\" abre um negócio novo para ele no funil e \"Ver contato\" leva à ficha completa do cliente. A mensagem com borda vermelha na conversa é só um envio que falhou neste exemplo; ela não tem a ver com a ficha.","rota":"/app/inbox?filter=all&id=be100000-0000-4000-8000-000000000005","antes":[],"destaques":[{"alvo":{"role":"link","nome":"Marcar compromisso"},"rotulo":"Agendar","tipo":"caixa"},{"alvo":{"role":"button","nome":"Tags do contato"},"rotulo":"Etiquetas da pessoa","tipo":"caixa"},{"alvo":{"role":"button","nome":"Novo Lead"},"rotulo":"Negócio novo no funil","tipo":"caixa"},{"alvo":{"role":"link","nome":"Ver contato","exato":true},"rotulo":"Ficha completa","tipo":"caixa"}],"clicar":{"role":"button","nome":"Tags do contato"}},{"id":"p2","titulo":"Etiquetas da pessoa","texto":"As \"Tags do contato\" acompanham o cliente em todas as conversas dele. Digite uma etiqueta nova e aperte Enter para adicionar. O X ao lado de uma etiqueta (aqui, o de \"retorno\") remove essa etiqueta. O botãozinho de paleta logo depois de cada etiqueta troca a cor dela.","dica":"Com o campo vazio, aparecem logo abaixo, com um \"+\", as etiquetas já usadas na clínica. Ao digitar, ficam só as que combinam com o texto; aqui nenhuma aparece porque nenhuma combina com \"vip\". Clicar numa delas abre a janela \"Adicionar tag\" para escolher a cor e grava a etiqueta com a mesma grafia, para todo mundo escrever igual.","antes":[{"acao":"click","alvo":{"role":"button","nome":"Tags do contato"}},{"acao":"fill","alvo":{"role":"textbox","nome":"Adicionar tag ao contato"},"valor":"vip"}],"destaques":[{"alvo":{"role":"textbox","nome":"Adicionar tag ao contato"},"rotulo":"Nova etiqueta","tipo":"seta"},{"alvo":{"role":"button","nome":"Remover tag retorno","exato":true},"rotulo":"Tirar etiqueta","tipo":"caixa"},{"alvo":{"role":"button","nome":"Cor da etiqueta retorno","exato":true},"rotulo":"Trocar a cor","tipo":"caixa"}]},{"id":"p3","titulo":"Etiquetas só deste atendimento","texto":"Repare que \"vip\" já entrou nas etiquetas da pessoa. Já as \"Tags da conversa\" marcam só este atendimento, como o assunto tratado agora. Elas não ficam gravadas no cliente. Digite e aperte Enter, igual às etiquetas da pessoa. Enquanto você não aperta Enter, continua aparecendo \"Sem tags.\".","antes":[{"acao":"press","tecla":"Enter","alvo":{"role":"textbox","nome":"Adicionar tag ao contato"}},{"acao":"aguardar","alvo":{"role":"button","nome":"Remover tag vip","exato":true}},{"acao":"fill","alvo":{"role":"textbox","nome":"Adicionar tag à conversa"},"valor":"pos-cirurgia"}],"destaques":[{"alvo":{"role":"textbox","nome":"Adicionar tag à conversa"},"rotulo":"Etiqueta do atendimento","tipo":"seta"}]},{"id":"p4","titulo":"O que o cliente pediu","texto":"Em \"Demandas abertas\" fica cada pedido do cliente que ainda não foi resolvido, com a situação (\"Aberta\") e há quanto tempo está aberto. Quando ninguém combinou o que fazer, aparece a frase \"Sem próximo passo definido\". \"Demanda vigente neste canal\" é só um aviso, não um botão: mostra que esta é a demanda desta conversa. \"Encerrar demanda\" registra o resultado quando o pedido estiver resolvido. Clique em \"Marcar próximo passo\" para anotar o que vai acontecer a seguir.","antes":[{"acao":"press","tecla":"Enter","alvo":{"role":"textbox","nome":"Adicionar tag à conversa"}},{"acao":"aguardar","alvo":{"role":"button","nome":"Remover tag pos-cirurgia","exato":true}}],"destaques":[{"alvo":{"testid":"inbox-demandas"},"rotulo":"Demandas em aberto","tipo":"caixa"},{"alvo":{"testid":"marcar-proximo-passo"},"rotulo":"Anotar o próximo passo","tipo":"seta"}],"clicar":{"testid":"marcar-proximo-passo"}},{"id":"p5","titulo":"Anotar o próximo passo","texto":"Escreva o que vai acontecer a seguir e clique em \"Salvar\" (ou aperte Enter).","dica":"O botão \"Salvar\" só funciona depois de pelo menos 3 letras.","antes":[{"acao":"click","alvo":{"testid":"marcar-proximo-passo"}},{"acao":"fill","alvo":{"testid":"campo-proximo-passo"},"valor":"Ligar para confirmar o curativo"},{"acao":"hover","alvo":{"testid":"salvar-proximo-passo"}}],"destaques":[{"alvo":{"testid":"campo-proximo-passo"},"rotulo":"O que vem a seguir","tipo":"caixa"},{"alvo":{"testid":"salvar-proximo-passo"},"rotulo":"Salvar","tipo":"caixa"}],"clicar":{"testid":"salvar-proximo-passo"}},{"id":"p5-salvo","titulo":"Próximo passo anotado","texto":"Depois de salvar, a demanda mostra o próximo passo no lugar de \"Sem próximo passo definido\", e o botão \"Marcar próximo passo\" some. Assim a equipe toda vê o que falta fazer.","antes":[{"acao":"click","alvo":{"testid":"salvar-proximo-passo"}},{"acao":"aguardar","alvo":{"testid":"demanda-com-proximo-passo"}}],"destaques":[{"alvo":{"testid":"demanda-com-proximo-passo"},"rotulo":"Próximo passo anotado","tipo":"caixa"}]},{"id":"p6","titulo":"O cliente no funil","texto":"Em \"Leads recentes\" (lead é o negócio aberto com este cliente) aparecem o nome do negócio e, logo abaixo, o funil e a etapa em que ele está. \"Etapa do funil\" muda a etapa sem sair da conversa, e \"Abrir no funil\" abre o quadro do funil já com os detalhes deste negócio na tela. \"Levar para outro funil\" muda o negócio de funil, não só de etapa. A frase \"Este funil não tem campos extras.\" só avisa que este funil não pede informações a mais. \"Tarefas desta demanda\" e \"Memória do contato\", mais acima, são outras partes da ficha. Para continuar, clique em \"Recolher\", no alto da ficha.","dica":"Se você escolher uma etapa de perda, o sistema pede o motivo antes de mover.","antes":[],"destaques":[{"alvo":{"testid":"inbox-etapa-select"},"rotulo":"Mudar de etapa","tipo":"seta"},{"alvo":{"testid":"inbox-abrir-no-funil"},"rotulo":"Ver no quadro","tipo":"caixa"},{"alvo":{"testid":"inbox-levar-para-outro-funil"},"rotulo":"Trocar de funil","tipo":"caixa"},{"alvo":{"role":"button","nome":"Recolher painel do contato"},"rotulo":"Recolher a ficha","tipo":"seta"}],"clicar":{"role":"button","nome":"Recolher painel do contato"}},{"id":"p7","titulo":"Recolher a ficha","texto":"\"Recolher\" esconde a ficha e dá mais espaço para a conversa. Este navegador lembra a escolha nas próximas visitas. Para abrir a ficha de novo, clique no botão com setas duplas (») no alto da borda direita.","antes":[{"acao":"click","alvo":{"role":"button","nome":"Recolher painel do contato"}}],"destaques":[{"alvo":{"role":"button","nome":"Expandir painel do contato"},"rotulo":"Abrir a ficha de novo","tipo":"seta"}],"clicar":{"role":"button","nome":"Expandir painel do contato"}}]},{"id":"atalhos-e-lote","titulo":"Trabalhar mais rápido: atalhos e ações em lote","objetivo":"Navegar pelo teclado e resolver várias conversas de uma vez.","papel":"admin","busca":["atalhos","teclado","J K","próxima conversa","selecionar várias","em lote","marcar como lida","arquivar várias","transferir várias"],"passos":[{"id":"p1","titulo":"Cinco letras que economizam cliques","texto":"Com a Inbox aberta e o cursor fora de qualquer campo de texto, cinco teclas fazem o trabalho do mouse: \"j\" abre a próxima conversa da lista, \"k\" volta para a anterior, \"r\" leva o cursor ao campo de resposta, \"a\" assume a conversa aberta e \"e\" fecha a conversa aberta. Só o \"e\" pergunta antes de agir (\"Fechar conversa?\").","dica":"Os atalhos não funcionam enquanto o cursor está dentro de um campo de texto. Clique fora dele antes de usar. Aperte \"?\" para ver a lista de atalhos.","rota":"/app/inbox?filter=all","antes":[],"destaques":[{"alvo":{"texto":"Ou navegue com J e K","exato":true},"rotulo":"O lembrete dos atalhos","tipo":"seta"}]},{"id":"p2","titulo":"Andar pela lista com J e K","texto":"Aperte \"j\" para abrir a próxima conversa da lista e \"k\" para voltar à anterior, sem usar o mouse. Se nenhuma conversa estiver aberta, o \"j\" abre a primeira da lista. Atenção: abrir uma conversa a marca como lida em poucos segundos.","antes":[{"acao":"press","tecla":"Escape"},{"acao":"esperar","ms":400},{"acao":"press","tecla":"j"},{"acao":"aguardar","alvo":{"css":"[data-conversation-id][aria-current=\"true\"]"}}],"destaques":[{"alvo":{"css":"[data-conversation-id][aria-current=\"true\"]"},"rotulo":"Conversa aberta pelo \"j\"","tipo":"seta"}],"clicar":{"testid":"selecao-em-lote-be100000-0000-4000-8000-000000000002"}},{"id":"p3","titulo":"Marcar várias conversas","texto":"A caixinha à esquerda de cada linha marca a conversa sem abri-la. Assim que uma é marcada, aparece acima da lista a barra de ações em lote, com a quantidade de conversas selecionadas. Aqui marcamos as conversas do Roberto e da Mariana. A conversa do Pedro, aberta no meio da tela, também fica com o fundo verde-claro, mas não entra no lote: a caixinha dela está vazia. Só contam as caixinhas marcadas, por isso a barra diz \"2 conversas selecionadas\".","dica":"\"Selecionar todas\" marca todas as conversas que estão na lista agora (na aba Todas, inclusive as fechadas e as arquivadas) e só acrescenta à seleção. Para desmarcar tudo, use o X no fim da barra.","antes":[{"acao":"click","alvo":{"testid":"selecao-em-lote-be100000-0000-4000-8000-000000000002"}},{"acao":"click","alvo":{"testid":"selecao-em-lote-be100000-0000-4000-8000-000000000001"}},{"acao":"aguardar","alvo":{"testid":"barra-de-acoes-em-lote"}}],"destaques":[{"alvo":{"testid":"selecao-em-lote-be100000-0000-4000-8000-000000000002"},"rotulo":"Marcar sem abrir","tipo":"seta"},{"alvo":{"testid":"barra-de-acoes-em-lote"},"rotulo":"Ações para as marcadas","tipo":"caixa"},{"alvo":{"css":"div:has(> [data-testid=\"selecionar-todas-visiveis\"])"},"rotulo":"Selecionar todas","tipo":"caixa"}],"clicar":{"role":"button","nome":"Mais ações","exato":true}},{"id":"p4","titulo":"Mais ações","texto":"Em \"Mais ações\" ficam Arquivar, Pausar IA, Devolver ao automático e \"Transferir para…\". Cada conversa marcada recebe a ação como se você a fizesse uma por uma. Pausar IA desliga o atendimento automático e, se a conversa não tiver responsável, você passa a ser o responsável. Devolver ao automático tira o responsável e deixa a IA atender de novo.","dica":"Arquivar, Pausar IA e Devolver ao automático acontecem na hora, sem pedir confirmação. \"Transferir para…\" abre uma janela para escolher o colega e, se quiser, escrever o motivo; só transfere quando você confirma em Transferir. Se alguma conversa não puder receber a ação, o aviso no fim diz quantas foram recusadas e o motivo.","antes":[{"acao":"click","alvo":{"role":"button","nome":"Mais ações","exato":true}},{"acao":"aguardar","alvo":{"testid":"lote-arquivar"}}],"destaques":[{"alvo":{"testid":"lote-arquivar"},"rotulo":"Arquivar","tipo":"numero"},{"alvo":{"testid":"lote-pausar-ia"},"rotulo":"Pausar IA","tipo":"numero"},{"alvo":{"testid":"lote-devolver-ao-automatico"},"rotulo":"Devolver ao automático","tipo":"numero"},{"alvo":{"testid":"lote-transferir"},"rotulo":"Transferir para…","tipo":"numero"}]},{"id":"p5","titulo":"Marcar todas como lidas","texto":"\"Marcar como lida\" zera o contador de não lidas de todas as conversas marcadas. No fim, aparece o aviso \"2 conversas atualizadas.\" e a seleção é desfeita. O \"Fechar\" da barra, ao lado de \"2 conversas selecionadas\", encerra todas as marcadas de uma vez e, ao contrário da tecla \"e\", não pede confirmação. Não confunda com o \"Fechar\" do topo da conversa aberta: esse fecha só a conversa do Pedro.","antes":[{"acao":"press","tecla":"Escape"},{"acao":"esperar","ms":400}],"destaques":[{"alvo":{"testid":"lote-marcar-como-lida"},"rotulo":"Marcar como lida","tipo":"caixa"},{"alvo":{"testid":"lote-fechar"},"rotulo":"Fechar (da barra)","tipo":"caixa"}],"clicar":{"testid":"lote-marcar-como-lida"}}]}]}],"capturas":{"conhecendo-a-tela--p1":{"foto":"/curso/capturas/conhecendo-a-tela--p1.jpg","destaques":[{"x":264,"y":80,"w":272,"h":796,"rotulo":"Lista de conversas","tipo":"caixa"},{"x":536,"y":80,"w":584,"h":796,"rotulo":"Aqui aparece a conversa aberta","tipo":"caixa"},{"x":1120,"y":80,"w":296,"h":796,"rotulo":"Aqui fica a ficha do cliente","tipo":"caixa"},{"x":296,"y":224,"w":207,"h":68,"rotulo":"Abas da lista (abre na Fila)","tipo":"caixa"}],"clicar":null},"conhecendo-a-tela--p2":{"foto":"/curso/capturas/conhecendo-a-tela--p2.jpg","destaques":[{"x":276,"y":92,"w":247,"h":36,"rotulo":"Falar primeiro com um cliente","tipo":"seta"}],"clicar":{"x":288,"y":322,"w":219,"h":140.5}},"conhecendo-a-tela--p3":{"foto":"/curso/capturas/conhecendo-a-tela--p3.jpg","destaques":[{"x":288,"y":322,"w":219,"h":140.5,"rotulo":"Conversa aberta","tipo":"caixa"},{"x":593.40625,"y":322.265625,"w":469.1875,"h":355.375,"rotulo":"Resumo deixado pela IA","tipo":"caixa"}],"clicar":null},"conhecendo-a-tela--p4":{"foto":"/curso/capturas/conhecendo-a-tela--p4.jpg","destaques":[{"x":691,"y":94,"w":43,"h":16,"rotulo":"Situação do atendimento","tipo":"caixa"},{"x":740,"y":94,"w":104,"h":16,"rotulo":"Número por onde o cliente chegou","tipo":"caixa"},{"x":552,"y":116,"w":292,"h":24,"rotulo":"Quem está cuidando agora","tipo":"caixa"},{"x":711,"y":170,"w":69,"h":32,"rotulo":"Assumir: a conversa passa para você","tipo":"caixa"},{"x":649,"y":208,"w":63,"h":32,"rotulo":"Fechar: encerra o atendimento","tipo":"caixa"},{"x":998,"y":244,"w":106,"h":16,"rotulo":"Automático pausado","tipo":"caixa"}],"clicar":null},"conhecendo-a-tela--p5":{"foto":"/curso/capturas/conhecendo-a-tela--p5.jpg","destaques":[{"x":1120,"y":80,"w":296,"h":796,"rotulo":"Ficha do cliente","tipo":"caixa"},{"x":1137,"y":615,"w":263,"h":134,"rotulo":"Demandas abertas","tipo":"caixa"}],"clicar":null},"conhecendo-a-tela--p6":{"foto":"/curso/capturas/conhecendo-a-tela--p6.jpg","destaques":[{"x":532,"y":80,"w":8,"h":796,"rotulo":"Arraste para ajustar","tipo":"seta"}],"clicar":null},"abas-e-sinais--p1":{"foto":"/curso/capturas/abas-e-sinais--p1.jpg","destaques":[{"x":296,"y":224,"w":207,"h":68,"rotulo":"As seis abas","tipo":"caixa"},{"x":419.5,"y":228.671875,"w":7,"h":14.65625,"rotulo":"Quantas conversas há na aba","tipo":"seta"}],"clicar":null},"abas-e-sinais--p2":{"foto":"/curso/capturas/abas-e-sinais--p2.jpg","destaques":[{"x":352,"y":340.5,"w":16.125,"h":16,"rotulo":"Posição na fila","tipo":"seta"},{"x":477,"y":391.75,"w":18,"h":18,"rotulo":"Mensagens não lidas","tipo":"seta"},{"x":374.40625,"y":473.5,"w":120.59375,"h":33,"rotulo":"Há quanto tempo espera","tipo":"caixa"},{"x":298,"y":503.5,"w":12,"h":12,"rotulo":"Âmbar = esperando uma pessoa","tipo":"seta"}],"clicar":{"x":296,"y":224,"w":75,"h":30}},"abas-e-sinais--p3":{"foto":"/curso/capturas/abas-e-sinais--p3.jpg","destaques":[{"x":298,"y":424.5,"w":12,"h":12,"rotulo":"Roxo = robô atendendo","tipo":"seta"}],"clicar":{"x":452,"y":224,"w":51,"h":30}},"abas-e-sinais--p4":{"foto":"/curso/capturas/abas-e-sinais--p4.jpg","destaques":[{"x":298,"y":424.5,"w":12,"h":12,"rotulo":"Azul = uma pessoa está cuidando","tipo":"seta"}],"clicar":{"x":296,"y":262,"w":51,"h":30}},"abas-e-sinais--p5":{"foto":"/curso/capturas/abas-e-sinais--p5.jpg","destaques":[{"x":415,"y":396.5,"w":42,"h":16,"rotulo":"Grupo de WhatsApp","tipo":"caixa"},{"x":352,"y":671.5,"w":82,"h":16,"rotulo":"Quem da equipe cuida","tipo":"caixa"},{"x":352,"y":733.5,"w":12,"h":12,"rotulo":"Robô = atendimento automático","tipo":"seta"}],"clicar":null},"abas-e-sinais--p6":{"foto":"/curso/capturas/abas-e-sinais--p6.jpg","destaques":[{"x":352,"y":597.5,"w":112,"h":16,"rotulo":"Ensina a IA","tipo":"caixa"},{"x":507,"y":550,"w":24,"h":24,"rotulo":"Liga ou desliga o exemplo","tipo":"seta"},{"x":352,"y":702,"w":61,"h":16,"rotulo":"Pediu para não receber mensagens","tipo":"caixa"}],"clicar":{"x":357,"y":262,"w":64,"h":30}},"abas-e-sinais--p7":{"foto":"/curso/capturas/abas-e-sinais--p7.jpg","destaques":[{"x":357,"y":262,"w":64,"h":30,"rotulo":"Atendimentos encerrados","tipo":"caixa"},{"x":298,"y":466.5,"w":12,"h":12,"rotulo":"Cinza claro = Encerrada","tipo":"seta"},{"x":298,"y":551,"w":12,"h":12,"rotulo":"Encerrada, com responsável: continua azul","tipo":"seta"},{"x":431,"y":262,"w":72,"h":30,"rotulo":"Guardadas sem apagar","tipo":"seta"}],"clicar":null},"achando-a-conversa--p1":{"foto":"/curso/capturas/achando-a-conversa--p1.jpg","destaques":[{"x":276,"y":140,"w":89,"h":36,"rotulo":"Nome, telefone ou última mensagem","tipo":"seta"}],"clicar":{"x":373,"y":140,"w":77,"h":36}},"achando-a-conversa--p2":{"foto":"/curso/capturas/achando-a-conversa--p2.jpg","destaques":[{"x":373,"y":140,"w":77,"h":36,"rotulo":"Ligado: só não lidas","tipo":"seta"}],"clicar":{"x":458,"y":140,"w":65,"h":36}},"achando-a-conversa--p3":{"foto":"/curso/capturas/achando-a-conversa--p3.jpg","destaques":[{"x":458,"y":140,"w":65,"h":36,"rotulo":"Ligado: só grupos","tipo":"seta"},{"x":288,"y":322,"w":219,"h":61.5,"rotulo":"Conversa de grupo","tipo":"caixa"}],"clicar":{"x":276,"y":184,"w":119.5,"h":32}},"achando-a-conversa--p4":{"foto":"/curso/capturas/achando-a-conversa--p4.jpg","destaques":[{"x":281,"y":494,"w":246,"h":32,"rotulo":"Marque a etiqueta","tipo":"seta"}],"clicar":{"x":281,"y":494,"w":246,"h":32}},"achando-a-conversa--p5":{"foto":"/curso/capturas/achando-a-conversa--p5.jpg","destaques":[{"x":276,"y":184,"w":119.5,"h":32,"rotulo":"Filtro de etiqueta ligado","tipo":"caixa"},{"x":288,"y":322,"w":219,"h":83.5,"rotulo":"Cliente com a etiqueta","tipo":"caixa"}],"clicar":null},"achando-a-conversa--p6":{"foto":"/curso/capturas/achando-a-conversa--p6.jpg","destaques":[{"x":288,"y":357,"w":223,"h":40,"rotulo":"Os filtros esconderam tudo","tipo":"caixa"},{"x":351.5,"y":437,"w":96,"h":32,"rotulo":"Desfazer de uma vez","tipo":"seta"}],"clicar":{"x":351.5,"y":437,"w":96,"h":32}},"achando-a-conversa--p7":{"foto":"/curso/capturas/achando-a-conversa--p7.jpg","destaques":[{"x":276,"y":140,"w":89,"h":36,"rotulo":"Busca vazia de novo","tipo":"caixa"},{"x":276,"y":184,"w":119.5,"h":32,"rotulo":"Etiquetas desligadas","tipo":"caixa"},{"x":296,"y":262,"w":51,"h":30,"rotulo":"Mesma aba","tipo":"seta"}],"clicar":null},"lendo-o-historico--p1":{"foto":"/curso/capturas/lendo-o-historico--p1.jpg","destaques":[{"x":552,"y":332,"w":284,"h":53.53125,"rotulo":"Mensagem do cliente","tipo":"caixa"},{"x":690,"y":229.515625,"w":414,"h":90.484375,"rotulo":"Mensagem da empresa","tipo":"caixa"},{"x":807,"y":285,"w":42,"h":20.5,"rotulo":"Dia da conversa","tipo":"caixa"}],"clicar":null},"lendo-o-historico--p2":{"foto":"/curso/capturas/lendo-o-historico--p2.jpg","destaques":[{"x":690,"y":402.28125,"w":414,"h":96.203125,"rotulo":"Respondida pela IA","tipo":"seta"},{"x":690,"y":604.515625,"w":414,"h":90.484375,"rotulo":"Escrita por você","tipo":"seta"}],"clicar":null},"lendo-o-historico--p3":{"foto":"/curso/capturas/lendo-o-historico--p3.jpg","destaques":[{"x":1060,"y":509.875,"w":12,"h":12,"rotulo":"Entregue: dois tiques cinza","tipo":"seta"},{"x":1060,"y":341.859375,"w":12,"h":12,"rotulo":"Lida: dois tiques azuis","tipo":"seta"}],"clicar":null},"lendo-o-historico--p4":{"foto":"/curso/capturas/lendo-o-historico--p4.jpg","destaques":[{"x":1024,"y":592.96875,"w":47,"h":14.28125,"rotulo":"Selo de falha","tipo":"seta"},{"x":793,"y":620.25,"w":278,"h":16.5,"rotulo":"Por que não saiu","tipo":"caixa"},{"x":793,"y":642.75,"w":107,"h":32,"rotulo":"Mandar de novo","tipo":"seta"}],"clicar":null},"lendo-o-historico--p5":{"foto":"/curso/capturas/lendo-o-historico--p5.jpg","destaques":[{"x":817,"y":408,"w":224,"h":32,"rotulo":"Responder citando","tipo":"seta"},{"x":817,"y":440,"w":224,"h":32,"rotulo":"Mandar para outra conversa","tipo":"caixa"},{"x":817,"y":472,"w":224,"h":32,"rotulo":"Esconder só aqui no CRM","tipo":"caixa"}],"clicar":{"x":817,"y":408,"w":224,"h":32}},"lendo-o-historico--p6":{"foto":"/curso/capturas/lendo-o-historico--p6.jpg","destaques":[{"x":548,"y":749.5,"w":560,"h":44.5,"rotulo":"Mensagem que você vai citar","tipo":"caixa"},{"x":1080,"y":755.5,"w":20,"h":20,"rotulo":"Desfazer a citação","tipo":"seta"},{"x":680,"y":830,"w":384,"h":38,"rotulo":"Sua resposta vai aqui","tipo":"caixa"}],"clicar":{"x":1080,"y":755.5,"w":20,"h":20}},"lendo-o-historico--p7":{"foto":"/curso/capturas/lendo-o-historico--p7.jpg","destaques":[{"x":576,"y":281,"w":488,"h":28,"rotulo":"Palavra procurada","tipo":"seta"},{"x":536,"y":318,"w":584,"h":24,"rotulo":"Quantas foram achadas","tipo":"caixa"},{"x":690,"y":397.53125,"w":414,"h":90.484375,"rotulo":"Mensagem encontrada (repare no contorno)","tipo":"seta"}],"clicar":null},"assumir-e-responder--p1":{"foto":"/curso/capturas/assumir-e-responder--p1.jpg","destaques":[{"x":606.40625,"y":357.828125,"w":443.1875,"h":20,"rotulo":"Motivo da troca","tipo":"seta"},{"x":593.40625,"y":322.265625,"w":469.1875,"h":355.375,"rotulo":"Resumo para quem vai assumir","tipo":"caixa"},{"x":912.59375,"y":634.640625,"w":137,"h":32,"rotulo":"Pegar este cliente","tipo":"seta"}],"clicar":{"x":912.59375,"y":634.640625,"w":137,"h":32}},"assumir-e-responder--p2":{"foto":"/curso/capturas/assumir-e-responder--p2.jpg","destaques":[{"x":552,"y":116,"w":292,"h":24,"rotulo":"Você é o responsável","tipo":"seta"},{"x":906,"y":244,"w":198,"h":16,"rotulo":"Automático pausado","tipo":"seta"},{"x":452,"y":224,"w":51,"h":30,"rotulo":"Agora está em Minhas","tipo":"caixa"}],"clicar":{"x":680,"y":830,"w":384,"h":38}},"assumir-e-responder--p3":{"foto":"/curso/capturas/assumir-e-responder--p3.jpg","destaques":[{"x":680,"y":832,"w":384,"h":36,"rotulo":"Escreva aqui","tipo":"caixa"},{"x":1072,"y":832,"w":36,"h":36,"rotulo":"Enviar","tipo":"caixa"},{"x":636,"y":832,"w":36,"h":36,"rotulo":"Sugestão da IA","tipo":"seta"}],"clicar":null},"assumir-e-responder--p4":{"foto":"/curso/capturas/assumir-e-responder--p4.jpg","destaques":[{"x":548,"y":800,"w":560,"h":26,"rotulo":"Respostas rápidas","tipo":"caixa"},{"x":745,"y":800,"w":156,"h":26,"rotulo":"Clique para usar","tipo":"seta"}],"clicar":{"x":745,"y":800,"w":156,"h":26}},"assumir-e-responder--p4b":{"foto":"/curso/capturas/assumir-e-responder--p4b.jpg","destaques":[{"x":680,"y":812,"w":384,"h":56,"rotulo":"Nome já trocado: confira e envie","tipo":"caixa"}],"clicar":null},"assumir-e-responder--p6":{"foto":"/curso/capturas/assumir-e-responder--p6.jpg","destaques":[{"x":548,"y":832,"w":36,"h":36,"rotulo":"Botão +","tipo":"seta"},{"x":553,"y":715,"w":198,"h":36,"rotulo":"Foto ou vídeo","tipo":"caixa"},{"x":553,"y":751,"w":198,"h":36,"rotulo":"PDF, planilha…","tipo":"caixa"},{"x":553,"y":787,"w":198,"h":36,"rotulo":"Cartão de contato","tipo":"caixa"}],"clicar":null},"nota-interna--p1":{"foto":"/curso/capturas/nota-interna--p1.jpg","destaques":[{"x":593.40625,"y":652.75,"w":469.1875,"h":94.484375,"rotulo":"Nota interna: só a equipe vê","tipo":"caixa"}],"clicar":{"x":631,"y":768,"w":88,"h":24}},"nota-interna--p2":{"foto":"/curso/capturas/nota-interna--p2.jpg","destaques":[{"x":548,"y":800,"w":79,"h":24,"rotulo":"Responder: vai para o cliente","tipo":"caixa"},{"x":631,"y":800,"w":88,"h":24,"rotulo":"Nota interna ligada: só a equipe vê","tipo":"caixa"},{"x":636,"y":830,"w":428,"h":38,"rotulo":"Escreva o recado aqui","tipo":"caixa"}],"clicar":null},"nota-interna--p3":{"foto":"/curso/capturas/nota-interna--p3.jpg","destaques":[{"x":553,"y":779,"w":278,"h":36,"rotulo":"Lista da equipe: clique em Carlos Mendes","tipo":"caixa"}],"clicar":{"x":553,"y":779,"w":278,"h":36}},"nota-interna--p4":{"foto":"/curso/capturas/nota-interna--p4.jpg","destaques":[{"x":636,"y":832,"w":428,"h":36,"rotulo":"Enter salva a nota","tipo":"caixa"},{"x":1072,"y":832,"w":36,"h":36,"rotulo":"Ou clique no aviãozinho","tipo":"seta"}],"clicar":null},"nota-interna--p5":{"foto":"/curso/capturas/nota-interna--p5.jpg","destaques":[{"x":621.5,"y":713.234375,"w":413,"h":75.234375,"rotulo":"Sua nota, com seu nome, a hora e o colega marcado","tipo":"caixa"},{"x":1009.5,"y":724.078125,"w":12,"h":12,"rotulo":"Lixeira: apaga na hora, sem confirmar","tipo":"seta"}],"clicar":null},"passar-pausar-encerrar--p1":{"foto":"/curso/capturas/passar-pausar-encerrar--p1.jpg","destaques":[{"x":780,"y":170,"w":140,"h":32,"rotulo":"Parar o robô aqui","tipo":"caixa"},{"x":552,"y":116,"w":284,"h":24,"rotulo":"Responsável: você (aqui, Helena Prado)","tipo":"caixa"},{"x":711,"y":170,"w":63,"h":32,"rotulo":"Soltar a conversa (é outra coisa)","tipo":"caixa"}],"clicar":{"x":780,"y":170,"w":140,"h":32}},"passar-pausar-encerrar--p2":{"foto":"/curso/capturas/passar-pausar-encerrar--p2.jpg","destaques":[{"x":906,"y":244,"w":198,"h":16,"rotulo":"Por que o robô está parado","tipo":"caixa"},{"x":780,"y":170,"w":155,"h":32,"rotulo":"Religar o robô","tipo":"caixa"}],"clicar":{"x":780,"y":170,"w":155,"h":32}},"passar-pausar-encerrar--p3":{"foto":"/curso/capturas/passar-pausar-encerrar--p3.jpg","destaques":[{"x":496,"y":267,"w":448,"h":366,"rotulo":"Janela de transferência","tipo":"caixa"},{"x":521,"y":398,"w":398,"h":36,"rotulo":"Quem continua","tipo":"numero"},{"x":521,"y":476,"w":398,"h":80,"rotulo":"Recado para o colega","tipo":"numero"},{"x":824,"y":572,"w":95,"h":36,"rotulo":"Confirmar","tipo":"numero"}],"clicar":{"x":824,"y":572,"w":95,"h":36}},"passar-pausar-encerrar--p4":{"foto":"/curso/capturas/passar-pausar-encerrar--p4.jpg","destaques":[{"x":552,"y":208,"w":91,"h":32,"rotulo":"Botão Lembrar","tipo":"caixa"},{"x":520,"y":249,"w":118,"h":32,"rotulo":"Prazo do lembrete","tipo":"seta"}],"clicar":{"x":520,"y":249,"w":118,"h":32}},"passar-pausar-encerrar--p5":{"foto":"/curso/capturas/passar-pausar-encerrar--p5.jpg","destaques":[{"x":464,"y":361,"w":512,"h":178,"rotulo":"Confirme o encerramento","tipo":"caixa"},{"x":877,"y":478,"w":74,"h":36,"rotulo":"Encerrar","tipo":"seta"}],"clicar":{"x":877,"y":478,"w":74,"h":36}},"passar-pausar-encerrar--p6":{"foto":"/curso/capturas/passar-pausar-encerrar--p6.jpg","destaques":[{"x":714,"y":94,"w":52,"h":16,"rotulo":"Atendimento encerrado","tipo":"caixa"},{"x":680,"y":830,"w":384,"h":38,"rotulo":"Campo travado: não aceita texto","tipo":"caixa"},{"x":780,"y":170,"w":65,"h":32,"rotulo":"Voltar a atender","tipo":"caixa"}],"clicar":{"x":780,"y":170,"w":65,"h":32}},"passar-pausar-encerrar--p7":{"foto":"/curso/capturas/passar-pausar-encerrar--p7.jpg","destaques":[{"x":464,"y":361,"w":512,"h":178,"rotulo":"Confirme","tipo":"caixa"},{"x":866,"y":478,"w":85,"h":36,"rotulo":"Guardar","tipo":"seta"}],"clicar":{"x":866,"y":478,"w":85,"h":36}},"ficha-do-cliente--p1":{"foto":"/curso/capturas/ficha-do-cliente--p1.jpg","destaques":[{"x":1150,"y":246,"w":132,"h":20,"rotulo":"Agendar","tipo":"caixa"},{"x":1150,"y":274,"w":134,"h":32,"rotulo":"Etiquetas da pessoa","tipo":"caixa"},{"x":1150,"y":314,"w":103,"h":32,"rotulo":"Negócio novo no funil","tipo":"caixa"},{"x":1261,"y":314,"w":106,"h":32,"rotulo":"Ficha completa","tipo":"caixa"}],"clicar":{"x":1150,"y":274,"w":134,"h":32}},"ficha-do-cliente--p2":{"foto":"/curso/capturas/ficha-do-cliente--p2.jpg","destaques":[{"x":1159,"y":431,"w":149,"h":28,"rotulo":"Nova etiqueta","tipo":"seta"},{"x":1202,"y":368,"w":10,"h":10,"rotulo":"Tirar etiqueta","tipo":"caixa"},{"x":1223,"y":363,"w":28,"h":28,"rotulo":"Trocar a cor","tipo":"caixa"}],"clicar":null},"ficha-do-cliente--p3":{"foto":"/curso/capturas/ficha-do-cliente--p3.jpg","destaques":[{"x":1137,"y":692.28125,"w":193,"h":28,"rotulo":"Etiqueta do atendimento","tipo":"seta"}],"clicar":null},"ficha-do-cliente--p4":{"foto":"/curso/capturas/ficha-do-cliente--p4.jpg","destaques":[{"x":1137,"y":704.28125,"w":263,"h":172,"rotulo":"Demandas em aberto","tipo":"caixa"},{"x":1146,"y":835.28125,"w":146,"h":32,"rotulo":"Anotar o próximo passo","tipo":"seta"}],"clicar":{"x":1146,"y":835.28125,"w":146,"h":32}},"ficha-do-cliente--p5":{"foto":"/curso/capturas/ficha-do-cliente--p5.jpg","destaques":[{"x":1146,"y":812.28125,"w":245,"h":26,"rotulo":"O que vem a seguir","tipo":"caixa"},{"x":1146,"y":844.28125,"w":57,"h":32,"rotulo":"Salvar","tipo":"caixa"}],"clicar":{"x":1146,"y":844.28125,"w":57,"h":32}},"ficha-do-cliente--p5-salvo":{"foto":"/curso/capturas/ficha-do-cliente--p5-salvo.jpg","destaques":[{"x":1137,"y":705.28125,"w":263,"h":110,"rotulo":"Próximo passo anotado","tipo":"caixa"}],"clicar":null},"ficha-do-cliente--p6":{"foto":"/curso/capturas/ficha-do-cliente--p6.jpg","destaques":[{"x":1137,"y":462.28125,"w":263,"h":32,"rotulo":"Mudar de etapa","tipo":"seta"},{"x":1137,"y":502.28125,"w":263,"h":32,"rotulo":"Ver no quadro","tipo":"caixa"},{"x":1137,"y":542.28125,"w":263,"h":32,"rotulo":"Trocar de funil","tipo":"caixa"},{"x":1317,"y":100,"w":83,"h":24,"rotulo":"Recolher a ficha","tipo":"seta"}],"clicar":{"x":1317,"y":100,"w":83,"h":24}},"ficha-do-cliente--p7":{"foto":"/curso/capturas/ficha-do-cliente--p7.jpg","destaques":[{"x":1379.5,"y":88,"w":30,"h":22,"rotulo":"Abrir a ficha de novo","tipo":"seta"}],"clicar":{"x":1379.5,"y":88,"w":30,"h":22}},"atalhos-e-lote--p1":{"foto":"/curso/capturas/atalhos-e-lote--p1.jpg","destaques":[{"x":766.5,"y":506,"w":123,"h":16,"rotulo":"O lembrete dos atalhos","tipo":"seta"}],"clicar":null},"atalhos-e-lote--p2":{"foto":"/curso/capturas/atalhos-e-lote--p2.jpg","destaques":[{"x":288,"y":322,"w":219,"h":61.5,"rotulo":"Conversa aberta pelo \"j\"","tipo":"seta"}],"clicar":{"x":272,"y":459,"w":16,"h":16}},"atalhos-e-lote--p3":{"foto":"/curso/capturas/atalhos-e-lote--p3.jpg","destaques":[{"x":272,"y":584,"w":16,"h":16,"rotulo":"Marcar sem abrir","tipo":"seta"},{"x":264,"y":293,"w":271,"h":125,"rotulo":"Ações para as marcadas","tipo":"caixa"},{"x":264,"y":418,"w":271,"h":29,"rotulo":"Selecionar todas","tipo":"caixa"}],"clicar":{"x":403,"y":339,"w":88,"h":32}},"atalhos-e-lote--p4":{"foto":"/curso/capturas/atalhos-e-lote--p4.jpg","destaques":[{"x":408,"y":412,"w":196,"h":32,"rotulo":"Arquivar","tipo":"numero"},{"x":408,"y":444,"w":196,"h":32,"rotulo":"Pausar IA","tipo":"numero"},{"x":408,"y":476,"w":196,"h":32,"rotulo":"Devolver ao automático","tipo":"numero"},{"x":408,"y":517,"w":196,"h":32,"rotulo":"Transferir para…","tipo":"numero"}],"clicar":null},"atalhos-e-lote--p5":{"foto":"/curso/capturas/atalhos-e-lote--p5.jpg","destaques":[{"x":276,"y":339,"w":121,"h":32,"rotulo":"Marcar como lida","tipo":"caixa"},{"x":427,"y":301,"w":63,"h":32,"rotulo":"Fechar (da barra)","tipo":"caixa"}],"clicar":{"x":276,"y":339,"w":121,"h":32}},"assumir-e-responder--p5":{"foto":"/curso/capturas/assumir-e-responder--p5.jpg","destaques":[{"x":548,"y":756,"w":320,"h":64,"rotulo":"Escolha com um clique","tipo":"caixa"}],"clicar":{"x":553,"y":761,"w":310,"h":54}}},"menu":[{"grupo":"Atendimento","itens":[{"href":"/app/inbox","rotulo":"Inbox","descricao":"As conversas de WhatsApp, com você e a IA atendendo lado a lado.","modulo":"inbox"},{"href":"/app/radar","rotulo":"Radar","descricao":"Quem esfriou e ainda está aberto — o que corre risco de morrer sem resposta.","modulo":null},{"href":"/app/agenda","rotulo":"Agenda","descricao":"O que está marcado, com quem, e quem atende — seu e da equipe.","modulo":null},{"href":"/app/templates","rotulo":"Respostas rápidas","descricao":"Scripts salvos para responder mais rápido, seus ou da equipe.","modulo":null}]},{"grupo":"CRM","itens":[{"href":"/app/kanban","rotulo":"Funis","descricao":"Seus funis de venda — clique em um para abrir o quadro de clientes.","modulo":null},{"href":"/app/contacts","rotulo":"Contatos","descricao":"As pessoas do outro lado da conversa e seu histórico.","modulo":null},{"href":"/app/tasks","rotulo":"Tarefas","descricao":"O que ficou combinado, com prazo — e o que já venceu sem ninguém fazer.","modulo":null}]},{"grupo":"Agente de IA","itens":[{"href":"/app/ai/agents","rotulo":"Agentes","descricao":"Quem atende por você: instruções, modelo, ferramentas e publicação.","modulo":null},{"href":"/app/ai/followups","rotulo":"Follow-ups","descricao":"Como o agente retoma uma conversa que esfriou, para nenhuma morrer no silêncio.","modulo":null},{"href":"/app/ai/cases","rotulo":"Casos","descricao":"Os atendimentos que o agente conduziu, do início ao desfecho.","modulo":null}]},{"grupo":"Canais","itens":[{"href":"/app/connections","rotulo":"Conexões","descricao":"Seus números de WhatsApp: por QR ou canal oficial da Meta, com saúde, reconexão e templates.","modulo":null},{"href":"/app/webhooks","rotulo":"Webhooks","descricao":"Avise outros sistemas quando algo acontecer aqui dentro.","modulo":null}]},{"grupo":"Análise","itens":[{"href":"/app/metrics","rotulo":"Desempenho","descricao":"Funil e performance por atendente nos últimos 30 dias.","modulo":null},{"href":"/app/ads/meta","rotulo":"Meta Ads","descricao":"Quanto custou cada resultado das campanhas que trazem gente para cá.","modulo":null},{"href":"/app/activities","rotulo":"Atividades","descricao":"Relatório do que a equipe e os agentes fizeram no período: quanto, quem e de que tipo.","modulo":null}]}]}</script>
+<script>
+// Curso DeskComm — navegação, leitura anotada, simulador e busca. Sem dependências.
+(function () {
+  "use strict";
+  var D = JSON.parse(document.getElementById("dados").textContent);
+  var W = D.largura, H = D.altura;
+  var vista = document.getElementById("vista");
+  var CHAVE_FEITOS = "curso-deskcomm:feitos";
+
+  // ---------- utilidades ----------
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function normalizar(s) {
+    return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  }
+  function plural(n, um, varios) { return n + " " + (n === 1 ? um : varios); }
+  function pct(v, total) { return (v / total) * 100 + "%"; }
+  function feitos() {
+    try { return JSON.parse(localStorage.getItem(CHAVE_FEITOS) || "[]"); } catch { return []; }
+  }
+  function marcarFeito(id) {
+    try {
+      var f = feitos();
+      if (f.indexOf(id) < 0) { f.push(id); localStorage.setItem(CHAVE_FEITOS, JSON.stringify(f)); }
+    } catch { /* armazenamento bloqueado: o progresso só não fica lembrado */ }
+  }
+  function modulo(id) { return D.modulos.filter(function (m) { return m.id === id; })[0]; }
+  function licaoDe(m, id) { return m && m.licoes.filter(function (l) { return l.id === id; })[0]; }
+  function captura(licao, passo) { return D.capturas[licao.id + "--" + passo.id]; }
+  function tokenDaTela(href) { return "t." + href.slice(1).split("/").join("~"); }
+
+  // ---------- a foto anotada ----------
+  // Coordenadas vêm medidas pelo capturador, em pixels da tela de W×H; o SVG usa o mesmo
+  // viewBox, então caixas e setas escalam junto com a foto em qualquer largura.
+  var contadorDeMascara = 0;
+  var P = 6, R = 22; // folga da caixa e raio do selo, em pixels da foto
+
+  // Selo nunca cobre um alvo: ele procura, em ordem, um lugar livre FORA de todas as
+  // caixas do passo e longe dos selos já postos. Sem lugar livre, fica no menos ruim.
+  function livre(p, caixas, selos) {
+    if (p[0] < R || p[1] < R || p[0] > W - R || p[1] > H - R) return false;
+    for (var i = 0; i < caixas.length; i++) {
+      var c = caixas[i];
+      if (p[0] > c.x - R && p[0] < c.x + c.w + R && p[1] > c.y - R && p[1] < c.y + c.h + R) return false;
+    }
+    for (var j = 0; j < selos.length; j++) {
+      if (Math.hypot(p[0] - selos[j][0], p[1] - selos[j][1]) < 2 * R + 4) return false;
+    }
+    return true;
+  }
+  function seta(de, ate) {
+    var ang = Math.atan2(ate[1] - de[1], ate[0] - de[0]), t = 24, a = 0.45;
+    var p1 = [ate[0] - t * Math.cos(ang - a), ate[1] - t * Math.sin(ang - a)];
+    var p2 = [ate[0] - t * Math.cos(ang + a), ate[1] - t * Math.sin(ang + a)];
+    var meio = [ate[0] - 0.8 * t * Math.cos(ang), ate[1] - 0.8 * t * Math.sin(ang)];
+    return '<line class="seta-linha" x1="' + de[0] + '" y1="' + de[1] + '" x2="' + meio[0] + '" y2="' + meio[1] + '" vector-effect="non-scaling-stroke"/>' +
+      '<polygon class="seta-ponta" points="' + ate.join(",") + " " + p1.join(",") + " " + p2.join(",") + '"/>';
+  }
+  /** Onde o selo (e, na seta, o rabo) de uma caixa fica: candidatos em volta, o primeiro livre vence. */
+  function posicionar(c, tipo, caixas, selos) {
+    var cx = c.x + c.w / 2, cy = c.y + c.h / 2, cands = [];
+    if (tipo === "seta") {
+      var L = 110, g = 10, d = L * 0.7;
+      [["esq", [c.x - g, cy], [-L, 0]], ["cima", [cx, c.y - g], [0, -L]], ["dir", [c.x + c.w + g, cy], [L, 0]],
+       ["baixo", [cx, c.y + c.h + g], [0, L]], ["ce", [c.x - g, c.y - g], [-d, -d]], ["cd", [c.x + c.w + g, c.y - g], [d, -d]],
+       ["be", [c.x - g, c.y + c.h + g], [-d, d]], ["bd", [c.x + c.w + g, c.y + c.h + g], [d, d]]].forEach(function (k) {
+        cands.push({ selo: [k[1][0] + k[2][0], k[1][1] + k[2][1]], ponta: k[1] });
+      });
+    } else {
+      var f = R + 6;
+      [[c.x - f, cy], [c.x - f, c.y - f + R], [cx, c.y - f], [c.x + c.w + f, cy], [cx, c.y + c.h + f],
+       [c.x - f, c.y - f], [c.x + c.w + f, c.y - f]].forEach(function (p) { cands.push({ selo: p }); });
+    }
+    for (var i = 0; i < cands.length; i++) if (livre(cands[i].selo, caixas, selos)) return cands[i];
+    var reserva = cands[0];
+    reserva.selo = [Math.min(W - R, Math.max(R, reserva.selo[0])), Math.min(H - R, Math.max(R, reserva.selo[1]))];
+    return reserva;
+  }
+  function figura(cap, opcoes) {
+    opcoes = opcoes || {};
+    var id = "m" + (++contadorDeMascara);
+    var furos = "", contornos = "", setas = "", selos = "";
+    if (!opcoes.limpa) {
+      var caixas = cap.destaques.map(function (d) { return { x: d.x - P, y: d.y - P, w: d.w + 2 * P, h: d.h + 2 * P }; });
+      var postos = [];
+      cap.destaques.forEach(function (d, i) {
+        var c = caixas[i];
+        furos += '<rect x="' + c.x + '" y="' + c.y + '" width="' + c.w + '" height="' + c.h + '" rx="8" fill="#000"/>';
+        if (d.tipo !== "numero") contornos += '<rect class="contorno" x="' + c.x + '" y="' + c.y + '" width="' + c.w + '" height="' + c.h + '" rx="8" vector-effect="non-scaling-stroke"/>';
+        var lugar = posicionar(c, d.tipo, caixas, postos);
+        if (d.tipo === "seta") setas += seta(lugar.selo, lugar.ponta);
+        postos.push(lugar.selo);
+        selos += '<span class="selo" style="left:' + pct(lugar.selo[0], W) + ";top:" + pct(lugar.selo[1], H) + '">' + (i + 1) + "</span>";
+      });
+    }
+    var veu = cap.destaques.length && !opcoes.limpa
+      ? '<defs><mask id="' + id + '"><rect width="' + W + '" height="' + H + '" fill="#fff"/>' + furos + "</mask></defs>" +
+        '<rect class="veu" width="' + W + '" height="' + H + '" mask="url(#' + id + ')"/>'
+      : "";
+    return '<figure class="tela" style="--proporcao:' + W + "/" + H + '">' +
+      '<img src="' + esc(cap.foto) + '" alt="' + esc(opcoes.alt || "") + '" loading="' + (opcoes.ansioso ? "eager" : "lazy") + '" width="' + W + '" height="' + H + '">' +
+      '<svg viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="none" aria-hidden="true">' + veu + contornos + setas + "</svg>" +
+      selos + (opcoes.extra || "") + "</figure>";
+  }
+  function legenda(cap) {
+    if (!cap.destaques.length) return "";
+    return '<ol class="legenda">' + cap.destaques.map(function (d, i) {
+      return '<li><span class="selo">' + (i + 1) + "</span>" + esc(d.rotulo) + "</li>";
+    }).join("") + "</ol>";
+  }
+
+  // ---------- menu lateral ----------
+  function desenharMenu(rota) {
+    var f = feitos();
+    document.getElementById("menu-grupos").innerHTML = D.menu.map(function (g) {
+      return '<div><div class="grupo-titulo">' + esc(g.grupo) + '</div><ul class="grupo-itens">' + g.itens.map(function (it) {
+        var m = it.modulo && modulo(it.modulo);
+        var ativo = m ? rota.mod === m.id : rota.tela === it.href;
+        var link = '<a class="item-menu" href="#' + (m ? "m." + m.id : tokenDaTela(it.href)) + '"' + (ativo ? ' aria-current="page"' : "") + ">" +
+          "<span>" + esc(it.rotulo) + "</span>" +
+          (m ? '<span class="qtd">' + plural(m.licoes.length, "lição", "lições") + "</span>" : '<span class="breve">em breve</span>') + "</a>";
+        var sub = m && ativo ? '<ul class="sublicoes">' + m.licoes.map(function (l) {
+          return '<li><a href="#l.' + m.id + "." + l.id + '"' + (rota.licao === l.id ? ' aria-current="page"' : "") + ">" +
+            (f.indexOf(m.id + "/" + l.id) >= 0 ? '<span class="feito" aria-label="concluída">✓</span>' : "") + esc(l.titulo) + "</a></li>";
+        }).join("") + "</ul>" : "";
+        return "<li>" + link + sub + "</li>";
+      }).join("") + "</ul></div>";
+    }).join("");
+  }
+
+  // ---------- vistas ----------
+  function vistaInicio() {
+    var m0 = D.modulos[0], l0 = m0.licoes[0], cap0 = captura(l0, l0.passos[0]);
+    var semCurso = [];
+    D.menu.forEach(function (g) { g.itens.forEach(function (it) { if (!it.modulo) semCurso.push(it); }); });
+    return '<div class="coluna">' +
+      '<section class="abertura"><div class="coluna-texto" style="display:flex;flex-direction:column;gap:16px">' +
+      '<span class="rotulo-mono">Curso em imagens · versão ' + esc(D.versao) + "</span>" +
+      '<h1 class="titulo-pagina">Aprenda o DeskComm tela por tela.</h1>' +
+      '<p class="subtitulo">Cada lição mostra o sistema de verdade, com setas apontando onde clicar e o que acontece depois. Leia no seu ritmo ou treine no simulador antes de atender um cliente.</p>' +
+      '<div class="acoes"><a class="botao botao-primario" href="#l.' + m0.id + "." + l0.id + '">Começar pela ' + esc(m0.titulo) + '</a>' +
+      '<a class="botao botao-secundario" href="#s.' + m0.id + "." + l0.id + '">Abrir o simulador</a></div></div>' +
+      '<div class="abertura-figura">' + figura(cap0, { ansioso: true, alt: "Tela da " + m0.titulo + " do DeskComm" }) + "</div></section>" +
+      '<section class="como">' +
+      "<div><strong>O menu é o do sistema</strong><span>À esquerda estão os mesmos grupos e nomes que você vê no DeskComm. Clique numa tela para aprender sobre ela.</span></div>" +
+      "<div><strong>Ler ou simular</strong><span>No modo Ler, cada passo tem a foto da tela e a explicação. No Simulador, você clica no lugar certo para avançar.</span></div>" +
+      "<div><strong>Busque qualquer dúvida</strong><span>Digite na busca o que você quer fazer, como “transferir conversa” ou “nota interna”.</span></div></section>" +
+      '<section style="display:flex;flex-direction:column;gap:14px"><h2 class="secao-titulo">Módulos prontos</h2><div class="cartoes">' +
+      D.modulos.map(function (m) {
+        var n = m.licoes.reduce(function (a, l) { return a + l.passos.length; }, 0);
+        return '<a class="cartao" href="#m.' + m.id + '"><span class="rotulo-mono">' + esc(grupoDaTela(m.tela)) + "</span><h3>" + esc(m.titulo) + "</h3><p>" + esc(m.resumo) + '</p><div class="rodape-cartao"><span>' + plural(m.licoes.length, "lição", "lições") + "</span><span>" + plural(n, "passo ilustrado", "passos ilustrados") + "</span></div></a>";
+      }).join("") + "</div></section>" +
+      '<section style="display:flex;flex-direction:column;gap:14px"><h2 class="secao-titulo">Próximos módulos</h2>' +
+      '<p class="subtitulo">Estas telas ainda não têm lições. Por enquanto, veja para que cada uma serve.</p><ul class="em-breve">' +
+      semCurso.map(function (it) { return "<li><strong>" + esc(it.rotulo) + "</strong><span>" + esc(it.descricao) + "</span></li>"; }).join("") +
+      "</ul></section></div>";
+  }
+  function grupoDaTela(href) {
+    var g = D.menu.filter(function (g) { return g.itens.some(function (it) { return it.href === href; }); })[0];
+    return g ? g.grupo : "";
+  }
+  function vistaTela(href) {
+    var it = null, grupo = "";
+    D.menu.forEach(function (g) { g.itens.forEach(function (i) { if (i.href === href) { it = i; grupo = g.grupo; } }); });
+    if (!it) return vistaInicio();
+    return '<div class="coluna"><div class="coluna-texto" style="display:flex;flex-direction:column;gap:14px">' +
+      '<nav class="trilha"><a href="#inicio">Início</a><span>›</span><span>' + esc(grupo) + "</span></nav>" +
+      '<h1 class="titulo-pagina">' + esc(it.rotulo) + '</h1><p class="subtitulo">' + esc(it.descricao) + "</p>" +
+      '<p class="dica"><b>Em breve.</b> Esta tela ainda não tem lições ilustradas. Comece pelos módulos prontos enquanto preparamos este.</p>' +
+      '<div class="acoes"><a class="botao botao-secundario" href="#inicio">Ver módulos prontos</a></div></div></div>';
+  }
+  function vistaModulo(m) {
+    var f = feitos();
+    return '<div class="coluna"><div class="coluna-texto" style="display:flex;flex-direction:column;gap:14px">' +
+      '<nav class="trilha"><a href="#inicio">Início</a><span>›</span><span>' + esc(grupoDaTela(m.tela)) + "</span></nav>" +
+      '<h1 class="titulo-pagina">' + esc(m.titulo) + '</h1><p class="subtitulo">' + esc(m.resumo) + "</p></div>" +
+      '<div class="cartoes">' + m.licoes.map(function (l, i) {
+        var ok = f.indexOf(m.id + "/" + l.id) >= 0;
+        return '<a class="cartao" href="#l.' + m.id + "." + l.id + '"><span class="rotulo-mono">Lição ' + (i + 1) + (ok ? ' · <span class="feito">concluída</span>' : "") + "</span><h3>" + esc(l.titulo) + "</h3><p>" + esc(l.objetivo) + '</p><div class="rodape-cartao"><span>' + l.passos.length + " passos</span><span>Ler ou simular</span></div></a>";
+      }).join("") + "</div></div>";
+  }
+  function cabecalhoLicao(m, l, modo) {
+    var i = m.licoes.indexOf(l);
+    return '<div class="cabeca-licao coluna-texto">' +
+      '<nav class="trilha"><a href="#inicio">Início</a><span>›</span><a href="#m.' + m.id + '">' + esc(m.titulo) + "</a><span>›</span><span>Lição " + (i + 1) + " de " + m.licoes.length + "</span></nav>" +
+      '<h1 class="titulo-pagina">' + esc(l.titulo) + '</h1><p class="subtitulo">' + esc(l.objetivo) + "</p>" +
+      '<div class="alternador" role="tablist" aria-label="Modo da lição">' +
+      '<a href="#l.' + m.id + "." + l.id + '"' + (modo === "ler" ? ' aria-current="page"' : "") + ">Ler</a>" +
+      '<a href="#s.' + m.id + "." + l.id + '"' + (modo === "simular" ? ' aria-current="page"' : "") + ">Simular</a></div></div>";
+  }
+  function proximaLicao(m, l) {
+    var i = m.licoes.indexOf(l);
+    return m.licoes[i + 1] || null;
+  }
+  function vistaLicao(m, l) {
+    var prox = proximaLicao(m, l);
+    return '<div class="coluna">' + cabecalhoLicao(m, l, "ler") +
+      l.passos.map(function (p, i) {
+        var cap = captura(l, p);
+        return '<section class="passo" id="passo-' + esc(p.id) + '"><div class="passo-num" aria-hidden="true">' + String(i + 1).padStart(2, "0") + "</div>" +
+          '<div class="passo-corpo"><span class="rotulo-mono">Passo ' + (i + 1) + " de " + l.passos.length + "</span><h2>" + esc(p.titulo) + "</h2>" +
+          '<p class="texto">' + esc(p.texto) + "</p>" + figura(cap, { alt: p.titulo, ansioso: i === 0 }) + '<div class="sob-figura">' + legenda(cap) + '<span class="ampliar-dica">Clique na foto para ampliar</span></div>' +
+          (p.dica ? '<p class="dica"><b>Dica:</b> ' + esc(p.dica) + "</p>" : "") + "</div></section>";
+      }).join("") +
+      '<div class="fim-licao coluna-texto"><h2 class="secao-titulo">Pronto para praticar?</h2><p class="subtitulo">Refaça esta lição no simulador: você clica nos lugares certos, como faria no sistema.</p>' +
+      '<div class="acoes"><a class="botao botao-primario" href="#s.' + m.id + "." + l.id + '">Treinar no simulador</a>' +
+      '<button class="botao botao-secundario" type="button" id="marcar-feita">Marcar como concluída</button>' +
+      (prox ? '<a class="botao botao-secundario" href="#l.' + m.id + "." + prox.id + '">Próxima: ' + esc(prox.titulo) + "</a>" : "") + "</div></div></div>";
+  }
+
+  // ---------- simulador ----------
+  var sim = null;
+  function vistaSimulador(m, l) {
+    sim = { m: m, l: l, i: 0 };
+    return '<div class="coluna">' + cabecalhoLicao(m, l, "simular") + '<div class="simulador" id="simulador"></div></div>';
+  }
+  function desenharSimulador() {
+    var alvo = document.getElementById("simulador");
+    if (!alvo || !sim) return;
+    var l = sim.l, m = sim.m;
+    if (sim.i >= l.passos.length) {
+      marcarFeito(m.id + "/" + l.id);
+      var prox = proximaLicao(m, l);
+      alvo.innerHTML = figura(captura(l, l.passos[l.passos.length - 1]), { limpa: true, alt: "Fim da lição" }) +
+        '<div class="painel"><span class="rotulo-mono">Lição concluída</span><h2>Você fez todos os passos.</h2><p>Agora é com você no sistema de verdade. Se esquecer algo, volte aqui ou use a busca.</p>' +
+        '<div class="acoes">' + (prox ? '<a class="botao botao-primario" href="#s.' + m.id + "." + prox.id + '">Próxima lição</a>' : "") +
+        '<button class="botao botao-secundario" type="button" data-sim="reiniciar">Repetir</button></div></div>';
+      desenharMenu(rotaAtual());
+      return;
+    }
+    var p = l.passos[sim.i], cap = captura(l, p);
+    var botaoAlvo = cap.clicar
+      ? '<button class="alvo-clique" type="button" data-sim="acertou" aria-label="Clique aqui para continuar" style="left:' + pct(cap.clicar.x - 4, W) + ";top:" + pct(cap.clicar.y - 4, H) + ";width:" + pct(cap.clicar.w + 8, W) + ";height:" + pct(cap.clicar.h + 8, H) + '"></button>'
+      : "";
+    alvo.innerHTML = figura(cap, { limpa: true, alt: p.titulo, extra: botaoAlvo, ansioso: true }) +
+      '<div class="painel" aria-live="polite"><div class="progresso" aria-hidden="true">' +
+      l.passos.map(function (_, k) { return '<span class="' + (k < sim.i ? "ok" : "") + '"></span>'; }).join("") + "</div>" +
+      '<span class="rotulo-mono">Passo ' + (sim.i + 1) + " de " + l.passos.length + "</span><h2>" + esc(p.titulo) + "</h2><p>" + esc(p.texto) + "</p>" +
+      (cap.clicar ? '<p class="rotulo-mono" style="text-transform:none;letter-spacing:0">Clique no ponto que está piscando para continuar.</p>' : "") +
+      '<p class="recado" id="recado"></p><div class="acoes">' +
+      (sim.i > 0 ? '<button class="botao botao-secundario" type="button" data-sim="voltar">Voltar</button>' : "") +
+      '<button class="botao ' + (cap.clicar ? "botao-secundario" : "botao-primario") + '" type="button" data-sim="avancar">' + (cap.clicar ? "Pular" : "Continuar") + "</button></div></div>";
+  }
+  vista.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-sim]");
+    if (b && sim) {
+      var acao = b.getAttribute("data-sim");
+      if (acao === "acertou" || acao === "avancar") sim.i++;
+      else if (acao === "voltar") sim.i = Math.max(0, sim.i - 1);
+      else if (acao === "reiniciar") sim.i = 0;
+      desenharSimulador();
+      return;
+    }
+    var ampliar = e.target.closest(".passo .tela");
+    if (ampliar) {
+      var dlg = document.getElementById("ampliada");
+      dlg.querySelector(".ampliada-conteudo").innerHTML = ampliar.outerHTML;
+      dlg.showModal();
+      return;
+    }
+    var tela = e.target.closest("#simulador .tela");
+    if (tela && sim && captura(sim.l, sim.l.passos[sim.i] || {})?.clicar) {
+      tela.classList.remove("errou"); void tela.offsetWidth; tela.classList.add("errou");
+      var r = document.getElementById("recado");
+      if (r) r.textContent = "Ainda não é aí. Procure o ponto piscando na tela.";
+      return;
+    }
+    if (e.target.id === "marcar-feita") {
+      var rota = rotaAtual();
+      marcarFeito(rota.mod + "/" + rota.licao);
+      e.target.textContent = "Concluída ✓";
+      desenharMenu(rota);
+    }
+  });
+
+  // ---------- busca ----------
+  var indice = [];
+  D.modulos.forEach(function (m) {
+    m.licoes.forEach(function (l) {
+      indice.push({ onde: m.titulo, titulo: l.titulo, trecho: l.objetivo, href: "#l." + m.id + "." + l.id,
+        campos: [[l.titulo, 6], [l.busca.join(" "), 5], [l.objetivo, 2]] });
+      l.passos.forEach(function (p) {
+        var cap = captura(l, p);
+        indice.push({ onde: m.titulo + " › " + l.titulo, titulo: p.titulo, trecho: p.texto, href: "#l." + m.id + "." + l.id + "." + p.id,
+          campos: [[p.titulo, 4], [p.texto + " " + (p.dica || ""), 1], [cap ? cap.destaques.map(function (d) { return d.rotulo; }).join(" ") : "", 2]] });
+      });
+    });
+  });
+  D.menu.forEach(function (g) {
+    g.itens.forEach(function (it) {
+      if (!it.modulo) indice.push({ onde: g.grupo + " · em breve", titulo: it.rotulo, trecho: it.descricao, href: "#" + tokenDaTela(it.href), campos: [[it.rotulo, 5], [it.descricao, 1]] });
+    });
+  });
+  indice.forEach(function (d) { d.campos = d.campos.map(function (c) { return [normalizar(c[0]), c[1]]; }); });
+
+  // Todos os termos precisam aparecer (por prefixo de palavra); o peso do campo decide a ordem.
+  function buscar(consulta) {
+    var termos = normalizar(consulta).split(/[^a-z0-9]+/).filter(function (t) { return t.length > 1; });
+    if (!termos.length) return [];
+    return indice.map(function (d) {
+      var total = 0;
+      for (var i = 0; i < termos.length; i++) {
+        var re = new RegExp("(^|[^a-z0-9])" + termos[i]), melhor = 0;
+        d.campos.forEach(function (c) { if (re.test(c[0]) && c[1] > melhor) melhor = c[1]; });
+        if (!melhor) return null;
+        total += melhor;
+      }
+      return { d: d, nota: total };
+    }).filter(Boolean).sort(function (a, b) { return b.nota - a.nota; }).slice(0, 8).map(function (r) { return r.d; });
+  }
+  var campoBusca = document.getElementById("busca"), lista = document.getElementById("resultados"), sel = -1, achados = [];
+  function mostrarResultados() {
+    achados = buscar(campoBusca.value); sel = achados.length ? 0 : -1;
+    if (!campoBusca.value.trim()) { lista.hidden = true; campoBusca.setAttribute("aria-expanded", "false"); return; }
+    lista.innerHTML = achados.length
+      ? achados.map(function (d, i) {
+          return '<li role="option" aria-selected="' + (i === sel) + '"><a href="' + d.href + '"><div class="res-onde">' + esc(d.onde) + '</div><div class="res-titulo">' + esc(d.titulo) + '</div><div class="res-trecho">' + esc(d.trecho) + "</div></a></li>";
+        }).join("")
+      : '<li class="res-vazio">Nada encontrado para “' + esc(campoBusca.value) + "”. Tente outra palavra, como “assumir” ou “etiqueta”.</li>";
+    lista.hidden = false; campoBusca.setAttribute("aria-expanded", "true");
+  }
+  function fecharBusca() { lista.hidden = true; campoBusca.setAttribute("aria-expanded", "false"); }
+  campoBusca.addEventListener("input", mostrarResultados);
+  campoBusca.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      if (!achados.length) return;
+      e.preventDefault();
+      sel = (sel + (e.key === "ArrowDown" ? 1 : -1) + achados.length) % achados.length;
+      Array.prototype.forEach.call(lista.children, function (li, i) { li.setAttribute("aria-selected", String(i === sel)); });
+    } else if (e.key === "Enter" && sel >= 0) {
+      location.hash = achados[sel].href; fecharBusca(); campoBusca.blur();
+    } else if (e.key === "Escape") { fecharBusca(); campoBusca.blur(); }
+  });
+  lista.addEventListener("click", function (e) { if (e.target.closest("a")) fecharBusca(); });
+  document.addEventListener("click", function (e) { if (!e.target.closest(".busca")) fecharBusca(); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "/" && document.activeElement !== campoBusca && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) {
+      e.preventDefault(); campoBusca.focus();
+    }
+  });
+
+  // ---------- menu no celular ----------
+  var menu = document.getElementById("menu"), botaoMenu = document.getElementById("botao-menu");
+  botaoMenu.addEventListener("click", function () {
+    var aberto = menu.classList.toggle("aberto");
+    botaoMenu.setAttribute("aria-expanded", String(aberto));
+  });
+  menu.addEventListener("click", function (e) {
+    if (e.target.closest("a")) { menu.classList.remove("aberto"); botaoMenu.setAttribute("aria-expanded", "false"); }
+  });
+
+  // ---------- rotas (#inicio, #m.inbox, #l.inbox.licao[.passo], #s.inbox.licao, #t.app~radar) ----------
+  function rotaAtual() {
+    var h = decodeURIComponent(location.hash.slice(1)), partes = h.split(".");
+    var r = { tipo: partes[0] || "inicio", mod: partes[1], licao: partes[2], passo: partes[3] };
+    if (r.tipo === "t") r.tela = "/" + h.slice(2).split("~").join("/");
+    return r;
+  }
+  function render() {
+    var r = rotaAtual(), m = modulo(r.mod), l = licaoDe(m, r.licao), html;
+    sim = null;
+    if (r.tipo === "m" && m) html = vistaModulo(m);
+    else if (r.tipo === "l" && l) html = vistaLicao(m, l);
+    else if (r.tipo === "s" && l) html = vistaSimulador(m, l);
+    else if (r.tipo === "t") html = vistaTela(r.tela);
+    else html = vistaInicio();
+    vista.innerHTML = html;
+    desenharMenu(r);
+    if (sim) desenharSimulador();
+    var foco = r.passo && document.getElementById("passo-" + r.passo);
+    if (foco) foco.scrollIntoView({ block: "start" }); else window.scrollTo(0, 0);
+    var t = l ? l.titulo : m ? m.titulo : "";
+    document.title = t ? t + " · Curso DeskComm" : "Curso DeskComm";
+  }
+  var ampliada = document.getElementById("ampliada");
+  ampliada.addEventListener("click", function (e) { if (e.target === ampliada || e.target.closest("[data-fechar]")) ampliada.close(); });
+  window.addEventListener("hashchange", function () { if (ampliada.open) ampliada.close(); render(); });
+  document.getElementById("rodape").innerHTML = '<div class="coluna"><span>Fotos tiradas do DeskComm versão ' + esc(D.versao) + " em " + esc(D.gerado.split("-").reverse().join("/")) + ", numa empresa de demonstração. Os nomes e conversas são fictícios.</span></div>";
+  render();
+})();
+
+</script>

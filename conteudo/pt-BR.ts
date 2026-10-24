@@ -80,6 +80,15 @@ export const ptBR: Conteudo = {
     atualizarTitulo: "Atualizar não quebra",
     atualizarTexto: "faz backup do banco antes, reaplica o schema de forma idempotente e confere a saúde no fim. O caminho de atualização é testado no CI — não é só documentado.",
   },
+  curso: {
+    sobretitulo: "Curso em imagens",
+    titulo: "Instalou? Agora aprenda a usar, tela por tela.",
+    sub: "Cada lição mostra a tela de verdade do DeskComm, com setas apontando onde clicar e o que acontece depois. Leia no seu ritmo ou treine no simulador antes de atender o primeiro cliente.",
+    itens: ["Começa pela Inbox: do primeiro clique às ações em lote", "Simulador: você clica no lugar certo para avançar", "Busca em todo o conteúdo, com a dúvida do jeito que você falaria"],
+    cta: "Abrir o curso",
+    nota: "Gratuito. As fotos são de uma clínica de demonstração, com nomes e conversas fictícios.",
+    alt: "Tela da Inbox do DeskComm mostrando o resumo que a IA deixa ao passar um cliente para a equipe",
+  },
   preco: {
     sobretitulo: "Quanto custa",
     titulo: "O software é grátis. Você paga o servidor.",
@@ -152,7 +161,7 @@ export const ptBR: Conteudo = {
   rodape: {
     colunas: [
       { titulo: "Produto", itens: [{ rotulo: "Como funciona", href: "#como-funciona" }, { rotulo: "Preço", href: "#preco" }, { rotulo: "Instalar", href: "#instalar" }] },
-      { titulo: "Documentação", itens: [{ rotulo: "Guias do assistente", href: "@guias" }, { rotulo: "Guia de instalação", href: "/blob/main/docs/SETUP.md" }, { rotulo: "Para agências", href: "/blob/main/docs/white-label.md" }, { rotulo: "Arquitetura", href: "/blob/main/ARCHITECTURE.md" }, { rotulo: "Doutrina do sistema vivo", href: "/blob/main/docs/doctrine/sistema-vivo.md" }] },
+      { titulo: "Documentação", itens: [{ rotulo: "Guias do assistente", href: "@guias" }, { rotulo: "Curso em imagens", href: "@curso" }, { rotulo: "Guia de instalação", href: "/blob/main/docs/SETUP.md" }, { rotulo: "Para agências", href: "/blob/main/docs/white-label.md" }, { rotulo: "Arquitetura", href: "/blob/main/ARCHITECTURE.md" }, { rotulo: "Doutrina do sistema vivo", href: "/blob/main/docs/doctrine/sistema-vivo.md" }] },
       { titulo: "Comunidade", itens: [{ rotulo: "Discussions", href: "/discussions" }, { rotulo: "Issues", href: "/issues" }, { rotulo: "Contribuir", href: "/blob/main/CONTRIBUTING.md" }] },
       { titulo: "Projeto", itens: [{ rotulo: "Licença MIT", href: "/blob/main/LICENSE" }, { rotulo: "Changelog", href: "@changelog" }, { rotulo: "Segurança", href: "/blob/main/SECURITY.md" }] },
     ],

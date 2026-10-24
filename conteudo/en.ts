@@ -85,6 +85,15 @@ export const en: Conteudo = {
     atualizarTitulo: "Updating doesn't break it",
     atualizarTexto: "backs up the database first, reapplies the schema idempotently and health-checks at the end. The upgrade path is tested in CI — not merely documented.",
   },
+  curso: {
+    sobretitulo: "Picture course",
+    titulo: "Installed it? Now learn it, screen by screen.",
+    sub: "Each lesson shows the real DeskComm screen, with arrows pointing where to click and what happens next. Read at your own pace or practice in the simulator before your first customer. The course is in Portuguese, the language of the screenshots.",
+    itens: ["Starts with the Inbox: from the first click to bulk actions", "Simulator: click the right spot to move forward", "Search across every lesson"],
+    cta: "Open the course (Portuguese)",
+    nota: "Free. Screenshots come from a demo clinic, with made-up names and conversations.",
+    alt: "DeskComm Inbox screen showing the summary the AI leaves when it hands a customer to the team",
+  },
   preco: {
     sobretitulo: "Pricing",
     titulo: "The software is free. You pay for the server.",
@@ -157,7 +166,7 @@ export const en: Conteudo = {
   rodape: {
     colunas: [
       { titulo: "Product", itens: [{ rotulo: "How it works", href: "#como-funciona" }, { rotulo: "Pricing", href: "#preco" }, { rotulo: "Install", href: "#instalar" }] },
-      { titulo: "Documentation", itens: [{ rotulo: "Assistant guides", href: "@guias" }, { rotulo: "Setup guide", href: "/blob/main/docs/SETUP.md" }, { rotulo: "For agencies", href: "/blob/main/docs/white-label.md" }, { rotulo: "Architecture", href: "/blob/main/ARCHITECTURE.md" }, { rotulo: "Living system doctrine", href: "/blob/main/docs/doctrine/sistema-vivo.md" }] },
+      { titulo: "Documentation", itens: [{ rotulo: "Assistant guides", href: "@guias" }, { rotulo: "Picture course (Portuguese)", href: "@curso" }, { rotulo: "Setup guide", href: "/blob/main/docs/SETUP.md" }, { rotulo: "For agencies", href: "/blob/main/docs/white-label.md" }, { rotulo: "Architecture", href: "/blob/main/ARCHITECTURE.md" }, { rotulo: "Living system doctrine", href: "/blob/main/docs/doctrine/sistema-vivo.md" }] },
       { titulo: "Community", itens: [{ rotulo: "Discussions", href: "/discussions" }, { rotulo: "Issues", href: "/issues" }, { rotulo: "Contributing", href: "/blob/main/CONTRIBUTING.md" }] },
       { titulo: "Project", itens: [{ rotulo: "MIT licence", href: "/blob/main/LICENSE" }, { rotulo: "Changelog", href: "@changelog" }, { rotulo: "Security", href: "/blob/main/SECURITY.md" }] },
     ],
