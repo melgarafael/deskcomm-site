@@ -16,7 +16,7 @@
  * mensagem do commit. O que ela proíbe é a volta SILENCIOSA.
  */
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { test } from "node:test";
 
 import { en } from "../conteudo/en.ts";
@@ -84,4 +84,13 @@ test("r1: o link permanente do item não depende de o item ter título", () => {
   const condicional = fonte.indexOf("{it.titulo ? (");
   assert.ok(link !== -1 && condicional !== -1, "âncoras do teste sumiram do componente");
   assert.ok(link < condicional, "dentro do `h3`, o cartão sem título não oferece o link — 64 cartões hoje");
+});
+
+test("curso: a foto que a home mostra existe no curso publicado", () => {
+  // O curso é gerado em outro repositório e copiado para public/curso; quando os nomes das fotos
+  // mudaram (a chave passou a levar o módulo), a home ficou apontando para um arquivo que não existia.
+  const foto = /capturas\/([a-z0-9-]+\.jpg)/.exec(ler("components/Pagina.tsx"));
+  assert.ok(foto, "a seção do curso na home não cita foto nenhuma — reveja a cerca");
+  assert.ok(existsSync(new URL(`../public/curso/capturas/${foto[1]}`, import.meta.url)), `public/curso/capturas/${foto[1]} não existe`);
+  assert.ok(existsSync(new URL("../public/curso/index.html", import.meta.url)), "o curso não foi publicado em public/curso");
 });

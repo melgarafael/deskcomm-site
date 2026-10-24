@@ -84,7 +84,7 @@ export const ptBR: Conteudo = {
     sobretitulo: "Curso em imagens",
     titulo: "Instalou? Agora aprenda a usar, tela por tela.",
     sub: "Cada lição mostra a tela de verdade do DeskComm, com setas apontando onde clicar e o que acontece depois. Leia no seu ritmo ou treine no simulador antes de atender o primeiro cliente.",
-    itens: ["Começa pela Inbox: do primeiro clique às ações em lote", "Simulador: você clica no lugar certo para avançar", "Busca em todo o conteúdo, com a dúvida do jeito que você falaria"],
+    itens: ["Todas as telas do menu: da Inbox e dos funis aos agentes de IA e às métricas", "Simulador: você clica no lugar certo para avançar", "Busca em todo o conteúdo, com a dúvida do jeito que você falaria"],
     cta: "Abrir o curso",
     nota: "Gratuito. As fotos são de uma clínica de demonstração, com nomes e conversas fictícios.",
     alt: "Tela da Inbox do DeskComm mostrando o resumo que a IA deixa ao passar um cliente para a equipe",

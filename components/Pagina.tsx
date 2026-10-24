@@ -181,7 +181,7 @@ export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
                   ))}
                   <span className="ml-1.5 font-mono text-xs text-text-muted">deskcomm.com.br{CURSO}</span>
                 </div>
-                <Image src={`${CURSO}/capturas/assumir-e-responder--p1.jpg`} alt={c.curso.alt} width={1440} height={900} className="h-auto w-full" />
+                <Image src={`${CURSO}/capturas/inbox--assumir-e-responder--p1.jpg`} alt={c.curso.alt} width={1440} height={900} className="h-auto w-full" />
               </a>
             </div>
           </div>

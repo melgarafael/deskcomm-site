@@ -89,7 +89,7 @@ export const en: Conteudo = {
     sobretitulo: "Picture course",
     titulo: "Installed it? Now learn it, screen by screen.",
     sub: "Each lesson shows the real DeskComm screen, with arrows pointing where to click and what happens next. Read at your own pace or practice in the simulator before your first customer. The course is in Portuguese, the language of the screenshots.",
-    itens: ["Starts with the Inbox: from the first click to bulk actions", "Simulator: click the right spot to move forward", "Search across every lesson"],
+    itens: ["Every screen in the menu: from the Inbox and pipelines to AI agents and metrics", "Simulator: click the right spot to move forward", "Search across every lesson"],
     cta: "Open the course (Portuguese)",
     nota: "Free. Screenshots come from a demo clinic, with made-up names and conversations.",
     alt: "DeskComm Inbox screen showing the summary the AI leaves when it hands a customer to the team",
