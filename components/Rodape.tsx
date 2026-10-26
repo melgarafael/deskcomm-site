@@ -1,6 +1,6 @@
 import type { Conteudo, Idioma } from "@/conteudo";
 import { TEXTOS_CHANGELOG, formatarData } from "@/conteudo/changelog";
-import { CURSO, ROTAS, ancoraDaHome, type PaginaId } from "@/conteudo/rotas";
+import { CURSO, INSTALACAO, ROTAS, ancoraDaHome, type PaginaId } from "@/conteudo/rotas";
 
 import { GITHUB } from "./Cabecalho";
 import { Simbolo } from "./Marca";
@@ -18,12 +18,13 @@ function resolver(href: string, idioma: Idioma, naHome: boolean): string {
   if (href === "@guias") return ROTAS.guias[idioma];
   if (href === "@changelog") return ROTAS.changelog[idioma];
   if (href === "@curso") return CURSO;
+  if (href === "@instalacao") return INSTALACAO;
   return `${GITHUB}${href}`;
 }
 
 /** `atualizadoEm` (AAAA-MM-DD) é de cada página: uma data só para o site inteiro fazia /guias e
  *  /changelog, criadas em setembro, dizerem que foram atualizadas em julho. */
-export function Rodape({ c, idioma, pagina, atualizadoEm }: { c: Conteudo; idioma: Idioma; pagina: PaginaId; atualizadoEm: string }) {
+export function Rodape({ c, idioma, pagina, atualizadoEm }: { c: Conteudo; idioma: Idioma; pagina: PaginaId | "instalacao"; atualizadoEm: string }) {
   const naHome = pagina === "home";
   return (
     <footer className="border-t border-border">

@@ -34,4 +34,11 @@ sed -n '/^on:/,/^jobs:/p' .github/workflows/ci.yml
 
 ## Estado
 
+O guia público de instalação fica em `/instalar`, com acesso pelo cabeçalho, home e
+rodapé em português. O conteúdo original veio do Notion e foi conferido contra o
+`hostgator-setup-kit` do CRM em 26/10/2026. O caminho principal usa um token pessoal
+do Supabase, lido em campo oculto no terminal da VPS, antes do instalador.
+Conteúdo e comandos: `conteudo/instalacao.ts` e `components/instalacao/`.
+O progresso guarda apenas ids de etapas no navegador; a página não recebe credenciais.
+
 Esqueleto com `noindex`. Sai quando a LP estiver pronta.

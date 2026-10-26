@@ -17,6 +17,10 @@
     background: theme("colors.accent.100");
     color: theme("colors.accent.700");
   }
+  :focus-visible {
+    outline: 2px solid theme("colors.accent.600");
+    outline-offset: 4px;
+  }
 }
 
 /* Doutrina: prefers-reduced-motion nunca remove conteúdo — só o movimento.

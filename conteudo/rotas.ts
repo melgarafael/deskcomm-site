@@ -29,6 +29,9 @@ export const ROTAS: Record<PaginaId, Record<Idioma, string>> = {
  */
 export const CURSO = "/curso";
 
+/** Guia editorial em português, como o curso: não promete traduções inexistentes. */
+export const INSTALACAO = "/instalar";
+
 /** Âncora de uma seção da home, válida de qualquer página: `/#instalar`, `/en#instalar`. */
 export function ancoraDaHome(idioma: Idioma, fragmento: string, naHome: boolean): string {
   if (naHome) return fragmento;
