@@ -4,7 +4,7 @@ import type { Conteudo, Idioma } from "@/conteudo";
 import { IDIOMAS } from "@/conteudo";
 
 import { Jornada } from "./Jornada";
-import { CURSO } from "@/conteudo/rotas";
+import { CURSO, INSTALACAO } from "@/conteudo/rotas";
 
 import { Cabecalho, GITHUB } from "./Cabecalho";
 import { Mesa } from "./mesa/MesaEstatica";
@@ -34,7 +34,7 @@ export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
                 </h1>
                 <p className="mt-6 max-w-[34ch] text-lg leading-relaxed text-text-muted">{c.hero.sub}</p>
                 <div className="mt-9 flex flex-wrap items-center gap-3">
-                  <a href={href("#instalar")} className="rounded-[4px] bg-accent-600 px-5 py-3 text-sm font-bold text-white transition-colors duration-120 ease-out-fast hover:bg-accent-700">
+                  <a href={idioma === "pt-BR" ? INSTALACAO : href("#instalar")} className="rounded-[4px] bg-accent-600 px-5 py-3 text-sm font-bold text-white transition-colors duration-120 ease-out-fast hover:bg-accent-700">
                     {c.hero.ctaPrimario}
                   </a>
                   <a href={GITHUB} className="rounded-[4px] border border-border px-5 py-3 text-sm font-bold transition-colors duration-120 ease-out-fast hover:border-accent-300 hover:bg-accent-50">
@@ -114,6 +114,7 @@ export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
                 <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent-600">{c.instalar.sobretitulo}</p>
                 <h2 className="mt-5 text-pretty text-[2rem] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[2.6rem]">{c.instalar.titulo}</h2>
                 <p className="mt-6 max-w-[40ch] text-lg leading-relaxed text-text-muted">{c.instalar.sub}</p>
+                {idioma === "pt-BR" && <a href={INSTALACAO} className="mt-6 inline-flex min-h-11 items-center rounded-[4px] bg-accent-600 px-4 text-sm font-bold text-white hover:bg-accent-700">Abrir o guia de instalação passo a passo →</a>}
                 <dl className="mt-10 space-y-6">
                   {c.instalar.apoio.map((a) => (
                     <div key={a.titulo}>

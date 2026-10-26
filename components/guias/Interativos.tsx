@@ -52,7 +52,7 @@ export function Comando({
       <span aria-hidden className={`select-none py-3 pl-3.5 pr-1 font-mono text-[13px] ${escuro ? "text-accent-300" : "text-accent-600"}`}>
         {prefixo}
       </span>
-      <pre ref={pre} className="min-w-0 flex-1 whitespace-pre-wrap break-all py-3 pl-1.5 pr-3 font-mono text-[13px] leading-relaxed">
+      <pre ref={pre} className="min-w-0 flex-1 whitespace-pre-wrap break-words py-3 pl-1.5 pr-3 font-mono text-[13px] leading-relaxed">
         <code>{comando}</code>
       </pre>
       <button

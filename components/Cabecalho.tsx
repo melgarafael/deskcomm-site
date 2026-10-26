@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import type { Conteudo, Idioma } from "@/conteudo";
 import { IDIOMAS } from "@/conteudo";
-import { ROTAS, ancoraDaHome, type PaginaId } from "@/conteudo/rotas";
+import { INSTALACAO, ROTAS, ancoraDaHome, type PaginaId } from "@/conteudo/rotas";
 
 import { Logotipo } from "./Marca";
 import { StarCount } from "./StarCount";
@@ -29,10 +29,11 @@ export const GITHUB = "https://github.com/melgarafael/DeskcommCRM";
  */
 /** `sufixo`: o resto do caminho depois da página (`/1.27.2` numa versão), para o seletor de idioma
  *  levar à mesma versão, e não à lista — o mesmo sufixo que `alternatesDe` põe no hreflang. */
-export function Cabecalho({ c, idioma, pagina, sufixo = "" }: { c: Conteudo; idioma: Idioma; pagina: PaginaId; sufixo?: string }) {
+export function Cabecalho({ c, idioma, pagina, sufixo = "" }: { c: Conteudo; idioma: Idioma; pagina: PaginaId | "instalacao"; sufixo?: string }) {
   const naHome = pagina === "home";
   const ancora = (frag: string) => ancoraDaHome(idioma, frag, naHome);
   const guiasAtiva = pagina === "guias";
+  const instalar = idioma === "pt-BR" ? INSTALACAO : ancora("#instalar");
 
   return (
     <header className="sticky top-0 z-50 border-b border-transparent bg-bg/90 backdrop-blur-[2px]">
@@ -44,7 +45,7 @@ export function Cabecalho({ c, idioma, pagina, sufixo = "" }: { c: Conteudo; idi
           {[
             [ancora("#como-funciona"), c.nav.comoFunciona],
             [ancora("#jornada"), c.nav.prova],
-            [ancora("#instalar"), c.nav.instalar],
+            [instalar, c.nav.instalar],
             [ancora("#preco"), c.nav.preco],
           ].map(([h, l]) => (
             <a key={h} href={h} className="whitespace-nowrap text-sm text-text-muted transition-colors duration-150 ease-out-fast hover:text-text">
@@ -55,7 +56,7 @@ export function Cabecalho({ c, idioma, pagina, sufixo = "" }: { c: Conteudo; idi
         <div className="ml-auto flex items-center gap-2 sm:gap-2.5">
           {/* Troca de idioma: links de verdade, não estado. Cada idioma tem URL
               própria — e aponta para a MESMA página no outro idioma. */}
-          <nav aria-label={c.nav.idioma} className="hidden items-center gap-1 md:flex">
+          {pagina !== "instalacao" && <nav aria-label={c.nav.idioma} className="hidden items-center gap-1 md:flex">
             {IDIOMAS.map((i) => (
               <a
                 key={i.codigo}
@@ -70,7 +71,7 @@ export function Cabecalho({ c, idioma, pagina, sufixo = "" }: { c: Conteudo; idi
                 {i.codigo === "pt-BR" ? "pt" : i.codigo}
               </a>
             ))}
-          </nav>
+          </nav>}
           <a
             href={ROTAS.guias[idioma]}
             aria-label={c.nav.guias}
@@ -96,7 +97,7 @@ export function Cabecalho({ c, idioma, pagina, sufixo = "" }: { c: Conteudo; idi
               <StarCount />
             </Suspense>
           </a>
-          <a href={ancora("#instalar")} className="flex h-9 items-center whitespace-nowrap rounded-[4px] bg-accent-600 px-3 text-sm font-bold text-white transition-colors duration-150 ease-out-fast hover:bg-accent-700 sm:px-4">
+          <a href={instalar} aria-current={pagina === "instalacao" ? "page" : undefined} className="flex h-9 items-center whitespace-nowrap rounded-[4px] bg-accent-600 px-3 text-sm font-bold text-white transition-colors duration-150 ease-out-fast hover:bg-accent-700 sm:px-4">
             {c.nav.ctaInstalar}
           </a>
         </div>
