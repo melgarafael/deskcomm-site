@@ -45,7 +45,7 @@ function Etapa({ numero, introducao, children, resultado }: { numero: number; in
       <div className="mt-7 space-y-6 sm:pl-14">{children}</div>
       <div className="mt-8 flex flex-col gap-4 rounded-lg bg-surface-elevated p-4 sm:ml-14 sm:p-5">
         <p className="text-sm leading-relaxed"><span className="font-bold text-accent-700">Tudo certo quando: </span>{resultado}</p>
-        {proxima ? <a href={`#${proxima.id}`} className="w-fit text-sm font-bold text-accent-700 underline decoration-accent-200 underline-offset-4">Próximo: {proxima.curto} →</a> : <a href={CURSO} className="w-fit text-sm font-bold text-accent-700 underline decoration-accent-200 underline-offset-4">Agora, aprenda a usar no curso em imagens →</a>}
+        {proxima ? <a href={`#${proxima.id}`} className="w-fit text-sm font-bold text-accent-700 underline decoration-accent-200 underline-offset-4">Próximo: {proxima.curto} →</a> : <a href={CURSO} className="inline-flex min-h-11 w-fit items-center rounded bg-accent-600 px-4 py-3 text-sm font-bold text-white hover:bg-accent-700">Próximo passo: começar o curso visual →</a>}
       </div>
     </section>
   );
@@ -204,6 +204,14 @@ export function PaginaInstalacao() {
                 <p className="leading-relaxed">Quer trocar a IA depois? A configuração de provedores fica na tela, sem reinstalar o sistema. O <Link href={CURSO}>curso em imagens</Link> mostra onde clicar e como preparar o atendimento.</p>
               </Etapa>
 
+              <section id="aprender-a-usar" aria-labelledby="titulo-curso-visual" className="mb-12 scroll-mt-24 rounded-xl bg-accent-900 p-6 text-white sm:p-8">
+                <p className="text-sm font-bold text-accent-200">Instalação concluída</p>
+                <h2 id="titulo-curso-visual" className="mt-3 text-balance text-2xl font-bold sm:text-3xl">Seu próximo passo é aprender a usar.</h2>
+                <p className="mt-4 max-w-[54ch] text-pretty leading-relaxed text-accent-100">Continue no curso visual gratuito. Com telas reais e indicações de onde clicar, você aprende a atender pela Inbox, organizar o funil e configurar os agentes de IA.</p>
+                <a href={CURSO} className="mt-6 inline-flex min-h-12 items-center rounded bg-bg px-5 py-3 text-sm font-bold text-accent-900 hover:bg-accent-100 focus-visible:outline-white">Começar o curso visual →</a>
+                <p className="mt-4 text-sm leading-relaxed text-accent-200">Abra o CRM ao lado do curso e acompanhe no seu ritmo. A primeira lição apresenta a Inbox.</p>
+              </section>
+
               <section id="manutencao" className="scroll-mt-24 border-t border-border py-12">
                 <h2 className="text-balance text-2xl font-bold tracking-[-0.02em]">Instalou? Cuide do que é seu.</h2>
                 <p className="mt-4 leading-relaxed text-text-muted">Para atualizar, procure <strong>“Nova versão”</strong> no rodapé do menu do CRM e clique em <strong>“Atualizar agora”</strong>. A tela mostra a mudança e acompanha a atualização, com backup antes.</p>
@@ -224,11 +232,6 @@ export function PaginaInstalacao() {
                 <p className="mt-6 text-sm leading-relaxed text-text-muted">Ainda precisa de ajuda? Consulte os <Link href="/guias">guias dos assistentes</Link> ou o <Link href={`${GITHUB}/blob/main/.agents/skills/deskcomm-instalar/references/problemas-e-armadilhas.md`}>catálogo de problemas do instalador</Link>. Não compartilhe senhas, tokens ou dados de clientes ao pedir ajuda.</p>
               </section>
 
-              <div className="mb-6 rounded-xl bg-accent-900 p-6 text-white sm:p-8">
-                <h2 className="text-2xl font-bold">O próximo passo é usar.</h2>
-                <p className="mt-3 max-w-[54ch] leading-relaxed text-accent-100">Aprenda a organizar a Inbox, montar o funil e configurar seus agentes com telas reais do sistema.</p>
-                <a href={CURSO} className="mt-5 inline-flex min-h-11 items-center rounded bg-bg px-4 text-sm font-bold text-accent-900 hover:bg-accent-100">Abrir o curso em imagens →</a>
-              </div>
               <p className="text-xs leading-relaxed text-text-muted">Adaptado do <Link href={NOTION_ORIGINAL}>guia original no Notion</Link> e revisado com o <Link href={`${GITHUB}/tree/main/hostgator-setup-kit`}>kit de instalação</Link>. Fluxo deste guia: Supabase na nuvem com token pessoal. Para banco no próprio servidor, veja o <Link href={`${GITHUB}/blob/main/.agents/skills/deskcomm-instalar/references/supabase-local.md`}>guia específico</Link>.</p>
             </div>
           </div>

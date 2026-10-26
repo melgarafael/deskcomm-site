@@ -72,6 +72,7 @@ export function ProgressoInstalacao() {
         ))}
       </ol>
       <p className="mt-4 border-t border-border pt-4 text-xs leading-relaxed text-text-muted">Marque o que já fez. Seu progresso fica salvo neste navegador.</p>
+      <a href="#aprender-a-usar" className="mt-4 flex min-h-11 items-center rounded-md bg-accent-50 px-3 py-2 text-sm font-bold text-accent-700 hover:bg-accent-100">Depois de instalar: curso visual →</a>
       <a href="#ajuda" className="mt-4 inline-flex min-h-9 items-center text-sm font-bold text-accent-700 underline decoration-accent-200 underline-offset-4">Travou em algum passo? →</a>
     </nav>
   );
