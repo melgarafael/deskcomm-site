@@ -2,6 +2,7 @@ import Image from "next/image";
 
 import type { Conteudo, Idioma } from "@/conteudo";
 import { IDIOMAS } from "@/conteudo";
+import { LINKS_INSTALACAO } from "@/conteudo/instalacao";
 
 import { Jornada } from "./Jornada";
 import { CURSO, INSTALACAO } from "@/conteudo/rotas";
@@ -325,7 +326,7 @@ export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
                 <p className="mt-4 max-w-[46ch] leading-relaxed text-[#AFC6D6]">{c.banner.texto}</p>
               </div>
               <div className="lg:text-right">
-                <a href="https://www.hostgator.com.br/52708-141-3-52.html" className="inline-flex items-center gap-2.5 rounded-[6px] bg-[#F67922] px-6 py-4 font-bold text-white transition-colors duration-150 ease-out-fast hover:bg-[#FF8E3C]">
+                <a href={LINKS_INSTALACAO.vps} rel="sponsored" className="inline-flex items-center gap-2.5 rounded-[6px] bg-[#F67922] px-6 py-4 font-bold text-white transition-colors duration-150 ease-out-fast hover:bg-[#FF8E3C]">
                   {c.banner.cta}
                   <span aria-hidden>→</span>
                 </a>

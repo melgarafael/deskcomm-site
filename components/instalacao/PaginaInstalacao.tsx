@@ -114,13 +114,14 @@ export function PaginaInstalacao() {
             <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-14">
               <div><h2 id="titulo-preparo" className="text-xl font-bold">Antes de começar</h2><p className="mt-2 text-sm leading-relaxed text-text-muted">Deixe estes acessos por perto. Vamos usar cada um no seu momento.</p></div>
               <ul className="grid gap-5 sm:grid-cols-2">
-                <li><p className="font-bold">VPS e domínio</p><p className="mt-1 text-sm leading-relaxed text-text-muted">Um servidor com 4 GB de RAM e o endereço que você quer usar. Os passos 1 e 4 ajudam com isso.</p></li>
+                <li><p className="font-bold">VPS e domínio</p><p className="mt-1 text-sm leading-relaxed text-text-muted">Um servidor com 4 GB de RAM e o endereço que você quer usar. Os passos 1 e 4 ajudam com isso.</p><div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm font-bold text-accent-700"><a href={LINKS.vps} rel="sponsored" className="inline-flex min-h-11 items-center underline decoration-accent-200 underline-offset-4 hover:decoration-accent-700">Contratar VPS ↗</a><a href={LINKS.dominio} rel="sponsored" className="inline-flex min-h-11 items-center underline decoration-accent-200 underline-offset-4 hover:decoration-accent-700">Registrar domínio ↗</a></div></li>
                 <li><p className="font-bold">Conta no Supabase</p><p className="mt-1 text-sm leading-relaxed text-text-muted">O banco de dados. Vamos gerar um único token no passo 3; o instalador cuida do projeto.</p></li>
                 <li><p className="font-bold">Celular com WhatsApp</p><p className="mt-1 text-sm leading-relaxed text-text-muted">Para ler o QR code e conectar o número de atendimento ao CRM.</p></li>
                 <li><p className="font-bold">Chave de IA <span className="text-xs font-normal text-text-muted">opcional agora</span></p><p className="mt-1 text-sm leading-relaxed text-text-muted">OpenRouter, Anthropic ou OpenAI. Você pode instalar primeiro e cadastrar a chave depois.</p></li>
               </ul>
             </div>
             <p className="mt-7 text-sm leading-relaxed text-text-muted"><strong className="text-text">O que você paga:</strong> a hospedagem, o domínio e a IA que consumir. O software é gratuito, e o Supabase tem um plano grátis com limites próprios.</p>
+            <p className="mt-2 text-xs leading-relaxed text-text-muted">Os links de VPS e domínio da HostGator são de parceria. Contratar por eles apoia o projeto.</p>
           </section>
 
           <div className="grid items-start gap-10 py-10 sm:py-14 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-16">
@@ -158,6 +159,7 @@ export function PaginaInstalacao() {
               </Etapa>
 
               <Etapa numero={4} introducao="Seu domínio é o endereço que você vai abrir no navegador. Vamos fazer esse endereço chegar à VPS." resultado="o endereço escolhido aponta para o IP do servidor. O instalador confere isso antes de publicar o site.">
+                <div className="space-y-3"><p className="leading-relaxed">Ainda não tem um domínio? Você pode registrá-lo na HostGator e depois seguir a configuração abaixo.</p><a href={LINKS.dominio} rel="sponsored" className="inline-flex min-h-11 items-center rounded bg-accent-600 px-4 py-3 text-sm font-bold text-white hover:bg-accent-700">Registrar domínio na HostGator ↗</a><p className="text-xs leading-relaxed text-text-muted">Link de parceria: registrar por ele apoia o projeto.</p></div>
                 <p className="leading-relaxed">No painel onde seu domínio foi registrado, abra a área de <strong>DNS</strong> e crie um registro com estes valores:</p>
                 <dl className="divide-y divide-border rounded-lg border border-border bg-surface px-5">
                   {[["Tipo", "A"], ["Nome / Host", "crm (ou @ para usar o domínio principal)"], ["Aponta para / Valor", "O IP da sua VPS"]].map(([k, v]) => <div key={k} className="grid gap-1 py-4 sm:grid-cols-[150px_minmax(0,1fr)]"><dt className="text-sm text-text-muted">{k}</dt><dd className="font-bold">{v}</dd></div>)}

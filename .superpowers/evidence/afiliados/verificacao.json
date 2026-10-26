@@ -1,0 +1,26 @@
+{
+  "base": "http://localhost:3318",
+  "casos": [
+    {
+      "width": 1440,
+      "vps": "https://www.hostgator.com.br/52708-141-3-52.html",
+      "dominio": "https://www.hostgator.com.br/52708-77-3-32.html",
+      "linksDoGuia": 4,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "vps": "https://www.hostgator.com.br/52708-141-3-52.html",
+      "dominio": "https://www.hostgator.com.br/52708-77-3-32.html",
+      "linksDoGuia": 4,
+      "overflow": false
+    },
+    {
+      "width": 360,
+      "vps": "https://www.hostgator.com.br/52708-141-3-52.html",
+      "dominio": "https://www.hostgator.com.br/52708-77-3-32.html",
+      "linksDoGuia": 4,
+      "overflow": false
+    }
+  ]
+}
