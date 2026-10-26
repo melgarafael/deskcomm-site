@@ -1,0 +1,25 @@
+{
+  "base": "http://localhost:3318",
+  "resultados": [
+    {
+      "width": 1440,
+      "jornada": "guia → curso visual → primeira lição",
+      "url": "http://localhost:3318/curso#l.inbox.conhecendo-a-tela",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "jornada": "guia → curso visual → primeira lição",
+      "url": "http://localhost:3318/curso#l.inbox.conhecendo-a-tela",
+      "overflow": false
+    },
+    {
+      "width": 360,
+      "jornada": "guia → curso visual → primeira lição",
+      "url": "http://localhost:3318/curso#l.inbox.conhecendo-a-tela",
+      "overflow": false
+    }
+  ],
+  "semJavaScript": "convite e link presentes",
+  "erros": []
+}
