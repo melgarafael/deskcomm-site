@@ -17,7 +17,7 @@ export type Conteudo = {
   meta: { titulo: string; descricao: string };
   /** `guias` é o rótulo do botão no cabeçalho (≥1024 px); `guiasCurto`, o de telas médias; o ícone
    *  sozinho, abaixo de 640 px, usa `guias` como aria-label. `idioma` é o aria-label do seletor de idioma. */
-  nav: { comoFunciona: string; prova: string; instalar: string; preco: string; ctaInstalar: string; guias: string; guiasCurto: string; changelog: string; idioma: string };
+  nav: { comoFunciona: string; prova: string; instalar: string; preco: string; ctaInstalar: string; curso: string; guias: string; guiasCurto: string; changelog: string; idioma: string };
   hero: {
     sobretitulo: string;
     h1a: string;

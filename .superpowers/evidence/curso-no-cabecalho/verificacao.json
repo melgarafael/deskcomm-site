@@ -1,0 +1,178 @@
+{
+  "base": "http://localhost:3318",
+  "casos": [
+    {
+      "rota": "/",
+      "width": 360,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/",
+      "width": 390,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/",
+      "width": 640,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/",
+      "width": 768,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/",
+      "width": 1024,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/",
+      "width": 1280,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/",
+      "width": 1440,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/en",
+      "width": 360,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/en",
+      "width": 390,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/en",
+      "width": 640,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/en",
+      "width": 768,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/en",
+      "width": 1024,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/en",
+      "width": 1280,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/en",
+      "width": 1440,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/es",
+      "width": 360,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/es",
+      "width": 390,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/es",
+      "width": 640,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/es",
+      "width": 768,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/es",
+      "width": 1024,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/es",
+      "width": 1280,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    },
+    {
+      "rota": "/es",
+      "width": 1440,
+      "curso_visivel": true,
+      "instalar_visivel": true,
+      "overflow": false,
+      "sobreposicao": false
+    }
+  ],
+  "paginas_internas": [
+    "/instalar",
+    "/guias",
+    "/changelog"
+  ]
+}

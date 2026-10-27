@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import type { Conteudo, Idioma } from "@/conteudo";
 import { IDIOMAS } from "@/conteudo";
-import { INSTALACAO, ROTAS, ancoraDaHome, type PaginaId } from "@/conteudo/rotas";
+import { CURSO, INSTALACAO, ROTAS, ancoraDaHome, type PaginaId } from "@/conteudo/rotas";
 
 import { Logotipo } from "./Marca";
 import { StarCount } from "./StarCount";
@@ -13,7 +13,7 @@ export const GITHUB = "https://github.com/melgarafael/DeskcommCRM";
  * O cabeçalho de todas as páginas.
  *
  * Saiu de dentro de `Pagina.tsx` quando o site ganhou páginas além da home, e com
- * três consertos medidos (Playwright, 360–1280 px, nos três idiomas):
+ * ajustes medidos (Playwright, 360–1440 px, nos três idiomas):
  *   - a nav de âncoras só aparece a partir de 1024 px (era 768). Entre 768 e ~900
  *     px os links já quebravam em duas e três linhas, e em espanhol o botão de
  *     instalar ficava mais alto que o próprio cabeçalho;
@@ -23,6 +23,9 @@ export const GITHUB = "https://github.com/melgarafael/DeskcommCRM";
  *     curto entre 640 e 1280, e só o ícone abaixo disso. Com o texto inteiro já em
  *     1024 px, o cabeçalho em espanhol passava 29 px da tela; e abaixo de 640 só o
  *     ícone cabe ao lado do botão de instalar num celular de 360 px.
+ *   - o acesso ao curso fica visível em todas as larguras. O botão de instalar
+ *     usa o rótulo curto abaixo de 1280 px: com o rótulo inteiro, o cabeçalho
+ *     em espanhol passava da tela de 1024 px ao lado do novo acesso.
  *
  * Não importa `Jornada` nem nada de `mesa/`: páginas que usam o cabeçalho não
  * carregam o Three.js da home.
@@ -72,6 +75,9 @@ export function Cabecalho({ c, idioma, pagina, sufixo = "" }: { c: Conteudo; idi
               </a>
             ))}
           </nav>}
+          <a href={CURSO} hrefLang="pt-BR" aria-label={c.curso.cta} title={c.curso.cta} className="inline-flex h-9 items-center whitespace-nowrap rounded-[4px] px-2 text-sm font-bold text-accent-700 transition-colors duration-150 ease-out-fast hover:bg-accent-50">
+            {c.nav.curso}
+          </a>
           <a
             href={ROTAS.guias[idioma]}
             aria-label={c.nav.guias}
@@ -97,8 +103,9 @@ export function Cabecalho({ c, idioma, pagina, sufixo = "" }: { c: Conteudo; idi
               <StarCount />
             </Suspense>
           </a>
-          <a href={instalar} aria-current={pagina === "instalacao" ? "page" : undefined} className="flex h-9 items-center whitespace-nowrap rounded-[4px] bg-accent-600 px-3 text-sm font-bold text-white transition-colors duration-150 ease-out-fast hover:bg-accent-700 sm:px-4">
-            {c.nav.ctaInstalar}
+          <a href={instalar} aria-label={c.nav.ctaInstalar} aria-current={pagina === "instalacao" ? "page" : undefined} className="flex h-9 items-center whitespace-nowrap rounded-[4px] bg-accent-600 px-3 text-sm font-bold text-white transition-colors duration-150 ease-out-fast hover:bg-accent-700 sm:px-4">
+            <span className="xl:hidden">{c.nav.instalar}</span>
+            <span className="hidden xl:inline">{c.nav.ctaInstalar}</span>
           </a>
         </div>
       </div>
