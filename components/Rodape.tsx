@@ -1,6 +1,6 @@
 import type { Conteudo, Idioma } from "@/conteudo";
 import { TEXTOS_CHANGELOG, formatarData } from "@/conteudo/changelog";
-import { CURSO, INSTALACAO, ROTAS, ancoraDaHome, type PaginaId } from "@/conteudo/rotas";
+import { ROTAS_CURSO, INSTALACAO, ROTAS, ancoraDaHome, type PaginaId } from "@/conteudo/rotas";
 
 import { GITHUB } from "./Cabecalho";
 import { Simbolo } from "./Marca";
@@ -17,7 +17,7 @@ function resolver(href: string, idioma: Idioma, naHome: boolean): string {
   if (href.startsWith("#")) return ancoraDaHome(idioma, href, naHome);
   if (href === "@guias") return ROTAS.guias[idioma];
   if (href === "@changelog") return ROTAS.changelog[idioma];
-  if (href === "@curso") return CURSO;
+  if (href === "@curso") return ROTAS_CURSO[idioma];
   if (href === "@instalacao") return INSTALACAO;
   return `${GITHUB}${href}`;
 }

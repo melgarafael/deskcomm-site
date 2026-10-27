@@ -41,4 +41,15 @@ do Supabase, lido em campo oculto no terminal da VPS, antes do instalador.
 Conteúdo e comandos: `conteudo/instalacao.ts` e `components/instalacao/`.
 O progresso guarda apenas ids de etapas no navegador; a página não recebe credenciais.
 
+O curso visual tem três endereços: `/curso`, `/en/course` e `/es/curso`. As capturas
+originais em português são compartilhadas; instruções, legendas, busca e navegação
+são traduzidas. O seletor mantém a aula ou cena aberta e o progresso no navegador.
+
+`public/curso/index.html` é a fonte canônica gerada no repositório do produto.
+`pnpm curso:gerar` combina essa fonte com os catálogos de `conteudo/curso/{en,es}/`
+e gera o HTML de cada idioma (ignorado pelo Git). Roda antes de `dev` e `build`.
+Ao atualizar o curso, traduza os textos novos nos catálogos: o teste e o gerador
+recusam traduções ausentes. `interface.json` traduz os literais visíveis do programa;
+`interface-interna.json` identifica os tokens que precisam permanecer iguais.
+
 Esqueleto com `noindex`. Sai quando a LP estiver pronta.

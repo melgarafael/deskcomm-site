@@ -5,7 +5,7 @@ import { IDIOMAS } from "@/conteudo";
 import { LINKS_INSTALACAO } from "@/conteudo/instalacao";
 
 import { Jornada } from "./Jornada";
-import { CURSO, INSTALACAO } from "@/conteudo/rotas";
+import { CURSO, ROTAS_CURSO, INSTALACAO } from "@/conteudo/rotas";
 
 import { Cabecalho, GITHUB } from "./Cabecalho";
 import { Mesa } from "./mesa/MesaEstatica";
@@ -171,17 +171,17 @@ export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
                     </li>
                   ))}
                 </ul>
-                <a href={CURSO} className="mt-10 inline-block rounded-[4px] bg-accent-600 px-5 py-3 text-sm font-bold text-white transition-colors duration-120 ease-out-fast hover:bg-accent-700">
+                <a href={ROTAS_CURSO[idioma]} className="mt-10 inline-block rounded-[4px] bg-accent-600 px-5 py-3 text-sm font-bold text-white transition-colors duration-120 ease-out-fast hover:bg-accent-700">
                   {c.curso.cta}
                 </a>
                 <p className="mt-4 max-w-[46ch] text-sm leading-relaxed text-text-muted">{c.curso.nota}</p>
               </div>
-              <a href={CURSO} className="block min-w-0 overflow-hidden rounded-[12px] border border-border bg-surface transition-colors duration-150 ease-out-fast hover:border-accent-300">
+              <a href={ROTAS_CURSO[idioma]} className="block min-w-0 overflow-hidden rounded-[12px] border border-border bg-surface transition-colors duration-150 ease-out-fast hover:border-accent-300">
                 <div className="flex items-center gap-2 border-b border-border px-4 py-2.5">
                   {[0, 1, 2].map((i) => (
                     <span key={i} aria-hidden className="h-2 w-2 rounded-full bg-border" />
                   ))}
-                  <span className="ml-1.5 font-mono text-xs text-text-muted">deskcomm.com.br{CURSO}</span>
+                  <span className="ml-1.5 font-mono text-xs text-text-muted">deskcomm.com.br{ROTAS_CURSO[idioma]}</span>
                 </div>
                 <Image src={`${CURSO}/capturas/inbox--assumir-e-responder--p1.jpg`} alt={c.curso.alt} width={1440} height={900} className="h-auto w-full" />
               </a>
