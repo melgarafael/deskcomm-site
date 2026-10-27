@@ -94,9 +94,9 @@ export const es: Conteudo = {
   curso: {
     sobretitulo: "Curso en imágenes",
     titulo: "¿Ya lo instalaste? Ahora aprende a usarlo, pantalla por pantalla.",
-    sub: "Cada lección muestra la pantalla real de DeskComm, con flechas que indican dónde hacer clic y qué pasa después. Lee a tu ritmo o practica en el simulador antes de atender al primer cliente. El curso está en portugués, el idioma de las capturas.",
+    sub: "Cada lección muestra la pantalla real de DeskComm, con flechas que indican dónde hacer clic y qué pasa después. Lee a tu ritmo o practica en el simulador antes de atender al primer cliente. Las lecciones y la navegación están en español; las capturas muestran la interfaz original en portugués.",
     itens: ["Todas las pantallas del menú: de la Inbox y los embudos a los agentes de IA y las métricas", "Simulador: haces clic en el lugar correcto para avanzar", "Búsqueda en todas las lecciones"],
-    cta: "Abrir el curso (portugués)",
+    cta: "Abrir el curso",
     nota: "Gratis. Las capturas son de una clínica de demostración, con nombres y conversaciones ficticios.",
     alt: "Pantalla de la Inbox de DeskComm con el resumen que deja la IA al pasar un cliente al equipo",
   },
@@ -172,7 +172,7 @@ export const es: Conteudo = {
   rodape: {
     colunas: [
       { titulo: "Producto", itens: [{ rotulo: "Cómo funciona", href: "#como-funciona" }, { rotulo: "Precio", href: "#preco" }, { rotulo: "Instalar", href: "#instalar" }] },
-      { titulo: "Documentación", itens: [{ rotulo: "Guías del asistente", href: "@guias" }, { rotulo: "Curso en imágenes (portugués)", href: "@curso" }, { rotulo: "Guía de instalación", href: "/blob/main/docs/SETUP.md" }, { rotulo: "Para agencias", href: "/blob/main/docs/white-label.md" }, { rotulo: "Arquitectura", href: "/blob/main/ARCHITECTURE.md" }, { rotulo: "Doctrina del sistema vivo", href: "/blob/main/docs/doctrine/sistema-vivo.md" }] },
+      { titulo: "Documentación", itens: [{ rotulo: "Guías del asistente", href: "@guias" }, { rotulo: "Curso visual", href: "@curso" }, { rotulo: "Guía de instalación", href: "/blob/main/docs/SETUP.md" }, { rotulo: "Para agencias", href: "/blob/main/docs/white-label.md" }, { rotulo: "Arquitectura", href: "/blob/main/ARCHITECTURE.md" }, { rotulo: "Doctrina del sistema vivo", href: "/blob/main/docs/doctrine/sistema-vivo.md" }] },
       { titulo: "Comunidad", itens: [{ rotulo: "Discussions", href: "/discussions" }, { rotulo: "Issues", href: "/issues" }, { rotulo: "Contribuir", href: "/blob/main/CONTRIBUTING.md" }] },
       { titulo: "Proyecto", itens: [{ rotulo: "Licencia MIT", href: "/blob/main/LICENSE" }, { rotulo: "Changelog", href: "@changelog" }, { rotulo: "Seguridad", href: "/blob/main/SECURITY.md" }] },
     ],

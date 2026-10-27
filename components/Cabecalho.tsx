@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import type { Conteudo, Idioma } from "@/conteudo";
 import { IDIOMAS } from "@/conteudo";
-import { CURSO, INSTALACAO, ROTAS, ancoraDaHome, type PaginaId } from "@/conteudo/rotas";
+import { ROTAS_CURSO, INSTALACAO, ROTAS, ancoraDaHome, type PaginaId } from "@/conteudo/rotas";
 
 import { Logotipo } from "./Marca";
 import { StarCount } from "./StarCount";
@@ -75,7 +75,7 @@ export function Cabecalho({ c, idioma, pagina, sufixo = "" }: { c: Conteudo; idi
               </a>
             ))}
           </nav>}
-          <a href={CURSO} hrefLang="pt-BR" aria-label={c.curso.cta} title={c.curso.cta} className="inline-flex h-9 items-center whitespace-nowrap rounded-[4px] px-2 text-sm font-bold text-accent-700 transition-colors duration-150 ease-out-fast hover:bg-accent-50">
+          <a href={ROTAS_CURSO[idioma]} hrefLang={idioma} aria-label={c.curso.cta} title={c.curso.cta} className="inline-flex h-9 items-center whitespace-nowrap rounded-[4px] px-2 text-sm font-bold text-accent-700 transition-colors duration-150 ease-out-fast hover:bg-accent-50">
             {c.nav.curso}
           </a>
           <a

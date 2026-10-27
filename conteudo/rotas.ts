@@ -22,14 +22,11 @@ export const ROTAS: Record<PaginaId, Record<Idioma, string>> = {
   changelog: { "pt-BR": "/changelog", en: "/en/changelog", es: "/es/changelog" },
 };
 
-/**
- * O curso em imagens: página estática em `public/curso/`, gerada no repositório do
- * produto (`curso/montar.ts`, com CURSO_BASE="/curso/"). Um idioma só — as fotos são
- * da tela em português —, então fica fora de ROTAS, que promete os três.
- */
-export const CURSO = "/curso";
+/** O curso compartilha capturas, ids de aulas e progresso entre os três idiomas. */
+export const ROTAS_CURSO: Record<Idioma, string> = { "pt-BR": "/curso", en: "/en/course", es: "/es/curso" };
+export const CURSO = ROTAS_CURSO["pt-BR"];
 
-/** Guia editorial em português, como o curso: não promete traduções inexistentes. */
+/** O guia de instalação editorial está disponível em português. */
 export const INSTALACAO = "/instalar";
 
 /** Âncora de uma seção da home, válida de qualquer página: `/#instalar`, `/en#instalar`. */

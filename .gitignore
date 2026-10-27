@@ -6,3 +6,8 @@ out
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
+
+# Gerados pelo localizador a partir do curso canônico e dos catálogos.
+public/curso/pt-BR/
+public/curso/en/
+public/curso/es/

@@ -1,0 +1,370 @@
+{
+  "base": "http://localhost:3318",
+  "data": "2026-10-27T10:48:58.690Z",
+  "medidas": [
+    {
+      "idioma": "pt-BR",
+      "largura": 360,
+      "documento": 360,
+      "links": [
+        {
+          "texto": "PT",
+          "esquerda": 254,
+          "direita": 284
+        },
+        {
+          "texto": "EN",
+          "esquerda": 286,
+          "direita": 316
+        },
+        {
+          "texto": "ES",
+          "esquerda": 318,
+          "direita": 348
+        }
+      ]
+    },
+    {
+      "idioma": "pt-BR",
+      "largura": 390,
+      "documento": 390,
+      "links": [
+        {
+          "texto": "PT",
+          "esquerda": 284,
+          "direita": 314
+        },
+        {
+          "texto": "EN",
+          "esquerda": 316,
+          "direita": 346
+        },
+        {
+          "texto": "ES",
+          "esquerda": 348,
+          "direita": 378
+        }
+      ]
+    },
+    {
+      "idioma": "pt-BR",
+      "largura": 768,
+      "documento": 768,
+      "links": [
+        {
+          "texto": "PT",
+          "esquerda": 640,
+          "direita": 676
+        },
+        {
+          "texto": "EN",
+          "esquerda": 678,
+          "direita": 714
+        },
+        {
+          "texto": "ES",
+          "esquerda": 716,
+          "direita": 752
+        }
+      ]
+    },
+    {
+      "idioma": "pt-BR",
+      "largura": 1024,
+      "documento": 1024,
+      "links": [
+        {
+          "texto": "PT",
+          "esquerda": 888,
+          "direita": 924
+        },
+        {
+          "texto": "EN",
+          "esquerda": 926,
+          "direita": 962
+        },
+        {
+          "texto": "ES",
+          "esquerda": 964,
+          "direita": 1000
+        }
+      ]
+    },
+    {
+      "idioma": "pt-BR",
+      "largura": 1440,
+      "documento": 1440,
+      "links": [
+        {
+          "texto": "PT",
+          "esquerda": 1304,
+          "direita": 1340
+        },
+        {
+          "texto": "EN",
+          "esquerda": 1342,
+          "direita": 1378
+        },
+        {
+          "texto": "ES",
+          "esquerda": 1380,
+          "direita": 1416
+        }
+      ]
+    },
+    {
+      "idioma": "en",
+      "largura": 360,
+      "documento": 360,
+      "links": [
+        {
+          "texto": "PT",
+          "esquerda": 254,
+          "direita": 284
+        },
+        {
+          "texto": "EN",
+          "esquerda": 286,
+          "direita": 316
+        },
+        {
+          "texto": "ES",
+          "esquerda": 318,
+          "direita": 348
+        }
+      ]
+    },
+    {
+      "idioma": "en",
+      "largura": 390,
+      "documento": 390,
+      "links": [
+        {
+          "texto": "PT",
+          "esquerda": 284,
+          "direita": 314
+        },
+        {
+          "texto": "EN",
+          "esquerda": 316,
+          "direita": 346
+        },
+        {
+          "texto": "ES",
+          "esquerda": 348,
+          "direita": 378
+        }
+      ]
+    },
+    {
+      "idioma": "en",
+      "largura": 768,
+      "documento": 768,
+      "links": [
+        {
+          "texto": "PT",
+          "esquerda": 640,
+          "direita": 676
+        },
+        {
+          "texto": "EN",
+          "esquerda": 678,
+          "direita": 714
+        },
+        {
+          "texto": "ES",
+          "esquerda": 716,
+          "direita": 752
+        }
+      ]
+    },
+    {
+      "idioma": "en",
+      "largura": 1024,
+      "documento": 1024,
+      "links": [
+        {
+          "texto": "PT",
+          "esquerda": 888,
+          "direita": 924
+        },
+        {
+          "texto": "EN",
+          "esquerda": 926,
+          "direita": 962
+        },
+        {
+          "texto": "ES",
+          "esquerda": 964,
+          "direita": 1000
+        }
+      ]
+    },
+    {
+      "idioma": "en",
+      "largura": 1440,
+      "documento": 1440,
+      "links": [
+        {
+          "texto": "PT",
+          "esquerda": 1304,
+          "direita": 1340
+        },
+        {
+          "texto": "EN",
+          "esquerda": 1342,
+          "direita": 1378
+        },
+        {
+          "texto": "ES",
+          "esquerda": 1380,
+          "direita": 1416
+        }
+      ]
+    },
+    {
+      "idioma": "es",
+      "largura": 360,
+      "documento": 360,
+      "links": [
+        {
+          "texto": "PT",
+          "esquerda": 254,
+          "direita": 284
+        },
+        {
+          "texto": "EN",
+          "esquerda": 286,
+          "direita": 316
+        },
+        {
+          "texto": "ES",
+          "esquerda": 318,
+          "direita": 348
+        }
+      ]
+    },
+    {
+      "idioma": "es",
+      "largura": 390,
+      "documento": 390,
+      "links": [
+        {
+          "texto": "PT",
+          "esquerda": 284,
+          "direita": 314
+        },
+        {
+          "texto": "EN",
+          "esquerda": 316,
+          "direita": 346
+        },
+        {
+          "texto": "ES",
+          "esquerda": 348,
+          "direita": 378
+        }
+      ]
+    },
+    {
+      "idioma": "es",
+      "largura": 768,
+      "documento": 768,
+      "links": [
+        {
+          "texto": "PT",
+          "esquerda": 640,
+          "direita": 676
+        },
+        {
+          "texto": "EN",
+          "esquerda": 678,
+          "direita": 714
+        },
+        {
+          "texto": "ES",
+          "esquerda": 716,
+          "direita": 752
+        }
+      ]
+    },
+    {
+      "idioma": "es",
+      "largura": 1024,
+      "documento": 1024,
+      "links": [
+        {
+          "texto": "PT",
+          "esquerda": 888,
+          "direita": 924
+        },
+        {
+          "texto": "EN",
+          "esquerda": 926,
+          "direita": 962
+        },
+        {
+          "texto": "ES",
+          "esquerda": 964,
+          "direita": 1000
+        }
+      ]
+    },
+    {
+      "idioma": "es",
+      "largura": 1440,
+      "documento": 1440,
+      "links": [
+        {
+          "texto": "PT",
+          "esquerda": 1304,
+          "direita": 1340
+        },
+        {
+          "texto": "EN",
+          "esquerda": 1342,
+          "direita": 1378
+        },
+        {
+          "texto": "ES",
+          "esquerda": 1380,
+          "direita": 1416
+        }
+      ]
+    }
+  ],
+  "jornadas": [
+    {
+      "idioma": "pt-BR",
+      "modulos": 61,
+      "licoes": 259,
+      "demonstracoes": 30,
+      "busca": "nota interna",
+      "resultado": "InboxRecados para a equipe com a nota internaRegistrar um recado que só a equipe vê e chamar um colega com @.",
+      "simulador": "concluído",
+      "trocaDeIdioma": "aula e progresso preservados"
+    },
+    {
+      "idioma": "en",
+      "modulos": 61,
+      "licoes": 259,
+      "demonstracoes": 30,
+      "busca": "internal note",
+      "resultado": "InboxTeam messages with internal notesRecord a note only the team can see and mention a colleague with @.",
+      "simulador": "concluído",
+      "trocaDeIdioma": "aula e progresso preservados"
+    },
+    {
+      "idioma": "es",
+      "modulos": 61,
+      "licoes": 259,
+      "demonstracoes": 30,
+      "busca": "nota interna",
+      "resultado": "InboxMensajes para el equipo con notas internasRegistrar una nota que solo ve el equipo y mencionar a un compañero con @.",
+      "simulador": "concluído",
+      "trocaDeIdioma": "aula e progresso preservados"
+    }
+  ],
+  "erros": [],
+  "falhasDeImagem": []
+}

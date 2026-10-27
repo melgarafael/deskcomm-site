@@ -4,9 +4,13 @@ const config: NextConfig = {
   reactStrictMode: true,
   // Imagens da LP são estáticas e servidas do próprio domínio; sem remote patterns.
   images: { formats: ["image/avif", "image/webp"] },
-  // O curso em imagens é HTML estático (public/curso/index.html); sem isto, /curso dá 404.
+  // O curso é localizado no prebuild, mantendo um só conjunto de capturas.
   async rewrites() {
-    return [{ source: "/curso", destination: "/curso/index.html" }];
+    return [
+      { source: "/curso", destination: "/curso/pt-BR/index.html" },
+      { source: "/en/course", destination: "/curso/en/index.html" },
+      { source: "/es/curso", destination: "/curso/es/index.html" },
+    ];
   },
 };
 
