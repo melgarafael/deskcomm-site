@@ -56,10 +56,15 @@ recusam traduções ausentes. `interface.json` traduz os literais visíveis do p
 
 ### Capturas reais em espanhol
 
-`conteudo/curso/es/capturas.json` é opcional. Quando presente, o gerador e a home
-validam o conjunto inteiro e a existência de cada arquivo em
+`conteudo/curso/es/capturas.json` é opcional. Quando presente, o gerador e a
+configuração do Next validam o conjunto inteiro e a existência de cada arquivo em
 `public/curso/capturas/es/`. Um manifesto parcial ou inválido interrompe a geração:
 nunca publica uma mistura anunciada como curso com imagens em espanhol.
+A home recebe apenas a foto de capa e suas dimensões pela constante de build
+`CURSO_CAPTURAS_ES`, ou `null` quando não há manifesto. Essa constante é produzida
+pelo projeto, sem ajuste do operador. A home não lê os arquivos do curso no
+servidor: assim, as capturas continuam como arquivos estáticos e não são incluídas
+na função do servidor pelo rastreador de dependências do Next.
 
 Contrato do manifesto (o exemplo mostra um registro; o arquivo real precisa de
 todos os IDs dos passos e das cenas de demonstração, sem IDs extras):
