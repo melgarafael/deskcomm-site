@@ -22,7 +22,7 @@ export const ROTAS: Record<PaginaId, Record<Idioma, string>> = {
   changelog: { "pt-BR": "/changelog", en: "/en/changelog", es: "/es/changelog" },
 };
 
-/** O curso compartilha capturas, ids de aulas e progresso entre os três idiomas. */
+/** O curso preserva ids de aulas e progresso entre os três idiomas. */
 export const ROTAS_CURSO: Record<Idioma, string> = { "pt-BR": "/curso", en: "/en/course", es: "/es/curso" };
 export const CURSO = ROTAS_CURSO["pt-BR"];
 

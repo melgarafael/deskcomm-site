@@ -56,7 +56,7 @@ export type Conteudo = {
     atualizarTitulo: string;
     atualizarTexto: string;
   };
-  curso: { sobretitulo: string; titulo: string; sub: string; itens: string[]; cta: string; nota: string; alt: string };
+  curso: { sobretitulo: string; titulo: string; sub: string; subComCapturasLocais?: string; itens: string[]; cta: string; nota: string; alt: string };
   preco: {
     sobretitulo: string;
     titulo: string;
