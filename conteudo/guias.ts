@@ -3,9 +3,9 @@ import type { Idioma } from "./tipos";
 /**
  * A página "Guias do assistente" — para devs e para quem instala.
  *
- * Tudo aqui descreve o que existe na `main` do DeskcommCRM, conferido na data de
+ * Catálogo público dos guias do DeskcommCRM, atualizado na data de
  * `GUIAS_ATUALIZADO_EM` (abaixo, e é ela que o rodapé mostra — uma data só):
- * os seis guias `deskcomm-*` em `.agents/skills/` (espelho em `.claude/skills/`),
+ * os guias `deskcomm-*` em `.agents/skills/` (espelho em `.claude/skills/`),
  * o `scripts/instalar-guias.sh` e o comportamento de cada assistente — medido
  * nesta máquina onde deu (Claude Code, Codex, OpenCode, Antigravity CLI) e pela
  * documentação oficial onde não deu (Cursor).
@@ -21,7 +21,7 @@ import type { Idioma } from "./tipos";
  * produto lembra disso a quem mexe em `.agents/skills/`.
  */
 
-export type GuiaId = "deskcomm-instalar" | "deskcomm-cliente-novo" | "deskcomm-metricas" | "deskcomm-prompt" | "deskcomm-contribuir" | "deskcomm-doutrina";
+export type GuiaId = "deskcomm-instalar" | "deskcomm-cliente-novo" | "deskcomm-metricas" | "deskcomm-prompt" | "deskcomm-contribuir" | "deskcomm-doutrina" | "deskcomm-curso";
 export type AssistenteId = "claude" | "codex" | "cursor" | "antigravity" | "opencode";
 export type Publico = "opera" | "programa";
 
@@ -97,7 +97,7 @@ export type TextosGuias = {
 };
 
 /** A data que o rodapé da página de guias mostra. Mudou o texto desta página? Mude esta data. */
-export const GUIAS_ATUALIZADO_EM = "2026-09-16";
+export const GUIAS_ATUALIZADO_EM = "2026-10-27";
 
 const COMANDO = "curl -fsSL https://raw.githubusercontent.com/melgarafael/DeskcommCRM/main/scripts/instalar-guias.sh | bash";
 export const COMANDOS = {
@@ -117,14 +117,14 @@ const pt: TextosGuias = {
   meta: {
     titulo: "Guias do assistente — DeskcommCRM",
     descricao:
-      "Seis guias que ensinam Claude Code, Codex, Cursor, Antigravity e OpenCode a instalar, configurar, analisar e melhorar o DeskcommCRM com você. O que cada um faz e como usar em cada assistente.",
+      "Guias para instalar, configurar, analisar e melhorar o DeskcommCRM com seu assistente de código, contribuir com o projeto e manter o curso atualizado. O que cada guia faz e como usar.",
   },
   sobretitulo: "Guias do assistente",
   titulo: "O seu assistente de código já sabe trabalhar no DeskcommCRM.",
   subtitulo:
-    "São seis guias que ensinam Claude Code, Codex, Cursor, Antigravity e OpenCode a instalar, montar um cliente, ler as métricas, afinar o agente de IA e contribuir com o código — seguindo as regras do projeto. Você não precisa decorar nome nenhum: diga o que quer e o guia certo entra sozinho.",
+    "Os guias ensinam Claude Code, Codex, Cursor, Antigravity e OpenCode a instalar, montar um cliente, ler as métricas, afinar o agente de IA, contribuir com o código e manter o curso atualizado — seguindo as regras do projeto. Você não precisa decorar nome nenhum: diga o que quer e o guia certo entra sozinho.",
   ctaInstalar: "Instalar os guias",
-  ctaCatalogo: "Ver os seis guias",
+  ctaCatalogo: "Ver os guias",
   copiar: "Copiar",
   copiado: "Copiado",
   selecionado: "Comando selecionado. Copie com Ctrl+C.",
@@ -146,7 +146,7 @@ const pt: TextosGuias = {
   catalogo: {
     sobretitulo: "Os guias",
     titulo: "Um guia para cada trabalho.",
-    texto: "Quatro são para quem instala e opera o CRM, e não exigem saber programar. Dois são para quem mexe no código.",
+    texto: "Há guias para quem instala e opera o CRM, sem exigir programação, e guias para quem contribui com o código ou mantém o curso.",
     filtros: { todos: "Todos", opera: "Para quem usa o CRM", programa: "Para quem programa" },
     paraQuem: "Para quem",
     faz: "O que ele faz",
@@ -268,6 +268,20 @@ const pt: TextosGuias = {
       faz: ["Isolamento entre empresas com RLS.", "Migration, baseline e manifesto andando juntos.", "O que muda para quem já instalou numa VPS."],
       frases: ["revisa este código", "como crio uma migration aqui?", "posso adicionar esta coluna?"],
     },
+    {
+      id: "deskcomm-curso",
+      publico: "programa",
+      titulo: "Manter o curso atualizado",
+      resumo: "A IA revisa aulas, traduções e capturas depois de mudanças no CRM, na sessão em que você faz o pedido, com os scripts do projeto. O curso em inglês continua usando fotos em português.",
+      paraQuem: "Mantenedores do curso e contribuidores do projeto, no clone do código.",
+      faz: [
+        "Planeja a revisão desde o commit do último curso publicado e confere as mudanças nas telas.",
+        "Revê aulas e traduções, recaptura só as telas afetadas em português e espanhol e mede de novo as setas e os cliques.",
+        "Revisa o resultado no navegador e prepara PRs com os checks dos dois repositórios; verifica o deploy depois da publicação aprovada.",
+        "Acione com /deskcomm-curso no Claude Code ou $deskcomm-curso no Codex, seguido do pedido.",
+      ],
+      frases: ["Atualize o curso após a última versão", "revise as aulas afetadas por esta mudança", "atualize as capturas em espanhol"],
+    },
   ],
   lista: [
     {
@@ -357,14 +371,14 @@ const en: TextosGuias = {
   meta: {
     titulo: "Assistant guides — DeskcommCRM",
     descricao:
-      "Six guides that teach Claude Code, Codex, Cursor, Antigravity and OpenCode to install, set up, analyze and improve DeskcommCRM with you. What each one does and how to use it in each assistant.",
+      "Guides for installing, configuring, analyzing and improving DeskcommCRM with your coding assistant, contributing to the project and keeping the course current. What each guide does and how to use it.",
   },
   sobretitulo: "Assistant guides",
   titulo: "Your coding assistant already knows how to work on DeskcommCRM.",
   subtitulo:
-    "Six guides teach Claude Code, Codex, Cursor, Antigravity and OpenCode to install the CRM, set up a client, read the metrics, tune the AI agent and contribute code — following the project's rules. No names to memorize: say what you want and the right guide kicks in on its own.",
+    "The guides teach Claude Code, Codex, Cursor, Antigravity and OpenCode to install the CRM, set up a client, read the metrics, tune the AI agent, contribute code and keep the course current — following the project's rules. No names to memorize: say what you want and the right guide kicks in on its own.",
   ctaInstalar: "Install the guides",
-  ctaCatalogo: "See the six guides",
+  ctaCatalogo: "See the guides",
   copiar: "Copy",
   copiado: "Copied",
   selecionado: "Command selected. Copy it with Ctrl+C.",
@@ -386,7 +400,7 @@ const en: TextosGuias = {
   catalogo: {
     sobretitulo: "The guides",
     titulo: "One guide for each job.",
-    texto: "Four are for people who install and run the CRM, no coding required. Two are for people who work on the code.",
+    texto: "There are guides for people who install and run the CRM, no coding required, and guides for code contributors and course maintainers.",
     filtros: { todos: "All", opera: "For CRM operators", programa: "For developers" },
     paraQuem: "Who it's for",
     faz: "What it does",
@@ -508,6 +522,20 @@ const en: TextosGuias = {
       faz: ["Tenant isolation with RLS.", "Migration, baseline and manifest moving together.", "What changes for people who already installed it on a VPS."],
       frases: ["review this code", "how do I create a migration here?", "can I add this column?"],
     },
+    {
+      id: "deskcomm-curso",
+      publico: "programa",
+      titulo: "Keep the course current",
+      resumo: "The AI reviews lessons, translations and screenshots after CRM changes, in the session where you make the request, using the project's scripts. The English course still uses Portuguese screenshots.",
+      paraQuem: "Course maintainers and project contributors, working in a clone of the code.",
+      faz: [
+        "Plans the review from the last published course's commit and checks what changed on screen.",
+        "Reviews lessons and translations, recaptures only affected screens in Portuguese and Spanish, and measures arrows and click targets again.",
+        "Reviews the result in the browser and prepares PRs with checks in both repositories; verifies the deployment after an approved publication.",
+        "Call /deskcomm-curso in Claude Code or $deskcomm-curso in Codex, followed by your request.",
+      ],
+      frases: ["Update the course after the latest release", "review the lessons affected by this change", "update the Spanish screenshots"],
+    },
   ],
   lista: [
     {
@@ -594,14 +622,14 @@ const es: TextosGuias = {
   meta: {
     titulo: "Guías del asistente — DeskcommCRM",
     descricao:
-      "Seis guías que enseñan a Claude Code, Codex, Cursor, Antigravity y OpenCode a instalar, configurar, analizar y mejorar DeskcommCRM contigo. Qué hace cada una y cómo usarla en cada asistente.",
+      "Guías para instalar, configurar, analizar y mejorar DeskcommCRM con tu asistente de código, contribuir al proyecto y mantener el curso actualizado. Qué hace cada guía y cómo usarla.",
   },
   sobretitulo: "Guías del asistente",
   titulo: "Tu asistente de código ya sabe trabajar en DeskcommCRM.",
   subtitulo:
-    "Son seis guías que enseñan a Claude Code, Codex, Cursor, Antigravity y OpenCode a instalar el CRM, configurar un cliente, leer las métricas, afinar el agente de IA y contribuir con el código — siguiendo las reglas del proyecto. No tienes que memorizar nombres: di lo que quieres y la guía correcta entra sola.",
+    "Las guías enseñan a Claude Code, Codex, Cursor, Antigravity y OpenCode a instalar el CRM, configurar un cliente, leer las métricas, afinar el agente de IA, contribuir con el código y mantener el curso actualizado — siguiendo las reglas del proyecto. No tienes que memorizar nombres: di lo que quieres y la guía correcta entra sola.",
   ctaInstalar: "Instalar las guías",
-  ctaCatalogo: "Ver las seis guías",
+  ctaCatalogo: "Ver las guías",
   copiar: "Copiar",
   copiado: "Copiado",
   selecionado: "Comando seleccionado. Cópialo con Ctrl+C.",
@@ -623,7 +651,7 @@ const es: TextosGuias = {
   catalogo: {
     sobretitulo: "Las guías",
     titulo: "Una guía para cada trabajo.",
-    texto: "Cuatro son para quien instala y opera el CRM, y no exigen saber programar. Dos son para quien trabaja en el código.",
+    texto: "Hay guías para quien instala y opera el CRM, sin exigir programación, y guías para quienes contribuyen al código o mantienen el curso.",
     filtros: { todos: "Todas", opera: "Para quien usa el CRM", programa: "Para quien programa" },
     paraQuem: "Para quién",
     faz: "Qué hace",
@@ -744,6 +772,20 @@ const es: TextosGuias = {
       paraQuem: "Cualquier persona o IA que escriba código en el proyecto.",
       faz: ["Aislamiento entre empresas con RLS.", "Migración, baseline y manifiesto andando juntos.", "Qué cambia para quien ya instaló en un VPS."],
       frases: ["revisa este código", "¿cómo creo una migración aquí?", "¿puedo agregar esta columna?"],
+    },
+    {
+      id: "deskcomm-curso",
+      publico: "programa",
+      titulo: "Mantener el curso actualizado",
+      resumo: "La IA revisa lecciones, traducciones y capturas después de cambios en el CRM, en la sesión donde haces el pedido, con los scripts del proyecto. El curso en inglés sigue usando capturas en portugués.",
+      paraQuem: "Quienes mantienen el curso y contribuyen al proyecto, desde un clon del código.",
+      faz: [
+        "Planifica la revisión desde el commit del último curso publicado y comprueba qué cambió en las pantallas.",
+        "Revisa lecciones y traducciones, vuelve a capturar solo las pantallas afectadas en portugués y español y mide de nuevo las flechas y los clics.",
+        "Revisa el resultado en el navegador y prepara PRs con los checks de ambos repositorios; verifica el despliegue después de una publicación aprobada.",
+        "Actívala con /deskcomm-curso en Claude Code o $deskcomm-curso en Codex, seguido de tu pedido.",
+      ],
+      frases: ["Actualiza el curso después de la última versión", "revisa las lecciones afectadas por este cambio", "actualiza las capturas en español"],
     },
   ],
   lista: [

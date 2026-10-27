@@ -3,6 +3,7 @@ import Image from "next/image";
 import type { Conteudo, Idioma } from "@/conteudo";
 import { IDIOMAS } from "@/conteudo";
 import { LINKS_INSTALACAO } from "@/conteudo/instalacao";
+import { lerCapturasEspanhol } from "@/lib/curso-capturas.mjs";
 
 import { Jornada } from "./Jornada";
 import { CURSO, ROTAS_CURSO, INSTALACAO } from "@/conteudo/rotas";
@@ -16,6 +17,11 @@ const VILOES_IMG = ["/img/viloes-01-planilha.png", "/img/viloes-02-robo.png"];
 export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
   const base = IDIOMAS.find((i) => i.codigo === idioma)!.caminho;
   const href = (frag: string) => `${base === "/" ? "" : base}${frag}`;
+  const capturasEspanhol = idioma === "es" ? lerCapturasEspanhol() : null;
+  const subCurso = capturasEspanhol ? c.curso.subComCapturasLocais : c.curso.sub;
+  const fotoCurso = capturasEspanhol
+    ? capturasEspanhol.capturas["inbox--assumir-e-responder--p1"].foto
+    : `${CURSO}/capturas/inbox--assumir-e-responder--p1.jpg`;
 
   return (
     <>
@@ -162,7 +168,7 @@ export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
               <div className="min-w-0">
                 <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent-600">{c.curso.sobretitulo}</p>
                 <h2 className="mt-5 text-pretty text-[2rem] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[2.6rem]">{c.curso.titulo}</h2>
-                <p className="mt-6 max-w-[42ch] text-lg leading-relaxed text-text-muted">{c.curso.sub}</p>
+                <p className="mt-6 max-w-[42ch] text-lg leading-relaxed text-text-muted">{subCurso}</p>
                 <ul className="mt-8 space-y-3">
                   {c.curso.itens.map((item) => (
                     <li key={item} className="flex gap-3 leading-relaxed">
@@ -183,7 +189,7 @@ export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
                   ))}
                   <span className="ml-1.5 font-mono text-xs text-text-muted">deskcomm.com.br{ROTAS_CURSO[idioma]}</span>
                 </div>
-                <Image src={`${CURSO}/capturas/inbox--assumir-e-responder--p1.jpg`} alt={c.curso.alt} width={1440} height={900} className="h-auto w-full" />
+                <Image src={fotoCurso} alt={c.curso.alt} width={capturasEspanhol?.largura ?? 1440} height={capturasEspanhol?.altura ?? 900} className="h-auto w-full" />
               </a>
             </div>
           </div>

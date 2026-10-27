@@ -95,6 +95,7 @@ export const es: Conteudo = {
     sobretitulo: "Curso en imágenes",
     titulo: "¿Ya lo instalaste? Ahora aprende a usarlo, pantalla por pantalla.",
     sub: "Cada lección muestra la pantalla real de DeskComm, con flechas que indican dónde hacer clic y qué pasa después. Lee a tu ritmo o practica en el simulador antes de atender al primer cliente. Las lecciones y la navegación están en español; las capturas muestran la interfaz original en portugués.",
+    subComCapturasLocais: "Cada lección muestra la pantalla real de DeskComm, con flechas que indican dónde hacer clic y qué pasa después. Lee a tu ritmo o practica en el simulador antes de atender al primer cliente. Las lecciones, la navegación y las capturas de la interfaz están en español.",
     itens: ["Todas las pantallas del menú: de la Inbox y los embudos a los agentes de IA y las métricas", "Simulador: haces clic en el lugar correcto para avanzar", "Búsqueda en todas las lecciones"],
     cta: "Abrir el curso",
     nota: "Gratis. Las capturas son de una clínica de demostración, con nombres y conversaciones ficticios.",

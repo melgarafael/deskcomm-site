@@ -44,6 +44,33 @@ test("os três dicionários têm a mesma estrutura — tradução que encolhe é
   });
 });
 
+test("curso: o guia público é para mantenedores e mostra como acioná-lo no Claude e no Codex", () => {
+  cada((t, i) => {
+    const guia = t.guias.find((g) => g.id === "deskcomm-curso");
+    assert.ok(guia, `${i}: a manutenção do curso precisa aparecer no catálogo público`);
+    assert.equal(guia.publico, "programa", `${i}: não é um guia de operação do CRM de cliente`);
+    const texto = frases(guia).join(" ");
+    assert.match(texto, /\/deskcomm-curso.*Claude Code/, `${i}: invocação do Claude ausente`);
+    assert.match(texto, /\$deskcomm-curso.*Codex/, `${i}: invocação do Codex ausente`);
+    assert.match(texto, /commit/, `${i}: a revisão parte da fonte publicada`);
+    assert.match(texto, /PRs.*checks/, `${i}: a publicação passa por PRs e checks`);
+    assert.ok(guia.frases.length, `${i}: precisa de exemplo de pedido em linguagem natural`);
+  });
+});
+
+test("curso: o guia preserva o aviso de que o curso inglês usa capturas em português", () => {
+  const aviso = {
+    "pt-BR": /curso em inglês.*fotos em português/,
+    en: /English course.*Portuguese screenshots/,
+    es: /curso en inglés.*capturas en portugués/,
+  };
+  cada((t, i) => {
+    const guia = t.guias.find((g) => g.id === "deskcomm-curso");
+    assert.ok(guia);
+    assert.match(guia.resumo, aviso[i as keyof typeof aviso], `${i}: tradução do curso não comprova interface do CRM nem capturas em inglês`);
+  });
+});
+
 test("c8: nenhuma língua diz que o Codex precisa de pasta confiável — medido com codex-cli 0.154.0", () => {
   cada((t, i) => {
     const codex = t.lista.find((a) => a.doc.includes("learn.chatgpt.com"));
