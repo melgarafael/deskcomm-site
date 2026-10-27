@@ -24,7 +24,7 @@ const catalogos = Object.fromEntries(["en", "es"].map((idioma) => {
 
 test("curso: links do site, seletor e rewrites concordam nos três idiomas", async () => {
   assert.deepEqual(ROTAS_CURSO, CAMINHOS_CURSO);
-  assert.deepEqual(await config.rewrites(), IDIOMAS_CURSO.map((idioma) => ({ source: CAMINHOS_CURSO[idioma], destination: `/curso/${idioma}/index.html` })));
+  assert.deepEqual(await config.rewrites(), { beforeFiles: IDIOMAS_CURSO.map((idioma) => ({ source: CAMINHOS_CURSO[idioma], destination: `/curso/${idioma}/index.html` })) }, "o HTML canônico em public/curso/index.html não deve ganhar do curso com seletor na Vercel");
 });
 
 test("curso: inglês e espanhol cobrem todo o conteúdo publicado sem fallback", () => {
