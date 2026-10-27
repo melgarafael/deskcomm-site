@@ -3,7 +3,6 @@ import Image from "next/image";
 import type { Conteudo, Idioma } from "@/conteudo";
 import { IDIOMAS } from "@/conteudo";
 import { LINKS_INSTALACAO } from "@/conteudo/instalacao";
-import { lerCapturasEspanhol } from "@/lib/curso-capturas.mjs";
 
 import { Jornada } from "./Jornada";
 import { CURSO, ROTAS_CURSO, INSTALACAO } from "@/conteudo/rotas";
@@ -13,14 +12,18 @@ import { Mesa } from "./mesa/MesaEstatica";
 import { Rodape } from "./Rodape";
 
 const VILOES_IMG = ["/img/viloes-01-planilha.png", "/img/viloes-02-robo.png"];
+// Preenchida pela configuração do Next somente após validar o conjunto inteiro.
+const CAPA_CURSO_ES = JSON.parse(process.env.CURSO_CAPTURAS_ES ?? "null") as {
+  foto: string; largura: number; altura: number;
+} | null;
 
 export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
   const base = IDIOMAS.find((i) => i.codigo === idioma)!.caminho;
   const href = (frag: string) => `${base === "/" ? "" : base}${frag}`;
-  const capturasEspanhol = idioma === "es" ? lerCapturasEspanhol() : null;
+  const capturasEspanhol = idioma === "es" ? CAPA_CURSO_ES : null;
   const subCurso = capturasEspanhol ? c.curso.subComCapturasLocais : c.curso.sub;
   const fotoCurso = capturasEspanhol
-    ? capturasEspanhol.capturas["inbox--assumir-e-responder--p1"].foto
+    ? capturasEspanhol.foto
     : `${CURSO}/capturas/inbox--assumir-e-responder--p1.jpg`;
 
   return (

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -52,6 +53,48 @@ function gravarManifesto(raiz, manifesto = manifestoMinimo()) {
 function gravarFotos(raiz) {
   for (const id of [ID_PASSO, ID_CENA]) gravar(raiz, `public/curso/capturas/es/${id}.jpg`, Buffer.from([0xff, 0xd8, 0xff, 0xd9]));
 }
+
+test("capturas: configuração incorpora só a capa após validar o conjunto completo", (t) => {
+  const raiz = pastaTemporaria(t);
+  const executarConfig = () => spawnSync(process.execPath, [
+    "--experimental-strip-types", "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", "--input-type=module", "-e",
+    `const { default: config } = await import(${JSON.stringify(new URL("../next.config.ts", import.meta.url).href)}); process.stdout.write(config.env.CURSO_CAPTURAS_ES);`,
+  ], { cwd: raiz, encoding: "utf8", timeout: 30_000 });
+  const ausente = executarConfig();
+  assert.equal(ausente.status, 0, ausente.stderr);
+  assert.equal(ausente.stdout, "null", "sem manifesto a home continua com fotos em português");
+
+  const idCapa = "inbox--assumir-e-responder--p1";
+  const dados = dadosMinimos();
+  dados.modulos[0].licoes[0].id = "assumir-e-responder";
+  dados.capturas[idCapa] = fotoPT(idCapa);
+  delete dados.capturas[ID_PASSO];
+  const manifesto = manifestoMinimo();
+  manifesto.capturas[idCapa] = { ...manifesto.capturas[ID_PASSO], foto: `/curso/capturas/es/${idCapa}.jpg` };
+  delete manifesto.capturas[ID_PASSO];
+  gravar(raiz, "public/curso/index.html", fonteMinima(dados));
+  gravarManifesto(raiz, manifesto);
+  const semFoto = executarConfig();
+  assert.notEqual(semFoto.status, 0, "o resumo não pode anunciar espanhol se falta uma foto");
+  assert.match(semFoto.stderr, /Captura em espanhol ausente/);
+
+  for (const captura of Object.values(manifesto.capturas)) gravar(raiz, `public${captura.foto}`, Buffer.from([0xff, 0xd8, 0xff, 0xd9]));
+  const completo = executarConfig();
+  assert.equal(completo.status, 0, completo.stderr);
+  assert.deepEqual(JSON.parse(completo.stdout), { foto: manifesto.capturas[idCapa].foto, largura: 1440, altura: 900 });
+  assert.ok(Buffer.byteLength(completo.stdout) < 256, "o build não precisa do manifesto nem das outras fotos na função");
+
+  const parcial = structuredClone(manifesto);
+  delete parcial.capturas[ID_CENA];
+  gravarManifesto(raiz, parcial);
+  const incompleto = executarConfig();
+  assert.notEqual(incompleto.status, 0);
+  assert.match(incompleto.stderr, /IDs divergentes/);
+  gravarManifesto(raiz, { ...manifesto, falhas: ["falha de captura"] });
+  const comFalha = executarConfig();
+  assert.notEqual(comFalha.status, 0);
+  assert.match(comFalha.stderr, /falhas deve ser uma lista vazia/);
+});
 
 test("capturas: sem manifesto o espanhol mantém fotos, metadados e aviso de português", () => {
   const fonte = fonteMinima();
