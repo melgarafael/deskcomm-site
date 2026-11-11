@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 
 import { Documento } from "@/components/Documento";
 import { CONTEUDO } from "@/conteudo";
+import { ORIGEM } from "@/conteudo/rotas";
 import "../globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://deskcomm.com.br"),
+  metadataBase: new URL(ORIGEM),
   title: CONTEUDO.es.meta.titulo,
   description: CONTEUDO.es.meta.descricao,
   robots: { index: false, follow: false },

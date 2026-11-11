@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 
+import { ORIGEM } from "@/conteudo/rotas";
+
 /**
  * Permitimos explicitamente os bots de BUSCA das IAs (distintos dos de treino).
  * A doc da OpenAI é clara: site que sai do OAI-SearchBot não aparece nas
@@ -17,6 +19,7 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: "Claude-User", allow: "/" },
       { userAgent: "PerplexityBot", allow: "/" },
     ],
-    host: "https://deskcomm.com.br",
+    host: ORIGEM,
+    sitemap: `${ORIGEM}/sitemap.xml`,
   };
 }
