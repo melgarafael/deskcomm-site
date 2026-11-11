@@ -14,6 +14,14 @@ import type { Idioma } from "./tipos";
  *   - o layout de cada idioma declara canonical e hreflang da home, e toda
  *     página-filha herdava — dizendo ao buscador que `/guias` É a home.
  */
+/**
+ * O endereço que responde 200. `deskcomm.com.br` redireciona (308) para o `www`
+ * na Vercel; canonical, hreflang, robots e sitemap apontando para o domínio sem
+ * `www` mandavam o buscador a uma URL que não é a final. O curso estático
+ * (`lib/curso-localizacao.mjs`) já usava o `www`.
+ */
+export const ORIGEM = "https://www.deskcomm.com.br";
+
 export type PaginaId = "home" | "guias" | "changelog";
 
 export const ROTAS: Record<PaginaId, Record<Idioma, string>> = {
