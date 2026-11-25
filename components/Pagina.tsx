@@ -7,6 +7,8 @@ import { LINKS_INSTALACAO } from "@/conteudo/instalacao";
 import { Jornada } from "./Jornada";
 import { CURSO, ROTAS_CURSO, INSTALACAO } from "@/conteudo/rotas";
 
+import { dadosEstruturados, serializarLd } from "@/lib/dados-estruturados";
+
 import { Cabecalho, GITHUB } from "./Cabecalho";
 import { Mesa } from "./mesa/MesaEstatica";
 import { Rodape } from "./Rodape";
@@ -28,6 +30,10 @@ export function Pagina({ c, idioma }: { c: Conteudo; idioma: Idioma }) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializarLd(dadosEstruturados(idioma, c.meta.descricao)) }}
+      />
       <Cabecalho c={c} idioma={idioma} pagina="home" />
 
       <main>
